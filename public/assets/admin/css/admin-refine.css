@@ -1,0 +1,232 @@
+/**
+ * Abahizi admin — layout polish (works with SB Admin / Bootstrap 5)
+ */
+
+:root {
+    --admin-sidebar: var(--brand-secondary, #2c2c2c);
+    --admin-sidebar-hover: #3a3a3a;
+    --admin-accent: var(--brand-primary, #fad200);
+    --admin-border: #e2e8f0;
+    --admin-muted: var(--brand-neutral, #b0b0b0);
+}
+
+/* Top bar */
+.sb-nav-fixed .sb-topnav {
+    background: linear-gradient(90deg, var(--brand-secondary, #2c2c2c) 0%, #1f1f1f 100%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    min-height: 3.5rem;
+}
+
+.sb-topnav .navbar-brand {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.sb-topnav .form-control {
+    border-radius: 0.375rem 0 0 0.375rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: #f8fafc;
+}
+
+.sb-topnav .form-control::placeholder {
+    color: rgba(248, 250, 252, 0.45);
+}
+
+.sb-topnav .btn-primary {
+    border-radius: 0 0.375rem 0.375rem 0;
+    background-color: var(--brand-primary, #fad200);
+    border-color: var(--brand-primary, #fad200);
+    color: var(--brand-secondary, #2c2c2c);
+}
+
+.sb-topnav .btn-primary:hover,
+.sb-topnav .btn-primary:focus {
+    background-color: #f0ca00;
+    border-color: #f0ca00;
+    color: #1d1d1d;
+}
+
+/* Sidebar */
+.sb-sidenav-dark {
+    background: var(--admin-sidebar) !important;
+}
+
+.sb-sidenav .sb-sidenav-menu .nav .nav-link {
+    border-radius: 0.375rem;
+    margin: 0 0.5rem;
+    padding: 0.55rem 0.75rem;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.sb-sidenav .sb-sidenav-menu .nav .nav-link:hover {
+    background: var(--admin-sidebar-hover);
+    color: #fff;
+}
+
+.sb-sidenav .sb-sidenav-menu .nav .nav-link.active {
+    background: rgba(250, 210, 0, 0.22);
+    color: #ffffff;
+    border-left: 3px solid var(--admin-accent);
+    padding-left: calc(0.75rem - 3px);
+}
+
+.sb-nav-link-icon {
+    opacity: 0.85;
+}
+
+.admin-nav-section-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    padding: 1rem 1rem 0.35rem 1rem;
+    margin: 0;
+}
+
+.sb-sidenav-footer {
+    background: rgba(0, 0, 0, 0.25);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    color: #94a3b8;
+}
+
+/* Main content */
+#layoutSidenav_content main {
+    background: #f1f5f9;
+    min-height: calc(100vh - 56px);
+}
+
+.admin-page-header {
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-page-header h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--brand-secondary, #2c2c2c);
+    margin: 0;
+}
+
+.admin-page-header .text-muted {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Cards */
+.card {
+    border: 1px solid var(--admin-border);
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.card-header {
+    background: #fff;
+    border-bottom: 1px solid var(--admin-border);
+    font-weight: 600;
+    color: var(--brand-secondary, #2c2c2c);
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
+.btn-primary,
+.btn-outline-primary:hover {
+    background-color: var(--brand-primary, #fad200);
+    border-color: var(--brand-primary, #fad200);
+    color: var(--brand-secondary, #2c2c2c);
+}
+
+.btn-outline-primary {
+    border-color: var(--brand-primary, #fad200);
+    color: var(--brand-secondary, #2c2c2c);
+}
+
+.btn,
+button {
+    font-weight: 600;
+}
+
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:disabled {
+    color: var(--brand-secondary, #2c2c2c) !important;
+}
+
+.nav-tabs .nav-link {
+    color: var(--brand-secondary, #2c2c2c);
+    font-weight: 600;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--brand-secondary, #2c2c2c);
+    background-color: #fff8cc;
+    border-color: var(--brand-primary, #fad200) var(--brand-primary, #fad200) #fff;
+}
+
+a {
+    color: var(--brand-secondary, #2c2c2c);
+}
+
+a:hover {
+    color: var(--brand-primary, #fad200);
+}
+
+/* Tables */
+.card-body .admin-table-wrap {
+    border: 0;
+    border-radius: 0;
+}
+
+.admin-table-wrap {
+    border-radius: 0.5rem;
+    border: 1px solid var(--admin-border);
+    overflow: hidden;
+}
+
+.admin-table-wrap .table {
+    margin-bottom: 0;
+}
+
+.admin-table-wrap thead th {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--admin-muted);
+    background: #f8fafc;
+    border-bottom: 1px solid var(--admin-border);
+    white-space: nowrap;
+}
+
+.admin-table-wrap tbody td {
+    vertical-align: middle;
+    font-size: 0.875rem;
+}
+
+.admin-table-wrap .cell-clamp {
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.admin-empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: var(--admin-muted);
+}
+
+.admin-empty-state i {
+    font-size: 2.5rem;
+    opacity: 0.35;
+    margin-bottom: 0.75rem;
+}
+
+/* Turbo progress bar */
+.turbo-progress-bar {
+    background: linear-gradient(90deg, var(--admin-accent), var(--brand-secondary, #2c2c2c));
+    height: 3px;
+}
