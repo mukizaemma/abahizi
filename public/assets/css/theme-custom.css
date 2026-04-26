@@ -1574,44 +1574,16 @@ body {
 .programs-dual-cta__overlay {
     position: relative;
     padding: clamp(2.75rem, 7vw, 4.5rem) 1rem;
-    background: linear-gradient(
-        105deg,
-        rgba(0, 0, 0, 0.82) 0%,
-        rgba(0, 0, 0, 0.55) 48%,
-        rgba(0, 0, 0, 0.78) 100%
-    );
+    background: transparent;
 }
 
+/* Grain + top accent were removed so the parallax photo stays the visible backdrop */
 .programs-dual-cta__grain {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.45;
-    background-image: repeating-linear-gradient(
-        -33deg,
-        transparent,
-        transparent 3px,
-        rgba(255, 255, 255, 0.04) 3px,
-        rgba(255, 255, 255, 0.04) 4px
-    );
+    display: none;
 }
 
 .programs-dual-cta__accent {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    z-index: 2;
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        var(--brand-primary, #fad200) 20%,
-        var(--brand-primary, #fad200) 80%,
-        transparent 100%
-    );
-    opacity: 0.95;
+    display: none;
 }
 
 .programs-dual-cta__overlay > .container {

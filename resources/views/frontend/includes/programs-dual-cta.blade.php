@@ -16,13 +16,13 @@
     @endif
     aria-labelledby="programs-dual-cta-heading"
 >
-    <div class="programs-dual-cta__overlay" style="background: linear-gradient(180deg, rgba(10, 16, 25, 0.68) 0%, rgba(8, 12, 20, 0.74) 100%);">
+    <div class="programs-dual-cta__overlay">
         <div class="programs-dual-cta__accent" aria-hidden="true"></div>
         <div class="programs-dual-cta__grain" aria-hidden="true"></div>
         <div class="container position-relative">
             <div class="row g-4 g-md-3 align-items-stretch justify-content-center programs-dual-cta__row">
-                <div class="col-12 col-md-5 col-xl-4">
-                    <article class="programs-dual-cta-card programs-dual-cta-card--primary" style="background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.32); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);">
+                <div class="col-12 col-md-5 col-xl-5">
+                    <article class="programs-dual-cta-card programs-dual-cta-card--primary" style="background: rgba(8, 12, 20, 0.42); border-color: rgba(255, 255, 255, 0.28); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
                         <span class="programs-dual-cta-card__shine" aria-hidden="true"></span>
                         <span class="programs-dual-cta-card__icon" aria-hidden="true">
                             <i class="fas fa-bullseye"></i>
@@ -33,11 +33,11 @@
                         </span>
                     </article>
                 </div>
-                <div class="col-md-2 col-xl-1 d-none d-md-flex align-items-center justify-content-center programs-dual-cta__or-wrap">
+                <div class="col-md-2 d-none d-md-flex align-items-center justify-content-center programs-dual-cta__or-wrap">
                     <span class="programs-dual-cta__or" aria-hidden="true">&amp;</span>
                 </div>
-                <div class="col-12 col-md-5 col-xl-4">
-                    <article class="programs-dual-cta-card programs-dual-cta-card--secondary" style="background: rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.32); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);">
+                <div class="col-12 col-md-5 col-xl-5">
+                    <article class="programs-dual-cta-card programs-dual-cta-card--secondary" style="background: rgba(8, 12, 20, 0.42); border-color: rgba(255, 255, 255, 0.28); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);">
                         <span class="programs-dual-cta-card__shine" aria-hidden="true"></span>
                         <span class="programs-dual-cta-card__icon" aria-hidden="true">
                             <i class="fas fa-eye"></i>
