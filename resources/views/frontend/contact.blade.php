@@ -93,7 +93,28 @@
                     <div class="col-xl-7 col-lg-6 wow tpfadeRight" data-wow-duration=".9s"
                     data-wow-delay=".7s">
                         <div class="tp-location__info-box h-100">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.434670504606!2d30.1565774!3d-1.9806325999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca75ea871adfd%3A0x807deb18c1a0592f!2sImpact%20Life%20Mission!5e0!3m2!1sen!2srw!4v1755602240867!5m2!1sen!2srw" width="100%" height="100%" style="border:0; min-height: 520px; border-radius: 12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            @php
+                                $mapEmbedRaw = trim((string) ($setting->google_map_embed_code ?? ''));
+                                $mapSrc = '';
+                                $mapIframeHtml = '';
+
+                                if ($mapEmbedRaw !== '') {
+                                    if (stripos($mapEmbedRaw, '<iframe') !== false) {
+                                        $mapIframeHtml = $mapEmbedRaw;
+                                    } else {
+                                        $mapSrc = $mapEmbedRaw;
+                                    }
+                                }
+
+                                $defaultMapSrc = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.434670504606!2d30.1565774!3d-1.9806325999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca75ea871adfd%3A0x807deb18c1a0592f!2sImpact%20Life%20Mission!5e0!3m2!1sen!2srw!4v1755602240867!5m2!1sen!2srw';
+                                $resolvedMapSrc = $mapSrc !== '' ? $mapSrc : $defaultMapSrc;
+                            @endphp
+
+                            @if($mapIframeHtml !== '')
+                                {!! $mapIframeHtml !!}
+                            @else
+                                <iframe src="{{ $resolvedMapSrc }}" width="100%" height="100%" style="border:0; min-height: 520px; border-radius: 12px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            @endif
                         </div>
                     </div>
                 </div>

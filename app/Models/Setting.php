@@ -16,6 +16,7 @@ class Setting extends Model
         'font_family' => 'string',
         'page_header_image' => 'string',
         'page_header_caption' => 'string',
+        'google_map_embed_code' => 'string',
         'show_products_publicly' => 'boolean',
     ];
 

@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('instagram')->nullable();
             $table->string('twitter')->nullable();
             $table->string('youtube')->nullable();
+            $table->text('google_map_embed_code')->nullable();
             $table->string('logo')->nullable();
             $table->timestamps();
         });

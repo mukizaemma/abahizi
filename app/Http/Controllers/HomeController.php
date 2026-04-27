@@ -175,7 +175,23 @@ class HomeController extends Controller
             $eager[] = 'program.images';
         }
 
-        $activity = Activity::with($eager)->where('slug', $slug)->firstOrFail();
+        $activity = Activity::with($eager)->where('slug', $slug)->first();
+        if (!$activity) {
+            $program = Program::with('activities')->where('slug', $slug)->firstOrFail();
+            $programs = Program::where('id', '!=', $program->id)->oldest()->get();
+            $about = Background::firstOrEmpty();
+            $gallery = Gallery::latest()->get();
+            $news = News::latest()->paginate(9);
+
+            return view('frontend.activities', [
+                'program' => $program,
+                'programs' => $programs,
+                'about' => $about,
+                'gallery' => $gallery,
+                'news' => $news,
+            ]);
+        }
+
         $images = $activity->images;
 
         $programGallery = collect();
@@ -406,6 +422,9 @@ public function gallery(){
         }
         if (Schema::hasColumn('settings', 'page_header_caption')) {
             $data->page_header_caption = $request->input('page_header_caption');
+        }
+        if (Schema::hasColumn('settings', 'google_map_embed_code')) {
+            $data->google_map_embed_code = $request->input('google_map_embed_code');
         }
 
 

@@ -79,6 +79,14 @@ body {
 }
 
 /* Page headers (breadcrumb heroes): parallax + readable text panel */
+:root {
+    --site-image-overlay: linear-gradient(
+        180deg,
+        rgba(8, 12, 18, 0.52) 0%,
+        rgba(8, 12, 18, 0.52) 100%
+    );
+}
+
 .tp-breadcrumb__area {
     position: relative;
     background-size: cover;
@@ -92,11 +100,7 @@ body {
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: linear-gradient(
-        180deg,
-        rgba(8, 12, 18, 0.2) 0%,
-        rgba(8, 12, 18, 0.4) 100%
-    );
+    background: var(--site-image-overlay);
     pointer-events: none;
 }
 
@@ -215,7 +219,7 @@ body {
     min-height: 440px;
     display: block;
     padding: clamp(3rem, 6vw, 5rem) 1rem;
-    background: rgba(0, 0, 0, 0.58);
+    background: var(--site-image-overlay);
 }
 
 .about-core-values-parallax__overlay .container {
@@ -1062,7 +1066,7 @@ body {
 }
 
 .product-story-section--parallax .product-story-section__overlay {
-    background: linear-gradient(180deg, rgba(8, 12, 18, 0.64) 0%, rgba(8, 12, 18, 0.72) 100%);
+    background: var(--site-image-overlay);
 }
 
 .product-story-section__banner {
@@ -1566,6 +1570,15 @@ body {
     background-attachment: fixed;
 }
 
+.programs-dual-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: var(--site-image-overlay);
+}
+
 .programs-dual-cta--no-bg {
     background-image: none;
     background: linear-gradient(125deg, #2a2418 0%, #1a1a1a 45%, #252018 100%);
@@ -1624,6 +1637,9 @@ body {
 .programs-dual-cta__row {
     position: relative;
     z-index: 1;
+    max-width: 1160px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .programs-dual-cta__or-wrap {
@@ -1658,22 +1674,22 @@ body {
     border-radius: 18px;
     text-decoration: none;
     color: #fff !important;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    background: none !important;
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 18px 52px rgba(0, 0, 0, 0.38);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
     transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease;
     overflow: hidden;
 }
 
 .programs-dual-cta-card--primary {
-    border-color: rgba(250, 210, 0, 0.45);
-    box-shadow: 0 18px 52px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(250, 210, 0, 0.12);
+    border-color: rgba(250, 210, 0, 0.42);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(250, 210, 0, 0.12);
 }
 
 .programs-dual-cta-card--secondary {
-    border-color: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .programs-dual-cta-card__badge {
@@ -1705,8 +1721,8 @@ body {
 .programs-dual-cta-card:hover {
     transform: translateY(-6px);
     border-color: rgba(250, 210, 0, 0.55);
-    box-shadow: 0 26px 64px rgba(0, 0, 0, 0.48);
-    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 22px 44px rgba(0, 0, 0, 0.3);
+    background: none !important;
 }
 
 .programs-dual-cta-card:hover .programs-dual-cta-card__shine {
@@ -1737,7 +1753,15 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 1.35rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
+}
+
+.programs-dual-cta-card__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.7rem;
+    min-height: 3rem;
 }
 
 .programs-dual-cta-card__label {
@@ -1745,15 +1769,22 @@ body {
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.25;
-    margin-bottom: 0.35rem;
+    margin-bottom: 0;
 }
 
 .programs-dual-cta-card__hint {
-    font-size: 0.9rem;
-    line-height: 1.45;
-    color: rgba(255, 255, 255, 0.74);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.92);
     font-weight: 400;
     flex: 1 1 auto;
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
+}
+
+@media (min-width: 1200px) {
+    .programs-dual-cta-card__hint {
+        max-width: 97%;
+    }
 }
 
 .programs-dual-cta-card__action {
