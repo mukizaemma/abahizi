@@ -161,6 +161,7 @@
                                     <li><a href="{{ route('ourFactory') }}">Our Factory</a></li>
                                     <li><a href="{{ route('impactPage') }}">Impact</a></li>
                                     <li><a href="{{ route('contacts') }}">Contacts</a></li>
+                                    <li><a href="{{ route('handoverPage') }}">Handover</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -251,6 +252,7 @@
                             <li><a href="{{ route('ourProducts') }}">Our products</a></li>
                             <li><a href="{{ route('impactPage') }}">Impact</a></li>
                             <li><a href="{{ route('contacts') }}">Contact</a></li>
+                            <li><a href="{{ route('handoverPage') }}">Handover</a></li>
                         </ul>
                     </div>
 

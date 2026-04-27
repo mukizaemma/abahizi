@@ -1316,6 +1316,41 @@ body {
     }
 }
 
+/* Public handover page */
+.handover-card {
+    border-radius: 14px;
+}
+
+.handover-card--accent {
+    border: 1px solid rgba(250, 210, 0, 0.42);
+}
+
+.handover-list li,
+.handover-steps li {
+    margin-bottom: 0.55rem;
+    line-height: 1.7;
+}
+
+.handover-list li:last-child,
+.handover-steps li:last-child {
+    margin-bottom: 0;
+}
+
+.handover-meta {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    padding: 0.75rem 0.85rem;
+    background: #fff;
+}
+
+.handover-meta__label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #6b7280;
+    font-weight: 700;
+}
+
 /* Site footer */
 .site-footer {
     background: linear-gradient(165deg, #1e2433 0%, #12151c 55%, #0d0f14 100%);

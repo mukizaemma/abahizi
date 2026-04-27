@@ -40,6 +40,7 @@ Route::get('/request-order',[App\Http\Controllers\HomeController::class,'request
 Route::post('/request-order',[App\Http\Controllers\HomeController::class,'storeOrderRequest'])->name('storeOrderRequest');
 Route::get('/get-involved',[App\Http\Controllers\HomeController::class,'getInvolved'])->name('getInvolved');
 Route::post('/get-involved',[App\Http\Controllers\HomeController::class,'storePartnershipInquiry'])->name('storePartnershipInquiry');
+Route::get('/handover',[App\Http\Controllers\HomeController::class,'handoverPage'])->name('handoverPage');
 Route::get('/testimonials',[App\Http\Controllers\HomeController::class,'testimonials'])->name('testimonials');
 Route::get('/testimonials/{id}',[App\Http\Controllers\HomeController::class,'testimony'])->name('testimony');
 Route::get('/updates',[App\Http\Controllers\HomeController::class,'posts'])->name('posts');

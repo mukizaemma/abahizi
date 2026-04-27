@@ -29,9 +29,6 @@
             <div class="col-12">
                 <div class="tp-breadcrumb__content z-index-5 text-center">
                     <div class="page-header__top">
-                        <div class="tp-breadcrumb__list page-header__home">
-                            <span><a href="{{ route('home') }}">Home</a></span>
-                        </div>
                         <h3 class="tp-breadcrumb__title text-center mb-0">{{ $headerTitle }}</h3>
                     </div>
                     @if(!empty($headerCaption))

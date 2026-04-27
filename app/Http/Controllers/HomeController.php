@@ -754,5 +754,12 @@ public function gallery(){
         return view('frontend.impact', compact('about', 'impacts'));
     }
 
+    public function handoverPage()
+    {
+        $about = Background::firstOrEmpty();
+
+        return view('frontend.handover', compact('about'));
+    }
+
 
 }
