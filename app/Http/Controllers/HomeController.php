@@ -547,7 +547,8 @@ public function gallery(){
 
     public function ourFactory(){
         $about = Background::firstOrEmpty();
-        return view('frontend.our-factory', compact('about'));
+        $factoryGallery = Gallery::query()->latest()->take(9)->get();
+        return view('frontend.our-factory', compact('about', 'factoryGallery'));
     }
 
     public function ourServices(){

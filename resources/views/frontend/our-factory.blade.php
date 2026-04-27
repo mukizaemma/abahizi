@@ -40,20 +40,11 @@
         <div class="container">
             <div class="row justify-content-center mb-4">
                 <div class="col-12 col-xl-10 col-xxl-9">
-                    <article class="page-standalone-card">
-                        <header class="page-standalone-card__head">
-                            <span class="page-standalone-card__icon" aria-hidden="true"><i class="flaticon-settings"></i></span>
-                            <div>
-                                <p class="page-standalone-card__eyebrow">Production &amp; training</p>
-                                <h2 class="page-standalone-card__title mb-0">Our factory</h2>
-                            </div>
-                        </header>
-                        <div class="page-standalone-card__body postbox__text">
-                            <p class="lead mb-0" style="font-size: 1.15rem; line-height: 1.75; color: #333;">
-                                {!! $factoryDescription !== '' ? $factoryDescription : 'Our production space brings together tailoring workshops, quality craftsmanship, and hands-on learning where trainees and staff create products that carry our mission forward.' !!}
-                            </p>
-                        </div>
-                    </article>
+                    <div class="postbox__text">
+                        <p class="mb-0 fw-bold" style="font-size: 1.2rem; line-height: 1.8; color: #2c2c2c;">
+                            {!! $factoryDescription !== '' ? $factoryDescription : 'Our production space brings together tailoring workshops, quality craftsmanship, and hands-on learning where trainees and staff create products that carry our mission forward.' !!}
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -68,7 +59,6 @@
                         <header class="page-standalone-card__head">
                             <span class="page-standalone-card__icon" aria-hidden="true"><i class="fas fa-industry"></i></span>
                             <div>
-                                <p class="page-standalone-card__eyebrow">Services</p>
                                 <h3 class="page-standalone-card__title mb-0">Factory services</h3>
                             </div>
                         </header>
@@ -81,20 +71,18 @@
                         @else
                             <p class="mb-0 text-muted">Add factory services from admin to display them here.</p>
                         @endif
-                        <button class="btn btn-outline-secondary btn-sm mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#factory-services-more" aria-expanded="false" aria-controls="factory-services-more">
-                            View more
-                        </button>
-                        <div class="collapse mt-3" id="factory-services-more">
-                            @if(count($factoryServicesSubitems) > 0)
+                        @if(count($factoryServicesSubitems) > 0)
+                            <button class="btn btn-outline-secondary btn-sm mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#factory-services-more" aria-expanded="false" aria-controls="factory-services-more">
+                                View more
+                            </button>
+                            <div class="collapse mt-3" id="factory-services-more">
                                 <ul class="list-unstyled mb-0 factory-subitems-list">
                                     @foreach($factoryServicesSubitems as $sub)
                                         <li>{{ $sub }}</li>
                                     @endforeach
                                 </ul>
-                            @else
-                                <p class="text-muted mb-0 small">Add sub-items from admin to show more details.</p>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </article>
                 </div>
 
@@ -108,27 +96,24 @@
                         <header class="page-standalone-card__head">
                             <span class="page-standalone-card__icon" aria-hidden="true"><i class="fas fa-people-group"></i></span>
                             <div>
-                                <p class="page-standalone-card__eyebrow">Community</p>
                                 <h3 class="page-standalone-card__title mb-0">Community impact</h3>
                             </div>
                         </header>
                         <div class="page-standalone-card__body postbox__text">
                             {!! $communityImpactRaw !== '' ? $communityImpactRaw : '<p class="mb-0">Our factory operations are designed to improve livelihoods, strengthen households, and build long-term community resilience.</p>' !!}
                         </div>
-                        <button class="btn btn-outline-secondary btn-sm mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#factory-impact-more" aria-expanded="false" aria-controls="factory-impact-more">
-                            View more
-                        </button>
-                        <div class="collapse mt-3" id="factory-impact-more">
-                            @if(count($communityImpactSubitems) > 0)
+                        @if(count($communityImpactSubitems) > 0)
+                            <button class="btn btn-outline-secondary btn-sm mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#factory-impact-more" aria-expanded="false" aria-controls="factory-impact-more">
+                                View more
+                            </button>
+                            <div class="collapse mt-3" id="factory-impact-more">
                                 <ul class="list-unstyled mb-0 factory-subitems-list">
                                     @foreach($communityImpactSubitems as $sub)
                                         <li>{{ $sub }}</li>
                                     @endforeach
                                 </ul>
-                            @else
-                                <p class="text-muted mb-0 small">Add sub-items from admin to show more details.</p>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </article>
                 </div>
 
@@ -142,7 +127,6 @@
                         <header class="page-standalone-card__head">
                             <span class="page-standalone-card__icon" aria-hidden="true"><i class="fas fa-graduation-cap"></i></span>
                             <div>
-                                <p class="page-standalone-card__eyebrow">Learning &amp; growth</p>
                                 <h3 class="page-standalone-card__title mb-0">Training facilities for creativity and upskilling</h3>
                             </div>
                         </header>
@@ -155,23 +139,38 @@
                         @else
                             <p class="mb-0 text-muted">Add training facilities from admin to display this section.</p>
                         @endif
-                        <button class="btn btn-outline-secondary btn-sm mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#factory-training-more" aria-expanded="false" aria-controls="factory-training-more">
-                            View more
-                        </button>
-                        <div class="collapse mt-3" id="factory-training-more">
-                            @if(count($trainingFacilitiesSubitems) > 0)
+                        @if(count($trainingFacilitiesSubitems) > 0)
+                            <button class="btn btn-outline-secondary btn-sm mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#factory-training-more" aria-expanded="false" aria-controls="factory-training-more">
+                                View more
+                            </button>
+                            <div class="collapse mt-3" id="factory-training-more">
                                 <ul class="list-unstyled mb-0 factory-subitems-list">
                                     @foreach($trainingFacilitiesSubitems as $sub)
                                         <li>{{ $sub }}</li>
                                     @endforeach
                                 </ul>
-                            @else
-                                <p class="text-muted mb-0 small">Add sub-items from admin to show more details.</p>
-                            @endif
-                        </div>
+                            </div>
+                        @endif
                     </article>
                 </div>
             </div>
+
+            @if(($factoryGallery ?? collect())->count() > 0)
+                <div class="row mt-5">
+                    <div class="col-12 text-center mb-3">
+                        <h3 class="tp-section-title mb-0">Factory gallery</h3>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    @foreach($factoryGallery as $galleryImage)
+                        <div class="col-md-6 col-lg-4">
+                            <a href="{{ asset('storage/images/gallery/' . $galleryImage->image) }}" class="factory-gallery-card popup-image d-block">
+                                <img src="{{ asset('storage/images/gallery/' . $galleryImage->image) }}" alt="{{ $galleryImage->caption ?? 'Factory gallery image' }}">
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </section>
 
@@ -225,6 +224,27 @@
             position: absolute;
             left: 0;
             top: 0;
+        }
+
+        .factory-gallery-card {
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(44, 44, 44, 0.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: #f5f5f5;
+        }
+
+        .factory-gallery-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
+        }
+
+        .factory-gallery-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
         }
     </style>
 

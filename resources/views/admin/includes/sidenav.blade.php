@@ -2,28 +2,6 @@
     <div class="sb-sidenav-menu">
         <div class="nav flex-column pt-2">
 
-            <p class="admin-nav-section-title mb-0">Content Management</p>
-            <x-admin.nav-link
-                :href="route('settings')"
-                icon="fa-cogs"
-                :active="request()->routeIs('settings')"
-            >
-                Site settings
-            </x-admin.nav-link>
-            <x-admin.nav-link
-                :href="route('about')"
-                icon="fa-bullseye"
-                :active="request()->routeIs(['about', 'background'])"
-            >
-                About
-            </x-admin.nav-link>
-            <x-admin.nav-link
-                :href="route('factory.admin.overview')"
-                icon="fa-industry"
-                :active="request()->routeIs('factory.admin.*')"
-            >
-                Factory
-            </x-admin.nav-link>
             <x-admin.nav-link
                 :href="route('programs')"
                 icon="fa-list-alt"
@@ -38,6 +16,15 @@
             >
                 Initiatives
             </x-admin.nav-link>
+
+            <x-admin.nav-link
+                :href="route('factory.admin.overview')"
+                icon="fa-industry"
+                :active="request()->routeIs('factory.admin.*')"
+            >
+                Factory
+            </x-admin.nav-link>
+
             <x-admin.nav-link
                 :href="route('blog.index')"
                 icon="fa-newspaper"
@@ -102,6 +89,22 @@
                 :active="request()->routeIs('partnershipInquiries.index')"
             >
                 Partnership inquiries
+            </x-admin.nav-link>
+
+            <x-admin.nav-link
+                :href="route('about')"
+                icon="fa-bullseye"
+                :active="request()->routeIs(['about', 'background'])"
+            >
+                About
+            </x-admin.nav-link>
+
+            <x-admin.nav-link
+                :href="route('settings')"
+                icon="fa-cogs"
+                :active="request()->routeIs('settings')"
+            >
+                Site settings
             </x-admin.nav-link>
 
         </div>
