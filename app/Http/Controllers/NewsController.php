@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use App\Models\News;
 use App\Models\Blogimages;
 use Illuminate\Http\RedirectResponse;
@@ -73,6 +75,9 @@ class NewsController extends Controller
         $blog->slug = $this->uniqueSlug($request->input('title'));
         $blog->published_at = null; // explicit draft
         $blog->published_by = null;
+        if (Schema::hasColumn('news', 'added_by')) {
+            $blog->added_by = Auth::id() ?? Auth::guard('admin')->id();
+        }
         $blog->save();
 
         if($request->hasFile('gallery')){
@@ -146,6 +151,12 @@ class NewsController extends Controller
     public function destroy($id)
     {
         $blog = News::findOrFail($id);
+        $isSuperAdmin = (Auth::user()->email ?? null) === 'admin@iremetech.com';
+        $isOwner = !Schema::hasColumn('news', 'added_by')
+            || ((int) ($blog->added_by ?? 0) === (int) (Auth::id() ?? Auth::guard('admin')->id()));
+        if (! $isSuperAdmin && ! $isOwner) {
+            return redirect()->back()->with('error', 'You can only delete blog posts that you created.');
+        }
         $galleries = $blog->blogimages;
         // delete the image file
         if (!empty($blog->image) && Storage::disk('public')->exists($blog->image)) {

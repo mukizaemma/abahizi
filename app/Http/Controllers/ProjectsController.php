@@ -33,6 +33,9 @@ class ProjectsController extends Controller
         $activity->description = $request->input('description');
         $activity->program_id = $request->input('program_id');
         $activity->slug = $this->uniqueSlug($request->input('title'));
+        if (Schema::hasColumn('activities', 'added_by')) {
+            $activity->added_by = Auth::id() ?? Auth::guard('admin')->id();
+        }
 
         if ($request->hasFile('image')) {
             $activity->image = $request->file('image')->store('images/projects', 'public');
@@ -89,6 +92,12 @@ class ProjectsController extends Controller
     public function destroy($id)
     {
         $data = Activity::findOrFail($id);
+        $isSuperAdmin = (Auth::user()->email ?? null) === 'admin@iremetech.com';
+        $isOwner = !Schema::hasColumn('activities', 'added_by')
+            || ((int) ($data->added_by ?? 0) === (int) (Auth::id() ?? Auth::guard('admin')->id()));
+        if (! $isSuperAdmin && ! $isOwner) {
+            return redirect()->back()->with('error', 'You can only delete initiatives that you created.');
+        }
         if (!empty($data->image) && Storage::disk('public')->exists($data->image)) {
             Storage::disk('public')->delete($data->image);
         }

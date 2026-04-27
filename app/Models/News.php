@@ -14,7 +14,8 @@ class News extends Model
         'author',
         'body',
         'slug',
-        'image'
+        'image',
+        'added_by',
     ];
 
     public function blogimages()

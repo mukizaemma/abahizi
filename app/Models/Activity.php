@@ -15,6 +15,7 @@ class Activity extends Model
         'slug',
         'image',
         'program_id',
+        'added_by',
         'created_at'
     ];
 

@@ -13,7 +13,8 @@ class Program extends Model
         'title',
         'description',
         'slug',
-        'image'
+        'image',
+        'added_by',
     ];
 
     public function activities(){

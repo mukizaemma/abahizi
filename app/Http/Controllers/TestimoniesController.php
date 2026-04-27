@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use App\Models\Testimony;
 
 use Illuminate\Http\Request;
@@ -44,6 +46,9 @@ class TestimoniesController extends Controller
         $data->names = $request->names;
         $data ->title = $request->title;
         $data ->testimony = $request->testimony;
+        if (Schema::hasColumn('testimonies', 'added_by')) {
+            $data->added_by = Auth::id() ?? Auth::guard('admin')->id();
+        }
 
         // Uploading image
         if ($request->hasFile('image')) {
@@ -124,6 +129,12 @@ class TestimoniesController extends Controller
     public function destroy($id)
     {
         $data = Testimony::findOrFail($id);
+        $isSuperAdmin = (Auth::user()->email ?? null) === 'admin@iremetech.com';
+        $isOwner = !Schema::hasColumn('testimonies', 'added_by')
+            || ((int) ($data->added_by ?? 0) === (int) (Auth::id() ?? Auth::guard('admin')->id()));
+        if (! $isSuperAdmin && ! $isOwner) {
+            return redirect()->back()->with('error', 'You can only delete testimonials that you created.');
+        }
         if (!empty($data->image) && Storage::disk('public')->exists($data->image)) {
             Storage::disk('public')->delete($data->image);
         }

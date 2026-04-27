@@ -35,6 +35,9 @@ class ProgramController extends Controller
         $program->description = $request->input('description');
         $program->slug = $this->uniqueSlug($request->input('title'));
         $program->image = $request->file('image')->store('images/programs', 'public');
+        if (Schema::hasColumn('programs', 'added_by')) {
+            $program->added_by = Auth::id() ?? Auth::guard('admin')->id();
+        }
         $program->save();
 
         if (Schema::hasTable('programimages')) {
@@ -103,6 +106,12 @@ class ProgramController extends Controller
     public function destroy($id)
     {
         $data = Program::findOrFail($id);
+        $isSuperAdmin = (Auth::user()->email ?? null) === 'admin@iremetech.com';
+        $isOwner = !Schema::hasColumn('programs', 'added_by')
+            || ((int) ($data->added_by ?? 0) === (int) (Auth::id() ?? Auth::guard('admin')->id()));
+        if (! $isSuperAdmin && ! $isOwner) {
+            return redirect()->back()->with('error', 'You can only delete programs that you created.');
+        }
         if (Schema::hasTable('programimages')) {
             foreach ($data->images as $img) {
                 if (! empty($img->image) && Storage::disk('public')->exists($img->image)) {
