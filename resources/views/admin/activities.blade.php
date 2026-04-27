@@ -17,7 +17,7 @@
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
                     <div>
                         <h1>Initiatives</h1>
-                        <p class="text-muted mb-0">Manage initiatives under each program, with what/how/impact content and gallery images.</p>
+                        <p class="text-muted mb-0">Manage initiatives with one clear description, cover image, and optional gallery images.</p>
                     </div>
                     <button class="btn btn-primary px-3" data-bs-toggle="modal" data-bs-target="#projectCreateModal">
                         <i class="fa fa-plus me-1"></i> Add Initiative
@@ -32,7 +32,7 @@
                                     <tr>
                                         <th>Title</th>
                                         <th>Program</th>
-                                        <th>What / How / Impact</th>
+                                        <th>Description</th>
                                         <th>Cover</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
@@ -42,7 +42,10 @@
                                         <tr>
                                             <td class="fw-semibold">{{ $rs->title }}</td>
                                             <td>{{ $rs->program->title ?? 'Unassigned' }}</td>
-                                            <td>{{ ($rs->what_we_do ? 1 : 0) + ($rs->how_we_do_it ? 1 : 0) + ($rs->impact ? 1 : 0) }}/3 sections</td>
+                                            @php
+                                                $desc = \Illuminate\Support\Str::limit(strip_tags(html_entity_decode($rs->description ?? '')), 100, '…');
+                                            @endphp
+                                            <td>{{ $desc !== '' ? $desc : 'No description' }}</td>
                                             <td>
                                                 @if(!empty($rs->image))
                                                     <img src="{{ asset('storage/' . $rs->image) }}" alt="{{ $rs->title }}" class="rounded border" width="90">
@@ -106,20 +109,8 @@
                             </select>
                         </div>
                         <div class="col-12">
-                            <label class="form-label">Overview (optional)</label>
-                            <textarea class="form-control" rows="4" name="description" data-no-editor="true"></textarea>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">What we do</label>
-                            <textarea class="form-control" rows="4" name="what_we_do" data-no-editor="true"></textarea>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">How we do it</label>
-                            <textarea class="form-control" rows="4" name="how_we_do_it" data-no-editor="true"></textarea>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Impact</label>
-                            <textarea class="form-control" rows="4" name="impact" data-no-editor="true"></textarea>
+                            <label class="form-label">Initiative details / description</label>
+                            <textarea class="form-control" rows="6" name="description" data-no-editor="true" required></textarea>
                         </div>
                         <div class="col-12">
                             <label class="form-label">Cover image</label>

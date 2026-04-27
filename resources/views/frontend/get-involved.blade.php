@@ -107,8 +107,13 @@
                         <h2 class="h4 mb-3">Tell us how you would like to collaborate</h2>
                         <p class="text-muted mb-4">Select any areas that fit. We will reply by email or phone to explore next steps.</p>
 
-                        <form action="{{ route('storePartnershipInquiry') }}" method="POST" class="row g-3">
+                        <form action="{{ route('storePartnershipInquiry') }}" method="POST" class="row g-3 site-partner-form">
                             @csrf
+                            <input type="hidden" name="started_at" value="{{ now()->timestamp }}">
+                            <div class="site-hp-field" aria-hidden="true">
+                                <label for="website">Website</label>
+                                <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+                            </div>
                             <div class="col-12">
                                 <label class="form-label">Organisation (optional)</label>
                                 <input type="text" name="organization" class="form-control" value="{{ old('organization') }}" placeholder="Company, NGO, school, church…">
@@ -154,6 +159,7 @@
                             <div class="col-12">
                                 <label class="form-label">Message</label>
                                 <textarea name="message" class="form-control" rows="5" placeholder="Goals, timeline, how you heard about us…">{{ old('message') }}</textarea>
+                                <small class="text-muted d-block mt-2">Tip: include goals, timeline, and the type of partnership you need.</small>
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-lg fw-semibold text-dark site-form-submit">Send inquiry</button>

@@ -7,7 +7,6 @@ use App\Models\Program;
 use App\Models\Projectimage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -25,25 +24,13 @@ class ProjectsController extends Controller
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'program_id' => ['required', 'exists:programs,id'],
-            'description' => ['nullable', 'string'],
-            'what_we_do' => ['nullable', 'string'],
-            'how_we_do_it' => ['nullable', 'string'],
-            'impact' => ['nullable', 'string'],
+            'description' => ['required', 'string'],
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:3072'],
         ]);
 
         $activity = new Activity();
         $activity->title = $request->input('title');
         $activity->description = $request->input('description');
-        if (Schema::hasColumn('activities', 'what_we_do')) {
-            $activity->what_we_do = $request->input('what_we_do');
-        }
-        if (Schema::hasColumn('activities', 'how_we_do_it')) {
-            $activity->how_we_do_it = $request->input('how_we_do_it');
-        }
-        if (Schema::hasColumn('activities', 'impact')) {
-            $activity->impact = $request->input('impact');
-        }
         $activity->program_id = $request->input('program_id');
         $activity->slug = $this->uniqueSlug($request->input('title'));
 
@@ -75,25 +62,13 @@ class ProjectsController extends Controller
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'program_id' => ['required', 'exists:programs,id'],
-            'description' => ['nullable', 'string'],
-            'what_we_do' => ['nullable', 'string'],
-            'how_we_do_it' => ['nullable', 'string'],
-            'impact' => ['nullable', 'string'],
+            'description' => ['required', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:3072'],
         ]);
 
         $data = Activity::findOrFail($id);
         $data->title = $request->input('title');
         $data->description = $request->input('description');
-        if (Schema::hasColumn('activities', 'what_we_do')) {
-            $data->what_we_do = $request->input('what_we_do');
-        }
-        if (Schema::hasColumn('activities', 'how_we_do_it')) {
-            $data->how_we_do_it = $request->input('how_we_do_it');
-        }
-        if (Schema::hasColumn('activities', 'impact')) {
-            $data->impact = $request->input('impact');
-        }
         $data->program_id = $request->input('program_id');
         if ($data->slug !== Str::slug($request->input('title'))) {
             $data->slug = $this->uniqueSlug($request->input('title'), $data->id);

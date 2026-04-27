@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
@@ -661,6 +662,15 @@ public function gallery(){
 
     public function storePartnershipInquiry(Request $request)
     {
+        $ipKey = 'partner-inquiry:ip:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($ipKey, 5)) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Too many attempts. Please wait a few minutes and try again.']);
+        }
+
+        RateLimiter::hit($ipKey, 10 * 60);
+
         $allowed = [
             'training',
             'equipment',
@@ -680,7 +690,32 @@ public function gallery(){
             'interests' => ['nullable', 'array'],
             'interests.*' => ['string', 'in:' . implode(',', $allowed)],
             'message' => ['nullable', 'string', 'max:20000'],
+            'website' => ['nullable', 'max:0'], // honeypot: must stay empty
+            'started_at' => ['nullable', 'integer'],
         ]);
+
+        $startedAt = (int) ($request->input('started_at') ?? 0);
+        if ($startedAt > 0 && (time() - $startedAt) < 3) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Form submitted too quickly. Please review your details and try again.']);
+        }
+
+        $spamPattern = '/https?:\/\/|www\./i';
+        foreach (['organization', 'full_name', 'message'] as $field) {
+            $value = (string) ($validated[$field] ?? '');
+            if ($value !== '' && preg_match($spamPattern, $value)) {
+                return back()
+                    ->withInput()
+                    ->withErrors([$field => 'Please remove links from this field.']);
+            }
+        }
+
+        if (empty($request->input('interests')) && ! $request->filled('message')) {
+            return back()
+                ->withInput()
+                ->withErrors(['interests' => 'Select at least one area of interest or write a message.']);
+        }
 
         $labels = [
             'training' => 'Skills development & training',

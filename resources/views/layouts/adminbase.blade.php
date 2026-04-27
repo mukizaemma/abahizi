@@ -190,12 +190,38 @@
                 });
             }
 
+            function initAdminModalCloseControls() {
+                document.querySelectorAll('.modal').forEach((modal) => {
+                    const header = modal.querySelector('.modal-header');
+                    if (header && !header.querySelector('[data-bs-dismiss="modal"]')) {
+                        const closeBtn = document.createElement('button');
+                        closeBtn.type = 'button';
+                        closeBtn.className = 'btn-close';
+                        closeBtn.setAttribute('data-bs-dismiss', 'modal');
+                        closeBtn.setAttribute('aria-label', 'Close');
+                        header.appendChild(closeBtn);
+                    }
+
+                    const footer = modal.querySelector('.modal-footer');
+                    if (footer && !footer.querySelector('[data-bs-dismiss="modal"]')) {
+                        const footerCloseBtn = document.createElement('button');
+                        footerCloseBtn.type = 'button';
+                        footerCloseBtn.className = 'btn btn-outline-secondary';
+                        footerCloseBtn.setAttribute('data-bs-dismiss', 'modal');
+                        footerCloseBtn.textContent = 'Close';
+                        footer.prepend(footerCloseBtn);
+                    }
+                });
+            }
+
             document.addEventListener('DOMContentLoaded', initAdminAlerts);
             document.addEventListener('DOMContentLoaded', initAdminSubmitFeedback);
             document.addEventListener('DOMContentLoaded', initAdminSummernote);
+            document.addEventListener('DOMContentLoaded', initAdminModalCloseControls);
             document.addEventListener('turbo:load', initAdminAlerts);
             document.addEventListener('turbo:load', initAdminSubmitFeedback);
             document.addEventListener('turbo:load', initAdminSummernote);
+            document.addEventListener('turbo:load', initAdminModalCloseControls);
             document.addEventListener('shown.bs.tab', initAdminSummernote);
         </script>
 

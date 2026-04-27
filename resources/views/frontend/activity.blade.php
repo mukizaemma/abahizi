@@ -61,7 +61,7 @@
 <section class="related-projects-section py-5 grey-bg">
     <div class="container">
         <div class="text-center mb-4 mb-lg-5">
-            <h2 class="h3 mb-2">Related projects</h2>
+            <h2 class="h3 mb-2">Related Initatives</h2>
             @if($activity->program)
                 <p class="text-muted mb-0">More work under <strong>{{ $activity->program->title }}</strong></p>
             @endif

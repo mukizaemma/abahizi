@@ -11,6 +11,16 @@
 
     <section class="tp-blog-2__area tp-blog-2__space programs-home-grid pb-90">
         <div class="container">
+            @if(!empty($program->description))
+                <div class="row justify-content-center mb-4 mb-lg-5">
+                    <div class="col-12 col-lg-10">
+                        <div class="postbox__text text-center" style="font-size: 1.06rem; line-height: 1.8;">
+                            {!! $program->description !!}
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <div class="row">
                 <div class="col-xl-12">
                     <div class="tp-blog-2__section-title pb-50 text-center">

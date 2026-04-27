@@ -17,7 +17,7 @@
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
                     <div>
                         <h1>Edit Initiative</h1>
-                        <p class="text-muted mb-0">Update initiative details, assign program, and manage gallery images.</p>
+                        <p class="text-muted mb-0">Update title, one clear description, cover image, and gallery images.</p>
                     </div>
                     <a href="{{ route('getProjects') }}" class="btn btn-outline-primary">Back to Initiatives</a>
                 </div>
@@ -42,20 +42,8 @@
                                     </select>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label">Overview (optional)</label>
-                                    <textarea rows="6" class="form-control" name="description" data-no-editor="true">{!! $data->description !!}</textarea>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">What we do</label>
-                                    <textarea rows="5" class="form-control" name="what_we_do" data-no-editor="true">{!! $data->what_we_do !!}</textarea>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">How we do it</label>
-                                    <textarea rows="5" class="form-control" name="how_we_do_it" data-no-editor="true">{!! $data->how_we_do_it !!}</textarea>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">Impact</label>
-                                    <textarea rows="5" class="form-control" name="impact" data-no-editor="true">{!! $data->impact !!}</textarea>
+                                    <label class="form-label">Initiative details / description</label>
+                                    <textarea rows="7" class="form-control" name="description" data-no-editor="true" required>{!! $data->description !!}</textarea>
                                 </div>
                                 <div class="col-lg-6">
                                     <label class="form-label">Current cover</label>
