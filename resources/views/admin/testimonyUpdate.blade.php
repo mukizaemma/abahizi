@@ -58,6 +58,11 @@
                                     <label for="projectinput8">Testimony Description</label>
                                     <textarea id="ProgramDescription" rows="5" class="form-control" name="testimony" data-editor="rich">{!! $data->testimony !!}</textarea>
                                 </div>
+                                <div class="form-group mt-3">
+                                    <label>YouTube Video URL (optional)</label>
+                                    <input type="url" class="form-control" name="video_url" value="{{ $data->video_url }}" placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/...">
+                                    <small class="text-muted">If provided, this testimonial will display a video player on the public impact page.</small>
+                                </div>
 
                                 <div class="row mt-5">
 

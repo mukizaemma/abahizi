@@ -16,6 +16,7 @@ class Testimony extends Model
         'age',
         'program_id',
         'testimony',
+        'video_url',
         'image',
         'status',
         'added_by',

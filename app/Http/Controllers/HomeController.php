@@ -751,8 +751,25 @@ public function gallery(){
 
     public function impactPage(){
         $about = Background::firstOrEmpty();
+        $initiatives = Activity::query()
+            ->where(function ($q) {
+                $q->whereNull('status')
+                    ->orWhere('status', 'Active');
+            })
+            ->latest()
+            ->take(9)
+            ->get();
         $impacts = Impact::query()->where('status', 'Active')->latest()->get();
-        return view('frontend.impact', compact('about', 'impacts'));
+        $testimonials = Testimony::query()
+            ->where(function ($q) {
+                $q->whereNull('status')
+                    ->orWhere('status', 'Publish')
+                    ->orWhere('status', 'Active');
+            })
+            ->latest()
+            ->take(8)
+            ->get();
+        return view('frontend.impact', compact('about', 'initiatives', 'impacts', 'testimonials'));
     }
 
     public function handoverPage()

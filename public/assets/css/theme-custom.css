@@ -78,7 +78,7 @@ body {
     }
 }
 
-/* Page headers (breadcrumb heroes): parallax + readable text panel */
+/* Page headers (breadcrumb heroes): parallax + readable text */
 :root {
     --site-image-overlay: linear-gradient(
         180deg,
@@ -110,12 +110,7 @@ body {
     display: block;
     width: min(100%, 780px);
     margin: 0 auto;
-    padding: 0.9rem 1.15rem;
-    border-radius: 14px;
-    background: rgba(16, 24, 38, 0.18);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    padding: 0;
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
     text-align: center;
 }
@@ -2112,5 +2107,87 @@ body {
 
 .site-cta-quote__btn.tp-btn {
     font-weight: 700;
+}
+
+/* Impact page: full-viewport stats band (matches parallax overlay treatment) */
+.impact-stats-hero {
+    position: relative;
+    overflow: hidden;
+    background-color: #2c2c2c;
+    background-image: var(--impact-stats-bg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    min-height: 100vh;
+}
+
+@media (min-width: 992px) {
+    .impact-stats-hero {
+        background-attachment: fixed;
+    }
+}
+
+.impact-stats-hero--no-bg {
+    background-image: none;
+    background: linear-gradient(135deg, #243028 0%, #1a221c 45%, #2c3a30 100%);
+}
+
+.impact-stats-hero__overlay {
+    position: relative;
+    z-index: 1;
+    min-height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(3rem, 10vh, 6rem) 1rem;
+    background: var(--site-image-overlay);
+}
+
+.impact-stats-hero__grid {
+    align-items: center;
+}
+
+/* Text-only stats: no glass panels (overlay on section provides contrast) */
+.impact-stats-hero__stat {
+    padding: clamp(1.25rem, 3vw, 1.75rem) 0.75rem;
+    text-align: center;
+    background: none;
+    border: 0;
+    box-shadow: none;
+}
+
+@media (min-width: 992px) {
+    .impact-stats-hero__grid > div:nth-child(1) .impact-stats-hero__stat,
+    .impact-stats-hero__grid > div:nth-child(3) .impact-stats-hero__stat {
+        transform: translateY(8px);
+    }
+}
+
+.impact-stats-hero__value {
+    font-size: clamp(2.25rem, 7vw, 3.75rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    text-shadow:
+        0 0 1px rgba(0, 0, 0, 0.8),
+        0 2px 28px rgba(0, 0, 0, 0.5),
+        0 1px 3px rgba(0, 0, 0, 0.6);
+    margin-bottom: 0.65rem;
+    min-height: 1.15em;
+}
+
+.impact-stats-hero__label {
+    margin: 0;
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.92);
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+    text-shadow:
+        0 0 1px rgba(0, 0, 0, 0.75),
+        0 2px 20px rgba(0, 0, 0, 0.45);
 }
 

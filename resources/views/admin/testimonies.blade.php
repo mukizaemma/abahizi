@@ -42,6 +42,7 @@
                                     <tr>
                                         <th>Names</th>
                                         <th>Testimony</th>
+                                        <th>Format</th>
                                         <th>Image</th>
                                         <th>Action</th>
                                     </tr>
@@ -52,6 +53,7 @@
                                         <tr>
                                             <td>{{ $rs->names }}</td>
                                             <td>{!! $rs->testimony !!}</td>
+                                            <td>{{ !empty($rs->video_url) ? 'Video (YouTube)' : 'Text' }}</td>
                                             <td><img src="{{ asset('storage/images/testimonies') . $rs->image }}"
                                                     alt="" width="150px"></td>
                                             <td>
@@ -107,6 +109,11 @@
                                                 <label for="projectinput8">Testimony Description</label>
                                                 <textarea id="ProgramDescription" rows="5" class="form-control" name="testimony" data-editor="rich"
                                                     placeholder="Testimony Description"></textarea>
+                                            </div>
+                                            <div class="form-group mt-3">
+                                                <label>YouTube Video URL (optional)</label>
+                                                <input type="url" class="form-control" name="video_url" placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/...">
+                                                <small class="text-muted">If provided, this testimonial will display as a video testimonial on the public page.</small>
                                             </div>
 
                                             <div class="row mt-5">

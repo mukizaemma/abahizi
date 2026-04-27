@@ -40,12 +40,14 @@ class TestimoniesController extends Controller
             'names' => ['required', 'string', 'max:255'],
             'title' => ['required', 'string', 'max:255'],
             'testimony' => ['nullable', 'string'],
+            'video_url' => ['nullable', 'url', 'regex:/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
         $data = new Testimony();
         $data->names = $request->names;
         $data ->title = $request->title;
         $data ->testimony = $request->testimony;
+        $data->video_url = $request->filled('video_url') ? trim((string) $request->input('video_url')) : null;
         if (Schema::hasColumn('testimonies', 'added_by')) {
             $data->added_by = Auth::id() ?? Auth::guard('admin')->id();
         }
@@ -100,6 +102,7 @@ class TestimoniesController extends Controller
             'names' => ['required', 'string', 'max:255'],
             'title' => ['required', 'string', 'max:255'],
             'testimony' => ['nullable', 'string'],
+            'video_url' => ['nullable', 'url', 'regex:/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//i'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
 
@@ -107,6 +110,7 @@ class TestimoniesController extends Controller
         $data->names = $request->input('names');
         $data->title = $request->input('title');
         $data->testimony = $request->input('testimony');
+        $data->video_url = $request->filled('video_url') ? trim((string) $request->input('video_url')) : null;
 
         if ($request->hasFile('image')) {
             if (!empty($data->image) && Storage::disk('public')->exists($data->image)) {
