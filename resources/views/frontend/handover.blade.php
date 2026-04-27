@@ -4,13 +4,18 @@
 
 @section('content')
 
-@include('frontend.includes.page-header', [
-    'title' => 'Website Handover Report',
-    'caption' => 'Summary of completed restructuring, demo access, CMS guidance, and support contacts.',
-])
-
 <section class="py-5 grey-bg">
     <div class="container">
+        <div class="row justify-content-center mb-4 mb-lg-5">
+            <div class="col-12 col-xl-10">
+                <div class="card border-0 shadow-sm handover-card">
+                    <div class="card-body p-4 p-lg-5 text-center">
+                        <h1 class="mb-2">Website Handover Report</h1>
+                        <p class="mb-0 text-muted">Summary of completed restructuring, demo access, CMS guidance, and support contacts.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row justify-content-center g-4">
             <div class="col-12 col-xl-10">
                 <article class="card border-0 shadow-sm handover-card">
@@ -93,14 +98,51 @@
             <div class="col-12 col-xl-10">
                 <article class="card border-0 shadow-sm handover-card">
                     <div class="card-body p-4 p-lg-5">
-                        <h2 class="h4 mb-3">CMS user guide (for management team)</h2>
+                        <h2 class="h4 mb-4">Website user guide (CMS)</h2>
+
+                        <h3 class="h5 mb-2">1) Login and account security</h3>
+                        <ol class="handover-steps mb-4">
+                            <li>Go to <a href="https://demo.iremetech.com/login" target="_blank" rel="noopener noreferrer">demo.iremetech.com/login</a>.</li>
+                            <li>Sign in using the shared credentials.</li>
+                            <li>After first login, update the password for better security.</li>
+                            <li>If login fails, contact support immediately using the contacts below.</li>
+                        </ol>
+
+                        <h3 class="h5 mb-2">2) Settings and contacts</h3>
+                        <ol class="handover-steps mb-4">
+                            <li>Open <strong>Settings</strong> from the admin menu.</li>
+                            <li>Update official contact channels: phone numbers, email, address, and social links.</li>
+                            <li>Update the embedded Google map code from the same settings area when needed.</li>
+                            <li>Save and verify changes on the public <strong>Contact</strong> page.</li>
+                        </ol>
+
+                        <h3 class="h5 mb-2">3) About section</h3>
+                        <ol class="handover-steps mb-4">
+                            <li>Use the <strong>About</strong> management page to update mission, vision, model, and key story sections.</li>
+                            <li>Keep language concise and practical for partners, buyers, and collaborators.</li>
+                            <li>Preview public pages after each update to ensure flow and clarity.</li>
+                        </ol>
+
+                        <h3 class="h5 mb-2">4) Programs and initiatives (CRUD)</h3>
+                        <ol class="handover-steps mb-4">
+                            <li>Create, edit, and delete programs from the <strong>Programs</strong> section.</li>
+                            <li>Under each program, manage initiatives in the <strong>Initiatives</strong> section.</li>
+                            <li>For each initiative, keep only: title, one clear description/details field, cover image, and gallery (optional).</li>
+                            <li>Avoid splitting initiative content into many fields to keep public pages concise and consistent.</li>
+                        </ol>
+
+                        <h3 class="h5 mb-2">5) Slides and gallery</h3>
+                        <ol class="handover-steps mb-4">
+                            <li>Manage homepage banners in <strong>Slides</strong>.</li>
+                            <li>Manage supporting image storytelling in <strong>Gallery</strong>.</li>
+                            <li>Use high-quality, relevant images from real field/project work only.</li>
+                        </ol>
+
+                        <h3 class="h5 mb-2">6) Products</h3>
                         <ol class="handover-steps mb-0">
-                            <li>Open <a href="https://demo.iremetech.com/login" target="_blank" rel="noopener noreferrer">demo.iremetech.com/login</a> and sign in with the shared credentials.</li>
-                            <li>From the dashboard, navigate to each section (Programs, Initiatives, About, Contact, Settings) and update content directly.</li>
-                            <li>Use the single description/details fields for initiatives to keep content concise and consistent.</li>
-                            <li>Upload cover images and gallery photos where relevant; review pages publicly after each save.</li>
-                            <li>For major edits, coordinate internally and document changes so the team can revert or request refinements if needed.</li>
-                            <li>After final approval, all confirmed updates from the demo will be moved to the live production website.</li>
+                            <li>Use the <strong>Products</strong> management area to create, edit, and organize product items.</li>
+                            <li>Ensure names, descriptions, and images are accurate and market-ready.</li>
+                            <li>Confirm changes on public product pages before final approval.</li>
                         </ol>
                     </div>
                 </article>
@@ -110,6 +152,8 @@
                 <article class="card border-0 shadow-sm handover-card">
                     <div class="card-body p-4 p-lg-5">
                         <h2 class="h4 mb-3">Support and clarifications</h2>
+                        <p class="mb-2">After approval, all confirmed updates from the demo will be moved to the live website.</p>
+                        <p class="mb-2">We remain available for further virtual training for your team if needed.</p>
                         <p class="mb-2">For login issues, clarifications, or requested modifications:</p>
                         <p class="mb-1"><strong>Phone/WhatsApp:</strong> <a href="tel:0783807409">0783807409</a></p>
                         <p class="mb-0"><strong>Email:</strong> <a href="mailto:info@iremetech.com">info@iremetech.com</a></p>
