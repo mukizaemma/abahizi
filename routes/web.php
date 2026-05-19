@@ -25,6 +25,8 @@ Route::get('/services/{slug}',[App\Http\Controllers\HomeController::class,'servi
 Route::get('/products',[App\Http\Controllers\HomeController::class,'ourProducts'])->name('ourProducts');
 Route::get('/products/{slug}',[App\Http\Controllers\HomeController::class,'productShow'])->name('productShow');
 Route::get('/impact',[App\Http\Controllers\HomeController::class,'impactPage'])->name('impactPage');
+Route::get('/impact-reports',[App\Http\Controllers\HomeController::class,'impactReportsIndex'])->name('impactReports');
+Route::get('/impact-reports/{slug}',[App\Http\Controllers\HomeController::class,'impactReportShow'])->name('impactReportShow');
 Route::get('/team',[App\Http\Controllers\HomeController::class,'team'])->name('team');
 Route::get('/our-programs',[App\Http\Controllers\HomeController::class,'showPrograms'])->name('showPrograms');
 Route::get('/our-programs/{slug}',[App\Http\Controllers\HomeController::class,'singleProgram'])->name('programShow');
@@ -193,6 +195,12 @@ Route::middleware(['auth', 'admin.role'
     Route::get('/webMessages',[App\Http\Controllers\HomeController::class,'webMessages'])->name('webMessages');
     Route::get('/messageReply/{id}',[App\Http\Controllers\HomeController::class,'messageReply'])->name('messageReply');
     Route::post('/sendReply',[App\Http\Controllers\HomeController::class,'sendReply'])->name('sendReply');
+
+    Route::get('/impact-reports-admin', [App\Http\Controllers\ImpactReportAdminController::class, 'index'])->name('impactReports.admin.index');
+    Route::post('/impact-reports-admin/page', [App\Http\Controllers\ImpactReportAdminController::class, 'updatePage'])->name('impactReports.admin.page');
+    Route::post('/impact-reports-admin/reports', [App\Http\Controllers\ImpactReportAdminController::class, 'store'])->name('impactReports.admin.store');
+    Route::post('/impact-reports-admin/reports/{id}', [App\Http\Controllers\ImpactReportAdminController::class, 'update'])->name('impactReports.admin.update');
+    Route::get('/impact-reports-admin/reports/{id}/delete', [App\Http\Controllers\ImpactReportAdminController::class, 'destroy'])->name('impactReports.admin.destroy');
 
     Route::get('/admin/impacts', [App\Http\Controllers\ImpactsController::class, 'index'])->name('impacts.index');
     Route::post('/saveImpact', [App\Http\Controllers\ImpactsController::class, 'store'])->name('saveImpact');

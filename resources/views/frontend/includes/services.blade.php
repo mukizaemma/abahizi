@@ -1,43 +1,51 @@
-    <div class="tp-blog-2__area tp-blog-2__space programs-home-grid">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="tp-blog-2__section-title pb-50 text-center">
-                        <h4 class="tp-section-title">Our Programs</h4>
+@php
+    $firstProgram = $ourPrograms->first();
+    $whatWeDoIntro = trim(strip_tags(html_entity_decode($about->what_we_do ?? '')));
+    if ($whatWeDoIntro === '') {
+        $whatWeDoIntro = 'We combine ethical manufacturing with community programs that create lasting opportunity for women and families across Rwanda.';
+    } else {
+        $whatWeDoIntro = \Illuminate\Support\Str::limit($whatWeDoIntro, 360, '…');
+    }
+    $firstImageUrl = $firstProgram && !empty($firstProgram->image)
+        ? asset('storage/' . $firstProgram->image)
+        : asset('assets/img/breadcrumb/breadcrumb-bg-1.jpg');
+@endphp
+
+<section class="home-programs-split" aria-labelledby="home-programs-split-title">
+    <div class="container-fluid px-0">
+        <div class="row g-0 align-items-stretch home-programs-split__row">
+            <div class="col-lg-5 col-xl-5 wow tpfadeUp" data-wow-duration=".9s" data-wow-delay=".1s">
+                <div class="home-programs-split__intro h-100">
+                    <div class="home-programs-split__intro-body">
+                        <h2 id="home-programs-split-title" class="home-programs-split__title">What we do</h2>
+                        <p class="home-programs-split__lead">{{ $whatWeDoIntro }}</p>
                     </div>
+                    @if($firstProgram)
+                        <div class="home-programs-split__actions">
+                            <a class="home-programs-split__cta tp-btn" href="{{ route('programShow', ['slug' => $firstProgram->slug]) }}">
+                                View more <span aria-hidden="true">→</span>
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
-            <div class="row g-4">
-                @foreach ($ourPrograms as $rs)
-                <div class="col-lg-6 mb-0 wow tpfadeUp" data-wow-duration=".9s"
-                data-wow-delay=".3s">
-                    <article class="program-list-card h-100 d-flex flex-column bg-white rounded-3 overflow-hidden border shadow-sm">
-                        <a href="{{ route('project', ['slug' => $rs->slug]) }}" class="program-list-card__thumb d-block position-relative">
-                            <img src="{{ asset('storage/' . $rs->image) }}" alt="{{ $rs->title }}" class="w-100 program-list-card__img">
-                        </a>
-                        <div class="program-list-card__body p-4 d-flex flex-column flex-grow-1">
-                            <h2 class="h5 mb-3">
-                                <a href="{{ route('project', ['slug' => $rs->slug]) }}" class="text-dark text-decoration-none">{{ $rs->title }}</a>
-                            </h2>
-                            <div class="tp-about-3__text flex-grow-1">
-                                @php
-                                $descPlain = strip_tags(html_entity_decode($rs->description ?? ''));
-                                $words = Str::limit($descPlain, 140, '…');
-                                @endphp
-
-                                <p class="program-list-card__excerpt mb-4">{{ $words }}</p>
-
-                                <a href="{{ route('project', ['slug' => $rs->slug]) }}" class="tp-btn program-list-card__cta align-self-start mt-auto">
-                                    View more <span class="ms-1" aria-hidden="true">→</span>
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-                @endforeach
-
+            <div class="col-lg-7 col-xl-7 wow tpfadeUp" data-wow-duration=".9s" data-wow-delay=".2s">
+                @if($firstProgram)
+                    <a
+                        href="{{ route('programShow', ['slug' => $firstProgram->slug]) }}"
+                        class="home-programs-split__feature h-100 d-block"
+                        style="background-image: url('{{ $firstImageUrl }}');"
+                    >
+                        <h3 class="home-programs-split__feature-title">{{ $firstProgram->title }}</h3>
+                    </a>
+                @else
+                    <div class="home-programs-split__feature home-programs-split__feature--empty h-100">
+                        <p class="mb-0">Add a program in admin to display it here.</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
+</section>
 
-    @include('frontend.includes.programs-dual-cta')
+@include('frontend.includes.programs-dual-cta')

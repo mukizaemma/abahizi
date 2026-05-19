@@ -139,28 +139,20 @@
                                 <ul>
                                     <li><a href="{{ route('home') }}">Home</a></li>
                                     <li class="has-dropdown">
-                                        <a href="{{ route('backgroundDetails') }}">About</a>
+                                        <a href="{{ route('ourMission') }}">About</a>
                                         <ul class="submenu tp-submenu">
-                                            <li><a href="{{ route('backgroundDetails') }}">Background / History</a></li>
-                                            <li><a href="{{ route('ourApproach') }}">Our Approach</a></li>
-                                            <li><a href="{{ route('ourModel') }}">Our Model</a></li>
+                                            <li><a href="{{ route('ourMission') }}">Our Mission &amp; Vision</a></li>
                                             <li><a href="{{ route('team') }}">Our Team</a></li>
+                                            <li><a href="{{ route('ourFactory') }}">Our Factory</a></li>
                                         </ul>
                                     </li>
-                                    <li class="has-dropdown">
-                                        <a href="{{ route('showPrograms') }}">Our Programs</a>
-                                        <ul class="submenu tp-submenu">
-                                            @forelse ($ourPrograms as $prog)
-                                                <li><a href="{{ route('programShow', ['slug' => $prog->slug]) }}">{{ $prog->title }}</a></li>
-                                            @empty
-                                                <li><span class="px-3 d-inline-block text-muted small">No programs available</span></li>
-                                            @endforelse
-                                        </ul>
-                                    </li>
-                                    <li><a href="{{ route('ourProducts') }}">Our Products</a></li>
-                                    <li><a href="{{ route('ourFactory') }}">Our Factory</a></li>
-                                    <li><a href="{{ route('impactPage') }}">Impact</a></li>
-                                    <li><a href="{{ route('contacts') }}">Contacts</a></li>
+                                    @if($navProgramWhatWeDo)
+                                        <li><a href="{{ route('programShow', ['slug' => $navProgramWhatWeDo->slug]) }}">What we do</a></li>
+                                    @endif
+                                    @if($navProgramOurImpact)
+                                        <li><a href="{{ route('programShow', ['slug' => $navProgramOurImpact->slug]) }}">Our Impact</a></li>
+                                    @endif
+                                    <li><a href="{{ route('impactReports') }}">Impact Reports</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -245,11 +237,15 @@
                     <div class="col-12 col-sm-6 col-lg-4 site-footer__col">
                         <h3 class="site-footer__heading">Explore</h3>
                         <ul class="site-footer__nav list-unstyled mb-0">
-                            <li><a href="{{ route('backgroundDetails') }}">About</a></li>
-                            <li><a href="{{ route('showPrograms') }}">Our programs</a></li>
-                            <li><a href="{{ route('ourProducts') }}">Our products</a></li>
+                            <li><a href="{{ route('ourMission') }}">About</a></li>
+                            @if($navProgramWhatWeDo)
+                                <li><a href="{{ route('programShow', ['slug' => $navProgramWhatWeDo->slug]) }}">What we do</a></li>
+                            @endif
+                            @if($navProgramOurImpact)
+                                <li><a href="{{ route('programShow', ['slug' => $navProgramOurImpact->slug]) }}">Our Impact</a></li>
+                            @endif
+                            <li><a href="{{ route('impactReports') }}">Impact Reports</a></li>
                             <li><a href="{{ route('ourFactory') }}">Our factory</a></li>
-                            <li><a href="{{ route('impactPage') }}">Impact</a></li>
                             <li><a href="{{ route('contacts') }}">Contact</a></li>
                         </ul>
                     </div>

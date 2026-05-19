@@ -19,6 +19,8 @@ use App\Models\Partner;
 use App\Models\Program;
 use App\Models\Setting;
 use App\Models\Activity;
+use App\Models\AnnualReport;
+use App\Models\ImpactReportPage;
 use ReCaptcha\ReCaptcha;
 use App\Models\Testimony;
 use App\Models\Volunteer;
@@ -747,6 +749,27 @@ public function gallery(){
         ]);
 
         return redirect()->route('getInvolved')->with('success', 'Thank you for reaching out. Our team will respond shortly.');
+    }
+
+    public function impactReportsIndex()
+    {
+        $about = Background::firstOrEmpty();
+        $page = ImpactReportPage::firstOrSingleton();
+        $reports = AnnualReport::query()->active()->ordered()->get();
+
+        return view('frontend.impact-reports', compact('about', 'page', 'reports'));
+    }
+
+    public function impactReportShow($slug)
+    {
+        $about = Background::firstOrEmpty();
+        $report = AnnualReport::query()->active()->where('slug', $slug)->firstOrFail();
+
+        if (empty($report->pdf)) {
+            abort(404);
+        }
+
+        return view('frontend.impact-report-pdf', compact('about', 'report'));
     }
 
     public function impactPage(){

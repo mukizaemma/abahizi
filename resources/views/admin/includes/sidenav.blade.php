@@ -100,6 +100,14 @@
             </x-admin.nav-link>
 
             <x-admin.nav-link
+                :href="route('impactReports.admin.index')"
+                icon="fa-file-pdf"
+                :active="request()->routeIs('impactReports.admin.*')"
+            >
+                Impact Reports
+            </x-admin.nav-link>
+
+            <x-admin.nav-link
                 :href="route('settings')"
                 icon="fa-cogs"
                 :active="request()->routeIs('settings')"
