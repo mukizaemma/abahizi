@@ -199,7 +199,10 @@ Route::middleware(['auth', 'admin.role'
     Route::get('/impact-reports-admin', [App\Http\Controllers\ImpactReportAdminController::class, 'index'])->name('impactReports.admin.index');
     Route::post('/impact-reports-admin/page', [App\Http\Controllers\ImpactReportAdminController::class, 'updatePage'])->name('impactReports.admin.page');
     Route::post('/impact-reports-admin/reports', [App\Http\Controllers\ImpactReportAdminController::class, 'store'])->name('impactReports.admin.store');
+    Route::get('/impact-reports-admin/reports/{id}/edit', [App\Http\Controllers\ImpactReportAdminController::class, 'edit'])->name('impactReports.admin.edit');
     Route::post('/impact-reports-admin/reports/{id}', [App\Http\Controllers\ImpactReportAdminController::class, 'update'])->name('impactReports.admin.update');
+    Route::post('/impact-reports-admin/reports/{id}/gallery', [App\Http\Controllers\ImpactReportAdminController::class, 'storeGallery'])->name('impactReports.admin.gallery.store');
+    Route::get('/impact-reports-admin/gallery/{imageId}/delete', [App\Http\Controllers\ImpactReportAdminController::class, 'destroyGallery'])->name('impactReports.admin.gallery.destroy');
     Route::get('/impact-reports-admin/reports/{id}/delete', [App\Http\Controllers\ImpactReportAdminController::class, 'destroy'])->name('impactReports.admin.destroy');
 
     Route::get('/admin/impacts', [App\Http\Controllers\ImpactsController::class, 'index'])->name('impacts.index');

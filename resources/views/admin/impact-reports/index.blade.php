@@ -17,7 +17,7 @@
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
                     <div>
                         <h1>Impact Reports</h1>
-                        <p class="text-muted mb-0">Manage the public impact reports page and annual report PDFs.</p>
+                        <p class="text-muted mb-0">Manage listing page, report landing pages, PDFs, and optional galleries.</p>
                     </div>
                     <a href="{{ route('impactReports') }}" class="btn btn-outline-primary" target="_blank" rel="noopener noreferrer">View public page</a>
                 </div>
@@ -37,7 +37,7 @@
                 @endif
 
                 <div class="card mb-4">
-                    <div class="card-header">Impact reports page</div>
+                    <div class="card-header">Impact reports listing page</div>
                     <div class="card-body">
                         <form action="{{ route('impactReports.admin.page') }}" method="POST" class="row g-3">
                             @csrf
@@ -47,7 +47,7 @@
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Introduction</label>
-                                <textarea name="description" class="form-control" rows="5" placeholder="Short description shown on the impact reports listing page.">{{ old('description', $page->description) }}</textarea>
+                                <textarea name="description" class="form-control" rows="4">{{ old('description', $page->description) }}</textarea>
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">Save page content</button>
@@ -62,8 +62,8 @@
                         <form action="{{ route('impactReports.admin.store') }}" method="POST" enctype="multipart/form-data" class="row g-3">
                             @csrf
                             <div class="col-md-6">
-                                <label class="form-label">Heading</label>
-                                <input type="text" name="heading" class="form-control" value="{{ old('heading') }}" required>
+                                <label class="form-label">Menu / list title</label>
+                                <input type="text" name="heading" class="form-control" value="{{ old('heading') }}" required placeholder="e.g. 2025 Impact Report">
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">Sort order</label>
@@ -77,16 +77,23 @@
                                 </select>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Short description</label>
-                                <textarea name="description" class="form-control" rows="3">{{ old('description') }}</textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">PDF file</label>
-                                <input type="file" name="pdf" class="form-control" accept="application/pdf" required>
-                                <small class="text-muted">Max 20 MB.</small>
+                                <label class="form-label">Short description (listing page)</label>
+                                <textarea name="description" class="form-control" rows="2">{{ old('description') }}</textarea>
                             </div>
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary">Add report</button>
+                                <label class="form-label">Highlight title (report page)</label>
+                                <input type="text" name="highlight_title" class="form-control" value="{{ old('highlight_title') }}">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Highlight message</label>
+                                <textarea name="highlight_message" class="form-control" rows="4">{{ old('highlight_message') }}</textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">PDF</label>
+                                <input type="file" name="pdf" class="form-control" accept="application/pdf" required>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">Create report</button>
                             </div>
                         </form>
                     </div>
@@ -95,47 +102,35 @@
                 <div class="card">
                     <div class="card-header">Annual reports</div>
                     <div class="card-body p-0">
-                        @forelse($reports as $report)
-                            <form action="{{ route('impactReports.admin.update', $report->id) }}" method="POST" enctype="multipart/form-data" class="border-bottom p-4 m-0">
-                                @csrf
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label small text-muted">Heading</label>
-                                        <input type="text" name="heading" class="form-control" value="{{ $report->heading }}" required>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label small text-muted">Sort</label>
-                                        <input type="number" name="sort_order" class="form-control" value="{{ $report->sort_order }}" min="0">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label class="form-label small text-muted">Status</label>
-                                        <select name="status" class="form-select">
-                                            <option value="Active" @selected($report->status === 'Active')>Active</option>
-                                            <option value="Inactive" @selected($report->status === 'Inactive')>Inactive</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2 d-flex align-items-end">
-                                        @if($report->pdf)
-                                            <a href="{{ $report->pdfUrl() }}" class="btn btn-sm btn-outline-secondary w-100" target="_blank" rel="noopener noreferrer">View PDF</a>
-                                        @endif
-                                    </div>
-                                    <div class="col-12">
-                                        <label class="form-label small text-muted">Description</label>
-                                        <textarea name="description" class="form-control" rows="2">{{ $report->description }}</textarea>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label small text-muted">Replace PDF (optional)</label>
-                                        <input type="file" name="pdf" class="form-control" accept="application/pdf">
-                                    </div>
-                                    <div class="col-md-6 d-flex flex-wrap gap-2 align-items-end justify-content-md-end">
-                                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                                        <a href="{{ route('impactReports.admin.destroy', $report->id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this annual report?')">Delete</a>
-                                    </div>
-                                </div>
-                            </form>
-                        @empty
-                            <div class="p-5 text-center text-muted">No annual reports yet. Add one above.</div>
-                        @endforelse
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Status</th>
+                                        <th>Sort</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($reports as $report)
+                                        <tr>
+                                            <td class="fw-semibold">{{ $report->heading }}</td>
+                                            <td><span class="badge bg-light text-dark border">{{ $report->status }}</span></td>
+                                            <td>{{ $report->sort_order }}</td>
+                                            <td class="text-end">
+                                                <a href="{{ route('impactReports.admin.edit', $report->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                                <a href="{{ route('impactReportShow', $report->slug) }}" class="btn btn-sm btn-outline-secondary" target="_blank" rel="noopener noreferrer">View</a>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted py-4">No reports yet.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

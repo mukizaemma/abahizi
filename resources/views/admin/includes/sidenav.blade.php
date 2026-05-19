@@ -102,7 +102,7 @@
             <x-admin.nav-link
                 :href="route('impactReports.admin.index')"
                 icon="fa-file-pdf"
-                :active="request()->routeIs('impactReports.admin.*')"
+                :active="request()->routeIs(['impactReports.admin.*', 'impactReports.admin.edit', 'impactReports.admin.gallery.store', 'impactReports.admin.gallery.destroy'])"
             >
                 Impact Reports
             </x-admin.nav-link>

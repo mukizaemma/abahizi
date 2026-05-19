@@ -763,13 +763,21 @@ public function gallery(){
     public function impactReportShow($slug)
     {
         $about = Background::firstOrEmpty();
-        $report = AnnualReport::query()->active()->where('slug', $slug)->firstOrFail();
+        $report = AnnualReport::query()
+            ->active()
+            ->with('images')
+            ->where('slug', $slug)
+            ->firstOrFail();
 
         if (empty($report->pdf)) {
             abort(404);
         }
 
-        return view('frontend.impact-report-pdf', compact('about', 'report'));
+        $galleryImages = Schema::hasTable('annual_report_images')
+            ? $report->images
+            : collect();
+
+        return view('frontend.impact-report-show', compact('about', 'report', 'galleryImages'));
     }
 
     public function impactPage(){

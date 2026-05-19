@@ -152,7 +152,20 @@
                                     @if($navProgramOurImpact)
                                         <li><a href="{{ route('programShow', ['slug' => $navProgramOurImpact->slug]) }}">Our Impact</a></li>
                                     @endif
-                                    <li><a href="{{ route('impactReports') }}">Impact Reports</a></li>
+                                    <li class="{{ $navImpactReports->isNotEmpty() ? 'has-dropdown' : '' }}">
+                                        <a href="{{ route('impactReports') }}">Impact Reports</a>
+                                        @if($navImpactReports->isNotEmpty())
+                                            <ul class="submenu tp-submenu">
+                                                @foreach($navImpactReports as $impactReport)
+                                                    <li>
+                                                        <a href="{{ route('impactReportShow', ['slug' => $impactReport->slug]) }}">
+                                                            {{ $impactReport->heading }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </li>
                                 </ul>
                             </nav>
                         </div>
@@ -212,7 +225,6 @@
                             <li><a href="{{ route('home') }}">Home</a></li>
                             <li><a href="{{ route('ourMission') }}">Our Mission &amp; Vision</a></li>
                             <li><a href="{{ route('team') }}">Our Team</a></li>
-                            <li><a href="{{ route('ourFactory') }}">Our Factory</a></li>
                             @if($navProgramWhatWeDo)
                                 <li><a href="{{ route('programShow', ['slug' => $navProgramWhatWeDo->slug]) }}">What we do</a></li>
                             @endif

@@ -2403,6 +2403,55 @@ body {
     justify-content: center;
 }
 
+/* Single impact report landing page */
+.impact-report-hero {
+    background: #ffffff;
+}
+
+.impact-report-hero__title {
+    margin-bottom: 1.25rem;
+    font-size: clamp(1.85rem, 4.5vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--brand-primary, #fad200);
+}
+
+.impact-report-hero__message {
+    margin: 0 auto;
+    max-width: 42rem;
+    font-size: clamp(1rem, 1.4vw, 1.125rem);
+    line-height: 1.75;
+    color: #3d3d3d;
+}
+
+.impact-report-hero__pdf-btn.tp-btn {
+    border-radius: 999px;
+    padding: 0.95rem 2rem;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.impact-report-gallery__item {
+    margin: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.impact-report-gallery__img {
+    display: block;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+.impact-report-gallery__caption {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    color: #555;
+    margin: 0;
+}
+
 .site-impact-quote__btn.tp-btn {
     border-radius: 999px;
     padding: 0.9rem 2rem;

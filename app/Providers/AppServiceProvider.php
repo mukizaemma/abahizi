@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Activity;
 use App\Models\ProductStoryPoint;
 use App\Models\ProductStorySetting;
+use App\Models\AnnualReport;
 use App\Models\Program;
 use App\Models\Service;
 use App\Models\Setting;
@@ -49,6 +50,12 @@ class AppServiceProvider extends ServiceProvider
         View::share('ourPrograms', $programs);
         View::share('navProgramWhatWeDo', $programs->get(0));
         View::share('navProgramOurImpact', $programs->get(1));
+        View::share(
+            'navImpactReports',
+            $dbReady && Schema::hasTable('annual_reports')
+                ? AnnualReport::query()->active()->ordered()->get()
+                : collect()
+        );
         View::share(
             'menuServices',
             $dbReady && Schema::hasTable('services')
