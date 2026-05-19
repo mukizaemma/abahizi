@@ -46,7 +46,9 @@
         var clearBtn = root.querySelector('[data-chunked-pdf-clear]');
 
         var currentUploadId = null;
+        var uploading = false;
         var ready = !required;
+        var submitButton = null;
 
         function setStatus(message, type) {
             if (!statusEl) {
@@ -65,12 +67,41 @@
             progressBar.setAttribute('aria-valuenow', String(percent));
         }
 
+        function setSubmitEnabled(enabled) {
+            if (submitButton) {
+                submitButton.disabled = !enabled;
+            }
+        }
+
         function setReady(isReady, uploadId) {
             ready = isReady;
             if (hiddenInput) {
                 hiddenInput.value = isReady ? uploadId || '' : '';
+                hiddenInput.disabled = !isReady;
             }
             root.classList.toggle('chunked-pdf-ready', isReady);
+            if (required) {
+                setSubmitEnabled(isReady && !uploading);
+            }
+        }
+
+        function formatError(payload, fallback) {
+            if (payload && payload.message) {
+                return payload.message;
+            }
+            if (payload && payload.errors) {
+                var messages = [];
+                Object.keys(payload.errors).forEach(function (key) {
+                    var list = payload.errors[key];
+                    if (Array.isArray(list)) {
+                        messages = messages.concat(list);
+                    }
+                });
+                if (messages.length) {
+                    return messages.join(' ');
+                }
+            }
+            return fallback || 'Upload failed.';
         }
 
         async function postForm(url, formData) {
@@ -78,6 +109,7 @@
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': csrfToken(),
+                    'X-Requested-With': 'XMLHttpRequest',
                     Accept: 'application/json',
                 },
                 body: formData,
@@ -92,7 +124,7 @@
             }
 
             if (!response.ok) {
-                throw new Error(payload.message || 'Upload failed.');
+                throw new Error(formatError(payload, 'Upload failed (HTTP ' + response.status + ').'));
             }
 
             return payload;
@@ -129,7 +161,9 @@
             }
 
             currentUploadId = uuid();
+            uploading = true;
             setReady(false, null);
+            setSubmitEnabled(false);
             setProgress(0);
             setStatus('Preparing upload…', 'muted');
             if (clearBtn) {
@@ -172,9 +206,10 @@
             finalizeData.append('upload_id', currentUploadId);
             await postForm(finalizeUrl, finalizeData);
 
+            uploading = false;
             setProgress(100);
             setReady(true, currentUploadId);
-            setStatus('PDF ready: ' + file.name, 'success');
+            setStatus('PDF ready: ' + file.name + ' — you can save the form now.', 'success');
             if (clearBtn) {
                 clearBtn.classList.remove('d-none');
             }
@@ -188,8 +223,10 @@
                 }
 
                 uploadFile(file).catch(function (err) {
+                    uploading = false;
                     setProgress(0);
                     setReady(false, null);
+                    setSubmitEnabled(false);
                     setStatus(err.message || 'Upload failed.', 'danger');
                     fileInput.value = '';
                     if (currentUploadId) {
@@ -218,16 +255,28 @@
 
         var form = root.closest('form');
         if (form) {
-            form.addEventListener('submit', function (event) {
-                if (required && !ready) {
-                    event.preventDefault();
-                    setStatus('Wait for the PDF upload to finish before saving.', 'danger');
-                }
-            });
+            submitButton = form.querySelector('[type="submit"]');
+            form.addEventListener(
+                'submit',
+                function (event) {
+                    if (uploading || (required && !ready)) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        setStatus(
+                            uploading
+                                ? 'Please wait — PDF is still uploading.'
+                                : 'Choose a PDF and wait until you see “PDF ready” before saving.',
+                            'danger'
+                        );
+                    }
+                },
+                true
+            );
         }
 
         if (required) {
-            setStatus('Large PDFs upload in small pieces — no server size limit needed.', 'muted');
+            setSubmitEnabled(false);
+            setStatus('Choose a PDF — it uploads in the background before you save.', 'muted');
         }
     }
 
@@ -235,6 +284,15 @@
         document.querySelectorAll('[data-chunked-pdf-upload]').forEach(initChunkedPdfUpload);
     }
 
-    document.addEventListener('DOMContentLoaded', initAll);
-    document.addEventListener('turbo:load', initAll);
+    function bootChunkedPdfUpload() {
+        initAll();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootChunkedPdfUpload);
+    } else {
+        bootChunkedPdfUpload();
+    }
+
+    document.addEventListener('turbo:load', bootChunkedPdfUpload);
 })();

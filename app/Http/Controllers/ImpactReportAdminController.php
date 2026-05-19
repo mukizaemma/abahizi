@@ -52,11 +52,10 @@ class ImpactReportAdminController extends Controller
             'highlight_title' => ['nullable', 'string', 'max:255'],
             'highlight_message' => ['nullable', 'string'],
             'pdf_button_label' => ['nullable', 'string', 'max:255'],
-            'pdf_upload_id' => ['nullable', 'uuid', 'required_without:pdf'],
-            'pdf' => ['nullable', 'file', 'mimes:pdf', 'max:20480', 'required_without:pdf_upload_id'],
+            'pdf_upload_id' => ['required', 'uuid'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'string', 'in:Active,Inactive'],
-        ]);
+        ], self::pdfUploadMessages());
 
         $pdfName = $this->resolvePdfUpload($request);
         $slug = $this->uniqueSlug(Str::slug($data['heading']));
@@ -77,6 +76,17 @@ class ImpactReportAdminController extends Controller
             ->with('success', 'Annual report created. Add gallery images below if needed.');
     }
 
+    /**
+     * @return array<string, string>
+     */
+    public static function pdfUploadMessages(): array
+    {
+        return [
+            'pdf_upload_id.required' => 'Please choose a PDF and wait until you see “PDF ready” before saving.',
+            'pdf_upload_id.uuid' => 'PDF upload is invalid. Please choose the file again.',
+        ];
+    }
+
     public function update(Request $request, $id)
     {
         $report = AnnualReport::findOrFail($id);
@@ -88,7 +98,6 @@ class ImpactReportAdminController extends Controller
             'highlight_message' => ['nullable', 'string'],
             'pdf_button_label' => ['nullable', 'string', 'max:255'],
             'pdf_upload_id' => ['nullable', 'uuid'],
-            'pdf' => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'string', 'in:Active,Inactive'],
         ]);

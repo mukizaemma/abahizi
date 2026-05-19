@@ -203,7 +203,7 @@ class ChunkedPdfUploadService
         $mime = finfo_file($finfo, $path);
         finfo_close($finfo);
 
-        return in_array($mime, ['application/pdf', 'application/x-pdf'], true);
+        return in_array($mime, ['application/pdf', 'application/x-pdf', 'application/octet-stream'], true);
     }
 
     private function maxChunks(): int

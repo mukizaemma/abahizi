@@ -132,7 +132,3 @@
     </div>
 </div>
 @endsection
-
-@push('scripts')
-    <script src="{{ asset('assets/admin/js/chunked-pdf-upload.js') }}"></script>
-@endpush
