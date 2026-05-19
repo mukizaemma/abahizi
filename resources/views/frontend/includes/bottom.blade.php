@@ -40,7 +40,7 @@
                         </a>
                     </div>
                 @endif
-            </motion>
+            </div>
         </div>
     </div>
 </section>

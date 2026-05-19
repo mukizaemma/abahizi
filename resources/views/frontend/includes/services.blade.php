@@ -20,13 +20,6 @@
                         <h2 id="home-programs-split-title" class="home-programs-split__title">What we do</h2>
                         <p class="home-programs-split__lead">{{ $whatWeDoIntro }}</p>
                     </div>
-                    @if($firstProgram)
-                        <div class="home-programs-split__actions">
-                            <a class="home-programs-split__cta tp-btn" href="{{ route('programShow', ['slug' => $firstProgram->slug]) }}">
-                                View more <span aria-hidden="true">→</span>
-                            </a>
-                        </div>
-                    @endif
                 </div>
             </div>
             <div class="col-lg-7 col-xl-7 wow tpfadeUp" data-wow-duration=".9s" data-wow-delay=".2s">
@@ -36,7 +29,12 @@
                         class="home-programs-split__feature h-100 d-block"
                         style="background-image: url('{{ $firstImageUrl }}');"
                     >
-                        <h3 class="home-programs-split__feature-title">{{ $firstProgram->title }}</h3>
+                        <div class="home-programs-split__feature-footer">
+                            <h3 class="home-programs-split__feature-title">{{ $firstProgram->title }}</h3>
+                            <span class="home-programs-split__feature-btn-wrap">
+                                <span class="tp-btn home-programs-split__feature-btn">View details <span>→</span></span>
+                            </span>
+                        </div>
                     </a>
                 @else
                     <div class="home-programs-split__feature home-programs-split__feature--empty h-100">
@@ -47,5 +45,7 @@
         </div>
     </div>
 </section>
+
+<div class="home-section-divider" aria-hidden="true"></div>
 
 @include('frontend.includes.programs-dual-cta')

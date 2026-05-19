@@ -204,8 +204,36 @@
                             @endif
                         </a>
                         <p class="site-footer__tagline mt-3 mb-0">From your heart to theirs—help us impact lives that truly matter.</p>
+                    </div>
 
-                        <ul class="site-footer__contact list-unstyled mt-4 mb-0">
+                    <div class="col-12 col-sm-6 col-lg-4 site-footer__col">
+                        <h3 class="site-footer__heading">Explore</h3>
+                        <ul class="site-footer__nav list-unstyled mb-0">
+                            <li><a href="{{ route('home') }}">Home</a></li>
+                            <li><a href="{{ route('ourMission') }}">Our Mission &amp; Vision</a></li>
+                            <li><a href="{{ route('team') }}">Our Team</a></li>
+                            <li><a href="{{ route('ourFactory') }}">Our Factory</a></li>
+                            @if($navProgramWhatWeDo)
+                                <li><a href="{{ route('programShow', ['slug' => $navProgramWhatWeDo->slug]) }}">What we do</a></li>
+                            @endif
+                            @if($navProgramOurImpact)
+                                <li><a href="{{ route('programShow', ['slug' => $navProgramOurImpact->slug]) }}">Our Impact</a></li>
+                            @endif
+                            <li><a href="{{ route('impactReports') }}">Impact Reports</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-12 col-sm-6 col-lg-4 site-footer__col site-footer__col--touch">
+                        <h3 class="site-footer__heading">Get in touch</h3>
+                        <ul class="site-footer__contact list-unstyled mb-0">
+                            @if(!empty($setting->phone))
+                                <li class="mb-2">
+                                    <a href="tel:{{ $setting->phone }}" class="site-footer__contact-link">
+                                        <i class="far fa-phone site-footer__contact-icon" aria-hidden="true"></i>
+                                        {{ $setting->phone }}
+                                    </a>
+                                </li>
+                            @endif
                             @if(!empty($setting->email))
                                 <li class="mb-2">
                                     <a href="mailto:{{ $setting->email }}" class="site-footer__contact-link">
@@ -214,53 +242,28 @@
                                     </a>
                                 </li>
                             @endif
-                            @if(!empty($setting->phone))
+                            @if(!empty($setting->address))
                                 <li>
-                                    <a href="tel:{{ $setting->phone }}" class="site-footer__contact-link">
-                                        <i class="far fa-phone site-footer__contact-icon" aria-hidden="true"></i>
-                                        {{ $setting->phone }}
-                                    </a>
+                                    <span class="site-footer__contact-link site-footer__contact-link--static">
+                                        <i class="far fa-location-dot site-footer__contact-icon" aria-hidden="true"></i>
+                                        {{ $setting->address }}
+                                    </span>
                                 </li>
                             @endif
                         </ul>
 
-                        <div class="site-footer__socials mt-3">
-                            @if(!empty($setting->facebook))
-                                <a href="{{ $setting->facebook }}" class="site-footer__social" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                            @endif
-                            @if(!empty($setting->instagram))
-                                <a href="{{ $setting->instagram }}" class="site-footer__social" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                            @endif
-                        </div>
-                    </div>
+                        @if(!empty($setting->facebook) || !empty($setting->instagram))
+                            <div class="site-footer__socials mt-3">
+                                @if(!empty($setting->facebook))
+                                    <a href="{{ $setting->facebook }}" class="site-footer__social" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                @endif
+                                @if(!empty($setting->instagram))
+                                    <a href="{{ $setting->instagram }}" class="site-footer__social" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                                @endif
+                            </div>
+                        @endif
 
-                    <div class="col-12 col-sm-6 col-lg-4 site-footer__col">
-                        <h3 class="site-footer__heading">Explore</h3>
-                        <ul class="site-footer__nav list-unstyled mb-0">
-                            <li><a href="{{ route('ourMission') }}">About</a></li>
-                            @if($navProgramWhatWeDo)
-                                <li><a href="{{ route('programShow', ['slug' => $navProgramWhatWeDo->slug]) }}">What we do</a></li>
-                            @endif
-                            @if($navProgramOurImpact)
-                                <li><a href="{{ route('programShow', ['slug' => $navProgramOurImpact->slug]) }}">Our Impact</a></li>
-                            @endif
-                            <li><a href="{{ route('impactReports') }}">Impact Reports</a></li>
-                            <li><a href="{{ route('ourFactory') }}">Our factory</a></li>
-                            <li><a href="{{ route('contacts') }}">Contact</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="col-12 col-sm-6 col-lg-4 site-footer__col">
-                        <h3 class="site-footer__heading">Our programs</h3>
-                        <ul class="site-footer__nav site-footer__programs-list list-unstyled mb-0">
-                            @forelse ($ourPrograms as $rs)
-                                <li><a href="{{ route('project', ['slug' => $rs->slug]) }}">{{ $rs->title }}</a></li>
-                            @empty
-                                <li class="site-footer__muted">Programs will appear here when published.</li>
-                            @endforelse
-                        </ul>
-
-                        <div class="site-footer__cta-below-programs pt-3 mt-3">
+                        <div class="site-footer__cta-block">
                             <div class="site-footer__cta-group">
                                 <a href="{{ route('requestOrder') }}" class="site-footer__btn site-footer__btn--order">
                                     <i class="fas fa-clipboard-list" aria-hidden="true"></i>

@@ -380,25 +380,14 @@ body {
     max-width: 42rem;
 }
 
-.home-programs-split__actions {
-    padding-top: 2rem;
-    margin-top: auto;
-}
-
-.home-programs-split__cta.tp-btn {
-    align-self: flex-start;
-    border-radius: 999px;
-    padding: 0.85rem 1.65rem;
-    font-weight: 600;
-}
-
 .home-programs-split__feature {
     position: relative;
     display: flex;
-    align-items: flex-end;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
     min-height: clamp(440px, 54vh, 580px);
-    padding: clamp(1.75rem, 3.5vw, 2.5rem) clamp(1.75rem, 4vw, 3rem);
+    padding: 0;
     background-color: var(--brand-secondary, #2c2c2c);
     background-size: cover;
     background-position: center;
@@ -421,22 +410,76 @@ body {
 }
 
 .home-programs-split__feature:hover {
-    transform: scale(1.008);
+    transform: scale(1.006);
+}
+
+.home-programs-split__feature-footer {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    width: 100%;
+    margin-top: auto;
+    padding: clamp(2.25rem, 5vh, 3.5rem) clamp(1.25rem, 3vw, 2rem) clamp(2rem, 4vh, 3rem);
+    text-align: center;
 }
 
 .home-programs-split__feature-title {
     position: relative;
     z-index: 1;
-    margin: 0;
+    margin: 0 auto;
     width: 100%;
     max-width: 36rem;
-    padding-bottom: 0.15rem;
-    font-size: clamp(2rem, 4.5vw, 3.25rem);
+    font-size: clamp(1.85rem, 4vw, 3rem);
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1.12;
     color: #fff;
     text-align: center;
     text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+}
+
+.home-programs-split__feature-btn-wrap {
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.home-programs-split__feature:hover .home-programs-split__feature-btn-wrap,
+.home-programs-split__feature:focus-visible .home-programs-split__feature-btn-wrap {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.home-programs-split__feature:hover::before,
+.home-programs-split__feature:focus-visible::before {
+    background: linear-gradient(
+        to top,
+        rgba(8, 12, 18, 0.88) 0%,
+        rgba(8, 12, 18, 0.5) 38%,
+        rgba(8, 12, 18, 0.2) 100%
+    );
+}
+
+.home-programs-split__feature-btn.tp-btn {
+    border-radius: 999px;
+    padding: 0.85rem 1.75rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+
+.home-section-divider {
+    display: block;
+    width: 100%;
+    height: clamp(2rem, 4.5vw, 3.25rem);
+    background: #ffffff;
 }
 
 .home-programs-split__feature--empty {
@@ -464,8 +507,10 @@ body {
         min-height: 320px;
     }
 
-    .home-programs-split__actions {
-        padding-top: 1.5rem;
+    .home-programs-split__feature-btn-wrap {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
     }
 }
 
@@ -1534,8 +1579,41 @@ body {
     max-width: 26rem;
 }
 
-.site-footer__cta-below-programs {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+.site-footer__cta-block {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.site-footer__col--touch .site-footer__contact li {
+    margin-bottom: 0.65rem;
+}
+
+.site-footer__contact-link--static {
+    cursor: default;
+    align-items: flex-start;
+    line-height: 1.55;
+    max-width: 22rem;
+}
+
+.site-footer__contact-link--static:hover {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.site-footer__col--touch .site-footer__socials {
+    padding-top: 0.15rem;
+}
+
+.site-footer__col--touch .site-footer__contact-link {
+    padding: 0.15rem 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+}
+
+.site-footer__col--touch .site-footer__contact-link:hover {
+    background: transparent;
+    border-color: transparent;
 }
 
 .site-footer__cta-group {
@@ -1595,8 +1673,8 @@ body {
     text-decoration: none;
     font-size: 0.9rem;
     display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+    align-items: flex-start;
+    gap: 0.55rem;
 }
 
 .site-footer__contact-link:hover {
@@ -2250,45 +2328,88 @@ body {
     }
 }
 
-/* Quote CTA strip (below programs dual-cta on home): readable text + aligned with site “Get involved” */
-.site-cta-quote.tp-cta-2__bg {
+/* Home impact quote CTA (manufacturing + Our Impacts) */
+.site-impact-quote {
     position: relative;
-    background-attachment: scroll;
+    overflow: hidden;
 }
 
-.site-cta-quote.tp-cta-2__bg::before {
+.site-impact-quote__bg {
+    position: relative;
+    padding: clamp(4rem, 9vh, 6.5rem) 0;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.site-impact-quote__bg::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: 0;
     background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.55) 0%,
-        rgba(0, 0, 0, 0.72) 100%
+        160deg,
+        rgba(8, 12, 18, 0.88) 0%,
+        rgba(8, 12, 18, 0.72) 48%,
+        rgba(8, 12, 18, 0.85) 100%
     );
 }
 
-.site-cta-quote.tp-cta-2__bg > .container {
+.site-impact-quote__bg > .container {
     position: relative;
     z-index: 1;
 }
 
-.site-cta-quote .tp-cta-2__shape-3 {
-    z-index: 2;
-    pointer-events: none;
+.site-impact-quote__inner {
+    max-width: 52rem;
+    margin: 0 auto;
 }
 
-.site-cta-quote .tp-cta-2__title {
-    max-width: min(42rem, 92vw);
-    margin-left: auto;
-    margin-right: auto;
-    font-size: clamp(1.65rem, 4.5vw, 2.75rem) !important;
-    line-height: 1.2 !important;
-    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.45);
+.site-impact-quote__eyebrow {
+    margin: 0 0 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--brand-primary, #fad200);
 }
 
-.site-cta-quote__btn.tp-btn {
+.site-impact-quote__quote {
+    margin: 0 0 2rem;
+    padding: 0;
+    border: none;
+    font-size: clamp(1.35rem, 3.2vw, 2.05rem);
+    font-weight: 600;
+    line-height: 1.45;
+    color: #fff;
+    text-shadow: 0 2px 28px rgba(0, 0, 0, 0.45);
+}
+
+.site-impact-quote__mark {
+    display: inline-block;
+    font-size: 1.35em;
+    line-height: 0;
     font-weight: 700;
+    color: var(--brand-primary, #fad200);
+    vertical-align: -0.12em;
+}
+
+.site-impact-quote__mark--end {
+    margin-left: 0.05em;
+}
+
+.site-impact-quote__actions {
+    display: flex;
+    justify-content: center;
+}
+
+.site-impact-quote__btn.tp-btn {
+    border-radius: 999px;
+    padding: 0.9rem 2rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
 }
 
 /* Impact page: full-viewport stats band (matches parallax overlay treatment) */

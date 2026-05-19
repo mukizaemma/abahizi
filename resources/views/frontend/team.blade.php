@@ -55,7 +55,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="tp-team-2__section-title pb-50 text-center">
-                            <h4 class="tp-section-title">Our Team of Advisors</h4>
+                            <h4 class="tp-section-title">Meet The Team</h4>
                         </div>
                     </div>
                 </div>
