@@ -33,7 +33,7 @@
                                 <p class="mb-4 text-muted">{{ $report->description }}</p>
                             @endif
                             <a href="{{ route('impactReportShow', ['slug' => $report->slug]) }}" class="tp-btn">
-                                Read report
+                                View more <span class="ms-1" aria-hidden="true">→</span>
                             </a>
                         </article>
                     </div>
