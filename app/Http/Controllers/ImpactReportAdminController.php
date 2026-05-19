@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\AnnualReport;
 use App\Models\AnnualReportImage;
 use App\Models\ImpactReportPage;
+use App\Services\ChunkedPdfUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class ImpactReportAdminController extends Controller
 {
@@ -49,12 +52,13 @@ class ImpactReportAdminController extends Controller
             'highlight_title' => ['nullable', 'string', 'max:255'],
             'highlight_message' => ['nullable', 'string'],
             'pdf_button_label' => ['nullable', 'string', 'max:255'],
-            'pdf' => ['required', 'file', 'mimes:pdf', 'max:20480'],
+            'pdf_upload_id' => ['nullable', 'uuid', 'required_without:pdf'],
+            'pdf' => ['nullable', 'file', 'mimes:pdf', 'max:20480', 'required_without:pdf_upload_id'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'string', 'in:Active,Inactive'],
         ]);
 
-        $pdfName = $this->storePdf($request->file('pdf'));
+        $pdfName = $this->resolvePdfUpload($request);
         $slug = $this->uniqueSlug(Str::slug($data['heading']));
 
         $report = AnnualReport::create([
@@ -83,13 +87,17 @@ class ImpactReportAdminController extends Controller
             'highlight_title' => ['nullable', 'string', 'max:255'],
             'highlight_message' => ['nullable', 'string'],
             'pdf_button_label' => ['nullable', 'string', 'max:255'],
+            'pdf_upload_id' => ['nullable', 'uuid'],
             'pdf' => ['nullable', 'file', 'mimes:pdf', 'max:20480'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'string', 'in:Active,Inactive'],
         ]);
 
         $pdfName = $report->pdf;
-        if ($request->hasFile('pdf')) {
+        if ($request->filled('pdf_upload_id')) {
+            $this->deletePdf($report->pdf);
+            $pdfName = $this->resolvePdfUpload($request);
+        } elseif ($request->hasFile('pdf')) {
             $this->deletePdf($report->pdf);
             $pdfName = $this->storePdf($request->file('pdf'));
         }
@@ -164,6 +172,45 @@ class ImpactReportAdminController extends Controller
         $report->delete();
 
         return redirect()->route('impactReports.admin.index')->with('success', 'Annual report deleted.');
+    }
+
+    private function resolvePdfUpload(Request $request): string
+    {
+        $uploadId = $request->input('pdf_upload_id');
+        if (empty($uploadId)) {
+            throw ValidationException::withMessages([
+                'pdf' => ['Please upload a PDF file.'],
+            ]);
+        }
+
+        $session = Session::get('pdf_upload.'.$uploadId);
+        if (! is_array($session) || ($session['user_id'] ?? null) !== $request->user()->id) {
+            throw ValidationException::withMessages([
+                'pdf' => ['PDF upload expired or is invalid. Please upload again.'],
+            ]);
+        }
+
+        $expiresAt = $session['expires_at'] ?? null;
+        if ($expiresAt && now()->greaterThan(\Illuminate\Support\Carbon::parse($expiresAt))) {
+            Session::forget('pdf_upload.'.$uploadId);
+            app(ChunkedPdfUploadService::class)->deleteStoredPdf($session['filename'] ?? null);
+
+            throw ValidationException::withMessages([
+                'pdf' => ['PDF upload expired. Please upload again.'],
+            ]);
+        }
+
+        $filename = $session['filename'] ?? null;
+        $path = storage_path('app/public/documents/impact-reports/'.$filename);
+        if (empty($filename) || ! File::exists($path)) {
+            throw ValidationException::withMessages([
+                'pdf' => ['Uploaded PDF could not be found. Please upload again.'],
+            ]);
+        }
+
+        Session::forget('pdf_upload.'.$uploadId);
+
+        return $filename;
     }
 
     private function storePdf($file): string

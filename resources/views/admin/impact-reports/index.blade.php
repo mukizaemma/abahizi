@@ -89,8 +89,7 @@
                                 <textarea name="highlight_message" class="form-control" rows="4">{{ old('highlight_message') }}</textarea>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">PDF</label>
-                                <input type="file" name="pdf" class="form-control" accept="application/pdf" required>
+                                @include('admin.includes.chunked-pdf-upload', ['required' => true, 'label' => 'PDF'])
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">Create report</button>
@@ -139,3 +138,7 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/admin/js/chunked-pdf-upload.js') }}"></script>
+@endpush

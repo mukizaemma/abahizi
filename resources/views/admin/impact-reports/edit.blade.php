@@ -80,11 +80,13 @@
                             <input type="text" name="pdf_button_label" class="form-control" value="{{ old('pdf_button_label', $report->pdf_button_label) }}" placeholder="Read the 2025 Impact Report">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">Replace PDF (optional)</label>
-                            <input type="file" name="pdf" class="form-control" accept="application/pdf">
-                            @if($report->pdf)
-                                <a href="{{ $report->pdfUrl() }}" class="small d-inline-block mt-1" target="_blank" rel="noopener noreferrer">Current PDF</a>
-                            @endif
+                            @include('admin.includes.chunked-pdf-upload', [
+                                'required' => false,
+                                'label' => 'Replace PDF (optional)',
+                                'hint' => $report->pdf
+                                    ? '<a href="'.e($report->pdfUrl()).'" target="_blank" rel="noopener noreferrer">Current PDF</a>'
+                                    : null,
+                            ])
                         </div>
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary">Save report</button>
@@ -130,3 +132,7 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/admin/js/chunked-pdf-upload.js') }}"></script>
+@endpush

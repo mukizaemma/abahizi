@@ -198,6 +198,9 @@ Route::middleware(['auth', 'admin.role'
 
     Route::get('/impact-reports-admin', [App\Http\Controllers\ImpactReportAdminController::class, 'index'])->name('impactReports.admin.index');
     Route::post('/impact-reports-admin/page', [App\Http\Controllers\ImpactReportAdminController::class, 'updatePage'])->name('impactReports.admin.page');
+    Route::post('/impact-reports-admin/pdf/chunk', [App\Http\Controllers\ImpactReportPdfUploadController::class, 'chunk'])->name('impactReports.admin.pdf.chunk');
+    Route::post('/impact-reports-admin/pdf/finalize', [App\Http\Controllers\ImpactReportPdfUploadController::class, 'finalize'])->name('impactReports.admin.pdf.finalize');
+    Route::post('/impact-reports-admin/pdf/cancel', [App\Http\Controllers\ImpactReportPdfUploadController::class, 'cancel'])->name('impactReports.admin.pdf.cancel');
     Route::post('/impact-reports-admin/reports', [App\Http\Controllers\ImpactReportAdminController::class, 'store'])->name('impactReports.admin.store');
     Route::get('/impact-reports-admin/reports/{id}/edit', [App\Http\Controllers\ImpactReportAdminController::class, 'edit'])->name('impactReports.admin.edit');
     Route::post('/impact-reports-admin/reports/{id}', [App\Http\Controllers\ImpactReportAdminController::class, 'update'])->name('impactReports.admin.update');
