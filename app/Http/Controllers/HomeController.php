@@ -42,9 +42,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Schema;
+use App\Http\Controllers\Concerns\ValidatesFormChannelSubmission;
 
 class HomeController extends Controller
 {
+    use ValidatesFormChannelSubmission;
     public function redirects(){
         $role = Auth::user()->role;
         if($role ==1){
@@ -624,13 +626,33 @@ public function gallery(){
 
     public function storeOrderRequest(Request $request)
     {
+        $ipKey = 'order-request:ip:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($ipKey, 5)) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Too many attempts. Please wait a few minutes and try again.']);
+        }
+
+        RateLimiter::hit($ipKey, 10 * 60);
+
+        $channelGate = $this->validateFormChannelGate($request, 'order');
+
         $validated = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:64'],
             'email' => ['required', 'email', 'max:255'],
             'product_description' => ['required', 'string', 'max:20000'],
             'product_slug' => ['nullable', 'string', 'max:255'],
+            'website' => ['nullable', 'max:0'],
+            'started_at' => ['nullable', 'integer'],
         ]);
+
+        $startedAt = (int) ($request->input('started_at') ?? 0);
+        if ($startedAt > 0 && (time() - $startedAt) < 3) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Form submitted too quickly. Please review your details and try again.']);
+        }
 
         $productId = null;
         $productReference = null;
@@ -649,11 +671,12 @@ public function gallery(){
             'product_description' => $validated['product_description'],
             'product_id' => $productId,
             'product_reference' => $productReference,
+            'submission_channel' => $channelGate['channel'],
         ]);
 
         return redirect()
             ->route('requestOrder')
-            ->with('success', 'Thank you. We have received your request and will contact you to discuss quantities and timelines.');
+            ->with('success', 'Thank you. We recorded your request after you sent it via ' . ($channelGate['channel'] === 'whatsapp' ? 'WhatsApp' : 'email') . '. Our team will follow up shortly.');
     }
 
     public function getInvolved()
@@ -673,6 +696,8 @@ public function gallery(){
         }
 
         RateLimiter::hit($ipKey, 10 * 60);
+
+        $channelGate = $this->validateFormChannelGate($request, 'partnership');
 
         $allowed = [
             'training',
@@ -746,9 +771,14 @@ public function gallery(){
             'email' => $validated['email'],
             'interests' => $interestsText,
             'message' => $validated['message'] ?? null,
+            'submission_channel' => $channelGate['channel'],
         ]);
 
-        return redirect()->route('getInvolved')->with('success', 'Thank you for reaching out. Our team will respond shortly.');
+        $redirectRoute = $request->input('form_source') === 'contact' ? 'contacts' : 'getInvolved';
+
+        return redirect()
+            ->route($redirectRoute)
+            ->with('success', 'Thank you. We recorded your inquiry after you sent it via ' . ($channelGate['channel'] === 'whatsapp' ? 'WhatsApp' : 'email') . '. Our team will respond shortly.');
     }
 
     public function impactReportsIndex()

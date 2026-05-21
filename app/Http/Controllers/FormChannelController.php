@@ -1,0 +1,144 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Setting;
+use App\Support\FormChannelService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+
+class FormChannelController extends Controller
+{
+    public function intent(Request $request): JsonResponse
+    {
+        $setting = Setting::firstOrEmpty();
+        $availability = FormChannelService::availability($setting);
+
+        if (! $availability['channels_ready']) {
+            throw ValidationException::withMessages([
+                'form' => 'Submissions are unavailable until both a valid site email and WhatsApp number are configured in admin settings.',
+            ]);
+        }
+
+        $validated = $request->validate([
+            'submission_channel' => ['required', 'in:whatsapp,email'],
+            'form_type' => ['required', 'in:partnership,order'],
+        ]);
+
+        $channel = $validated['submission_channel'];
+        $formType = $validated['form_type'];
+
+        if ($channel === FormChannelService::CHANNEL_WHATSAPP && ! $availability['whatsapp_active']) {
+            throw ValidationException::withMessages([
+                'submission_channel' => 'WhatsApp is not configured on this site.',
+            ]);
+        }
+
+        if ($channel === FormChannelService::CHANNEL_EMAIL && ! $availability['email_active']) {
+            throw ValidationException::withMessages([
+                'submission_channel' => 'Email is not configured on this site.',
+            ]);
+        }
+
+        $payload = $formType === 'order'
+            ? $this->validateOrderPayload($request)
+            : $this->validatePartnershipPayload($request);
+
+        $openUrl = FormChannelService::openUrl($channel, $setting, $formType, $payload);
+
+        if ($openUrl === null) {
+            throw ValidationException::withMessages([
+                'form' => 'Unable to open the selected contact channel. Please try again later.',
+            ]);
+        }
+
+        $token = Str::random(40);
+
+        Cache::put('form_submit:' . $token, [
+            'channel' => $channel,
+            'form_type' => $formType,
+            'ip' => $request->ip(),
+            'opened_at' => time(),
+        ], now()->addMinutes(30));
+
+        return response()->json([
+            'token' => $token,
+            'open_url' => $openUrl,
+        ]);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validatePartnershipPayload(Request $request): array
+    {
+        $allowed = [
+            'training',
+            'equipment',
+            'fundraising',
+            'volunteering',
+            'sales_ambassador',
+            'wholesale',
+            'corporate',
+            'other',
+        ];
+
+        $validated = $request->validate([
+            'organization' => ['nullable', 'string', 'max:255'],
+            'full_name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:64'],
+            'email' => ['required', 'email', 'max:255'],
+            'interests' => ['nullable', 'array'],
+            'interests.*' => ['string', 'in:' . implode(',', $allowed)],
+            'message' => ['nullable', 'string', 'max:20000'],
+        ]);
+
+        if (empty($request->input('interests')) && ! $request->filled('message')) {
+            throw ValidationException::withMessages([
+                'interests' => 'Select at least one area of interest or write a message.',
+            ]);
+        }
+
+        $labels = [
+            'training' => 'Skills development & training',
+            'equipment' => 'Equipment or materials',
+            'fundraising' => 'Fundraising or sponsorship',
+            'volunteering' => 'Volunteering',
+            'sales_ambassador' => 'Sales & ambassador programmes',
+            'wholesale' => 'Wholesale / bulk orders',
+            'corporate' => 'Corporate or institutional partnership',
+            'other' => 'Other',
+        ];
+
+        $raw = (array) $request->input('interests', []);
+        $picked = array_values(array_intersect($allowed, $raw));
+        $summaryParts = [];
+        foreach ($picked as $key) {
+            $summaryParts[] = $labels[$key] ?? $key;
+        }
+
+        $validated['interests'] = $summaryParts !== [] ? implode(', ', $summaryParts) : null;
+
+        return $validated;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validateOrderPayload(Request $request): array
+    {
+        $validated = $request->validate([
+            'full_name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:64'],
+            'email' => ['required', 'email', 'max:255'],
+            'product_description' => ['required', 'string', 'max:20000'],
+            'product_slug' => ['nullable', 'string', 'max:255'],
+            'product_reference' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        return $validated;
+    }
+}

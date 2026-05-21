@@ -41,8 +41,13 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('storeOrderRequest') }}" method="POST" class="row g-3">
+                        <form action="{{ route('storeOrderRequest') }}" method="POST" class="row g-3 site-partner-form site-channel-form" data-form-type="order">
                             @csrf
+                            <input type="hidden" name="started_at" value="{{ now()->timestamp }}">
+                            <div class="site-hp-field" aria-hidden="true">
+                                <label for="website_order">Website</label>
+                                <input type="text" name="website" id="website_order" tabindex="-1" autocomplete="off">
+                            </div>
                             @if($product)
                                 <input type="hidden" name="product_slug" value="{{ $product->slug }}">
                             @endif
@@ -62,10 +67,10 @@
                                 <label class="form-label">Describe what you need <span class="text-danger">*</span></label>
                                 <textarea name="product_description" class="form-control" rows="6" required placeholder="Product types, quantities, colours, delivery timeline, organisation name (if any)…">{{ old('product_description') }}</textarea>
                             </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-lg fw-semibold text-dark site-form-submit">Submit request</button>
-                                <a href="{{ route('ourProducts') }}" class="btn btn-outline-secondary btn-lg ms-0 ms-md-2 mt-2 mt-md-0">Browse products</a>
-                            </div>
+                            @if($product)
+                                <input type="hidden" name="product_reference" value="{{ $product->title }}">
+                            @endif
+                            @include('frontend.includes.form-channel-submit', ['formType' => 'order'])
                         </form>
                     </div>
                 </div>

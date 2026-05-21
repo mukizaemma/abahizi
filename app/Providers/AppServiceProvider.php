@@ -9,6 +9,7 @@ use App\Models\AnnualReport;
 use App\Models\Program;
 use App\Models\Service;
 use App\Models\Setting;
+use App\Support\FormChannelService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -37,12 +38,12 @@ class AppServiceProvider extends ServiceProvider
     {
         $dbReady = $this->databaseAvailable();
 
-        View::share(
-            'setting',
-            $dbReady && Schema::hasTable('settings')
-                ? Setting::firstOrEmpty()
-                : new Setting()
-        );
+        $setting = $dbReady && Schema::hasTable('settings')
+            ? Setting::firstOrEmpty()
+            : new Setting();
+
+        View::share('setting', $setting);
+        View::share('formChannels', FormChannelService::availability($setting));
         $programs = $dbReady && Schema::hasTable('programs')
             ? Program::query()->oldest()->get()
             : collect();

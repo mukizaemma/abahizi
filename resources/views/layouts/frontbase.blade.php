@@ -6,6 +6,8 @@
     <title>{{ $setting->company ?? ''}}</title>
     <meta name="description" content="A Community-based Initiative Dedicated to Transforming Lives through Holistic Empowerment, Leadership Development, and Spiritual Growth">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="form-channel-intent-url" content="{{ route('formChannel.intent') }}">
 
 
     <!-- Place favicon.ico in the root directory -->
@@ -335,6 +337,7 @@
     <script src="{{ asset('assets/js/imagesloaded-pkgd.js') }}"></script>
     <script src="{{ asset('assets/js/ajax-form.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/site-form-channels.js') }}"></script>
 
 
 

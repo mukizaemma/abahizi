@@ -14,6 +14,7 @@ class OrderRequest extends Model
         'product_description',
         'product_id',
         'product_reference',
+        'submission_channel',
     ];
 
     public function product(): BelongsTo

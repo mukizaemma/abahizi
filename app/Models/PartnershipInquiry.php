@@ -13,5 +13,6 @@ class PartnershipInquiry extends Model
         'email',
         'interests',
         'message',
+        'submission_channel',
     ];
 }

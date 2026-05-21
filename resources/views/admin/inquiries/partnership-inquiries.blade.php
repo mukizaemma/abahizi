@@ -16,7 +16,34 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header mb-4">
                     <h1>Partnership inquiries</h1>
-                    <p class="text-muted mb-0">“Get involved” form — training, equipment, fundraising, volunteering, and more.</p>
+                    <p class="text-muted mb-0">“Get involved” and contact forms — recorded only after the visitor sent via WhatsApp or email.</p>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="text-muted small text-uppercase fw-semibold">Total recorded</div>
+                                <div class="fs-3 fw-bold">{{ $channelStats['total'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="text-muted small text-uppercase fw-semibold">Via WhatsApp</div>
+                                <div class="fs-3 fw-bold text-success">{{ $channelStats['whatsapp'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="text-muted small text-uppercase fw-semibold">Via email</div>
+                                <div class="fs-3 fw-bold text-primary">{{ $channelStats['email'] }}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card">
@@ -28,6 +55,7 @@
                                         <th>Date</th>
                                         <th>Name / org.</th>
                                         <th>Contact</th>
+                                        <th>Sent via</th>
                                         <th>Interests</th>
                                         <th>Message</th>
                                     </tr>
@@ -46,12 +74,21 @@
                                                 <div>{{ $row->email }}</div>
                                                 <div class="text-muted">{{ $row->phone }}</div>
                                             </td>
+                                            <td>
+                                                @if($row->submission_channel === 'whatsapp')
+                                                    <span class="badge text-bg-success">WhatsApp</span>
+                                                @elseif($row->submission_channel === 'email')
+                                                    <span class="badge text-bg-primary">Email</span>
+                                                @else
+                                                    <span class="text-muted">—</span>
+                                                @endif
+                                            </td>
                                             <td style="max-width: 14rem;">{{ $row->interests ?: '—' }}</td>
                                             <td style="max-width: 22rem;">{{ $row->message ? Str::limit($row->message, 200) : '—' }}</td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center text-muted py-5">No inquiries yet.</td>
+                                            <td colspan="6" class="text-center text-muted py-5">No inquiries yet.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

@@ -16,7 +16,34 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header mb-4">
                     <h1>Product order requests</h1>
-                    <p class="text-muted mb-0">Submissions from the public “Request an order” form.</p>
+                    <p class="text-muted mb-0">Recorded only after the visitor sent their request via WhatsApp or email.</p>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="text-muted small text-uppercase fw-semibold">Total recorded</div>
+                                <div class="fs-3 fw-bold">{{ $channelStats['total'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="text-muted small text-uppercase fw-semibold">Via WhatsApp</div>
+                                <div class="fs-3 fw-bold text-success">{{ $channelStats['whatsapp'] }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body">
+                                <div class="text-muted small text-uppercase fw-semibold">Via email</div>
+                                <div class="fs-3 fw-bold text-primary">{{ $channelStats['email'] }}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card">
@@ -28,6 +55,7 @@
                                         <th>Date</th>
                                         <th>Name</th>
                                         <th>Contact</th>
+                                        <th>Sent via</th>
                                         <th>Product ref.</th>
                                         <th>Request</th>
                                     </tr>
@@ -42,6 +70,15 @@
                                                 <div class="text-muted">{{ $row->phone }}</div>
                                             </td>
                                             <td>
+                                                @if($row->submission_channel === 'whatsapp')
+                                                    <span class="badge text-bg-success">WhatsApp</span>
+                                                @elseif($row->submission_channel === 'email')
+                                                    <span class="badge text-bg-primary">Email</span>
+                                                @else
+                                                    <span class="text-muted">—</span>
+                                                @endif
+                                            </td>
+                                            <td>
                                                 @if($row->product_reference)
                                                     {{ $row->product_reference }}
                                                 @else
@@ -52,7 +89,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center text-muted py-5">No requests yet.</td>
+                                            <td colspan="6" class="text-center text-muted py-5">No requests yet.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

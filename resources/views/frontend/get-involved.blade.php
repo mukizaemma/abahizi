@@ -105,9 +105,9 @@
                 <div class="card border-0 shadow-sm site-form-card">
                     <div class="card-body p-4 p-lg-5">
                         <h2 class="h4 mb-3">Tell us how you would like to collaborate</h2>
-                        <p class="text-muted mb-4">Select any areas that fit. We will reply by email or phone to explore next steps.</p>
+                        <p class="text-muted mb-4">Select any areas that fit, then send your inquiry via WhatsApp or email. We only save your details after you send the message.</p>
 
-                        <form action="{{ route('storePartnershipInquiry') }}" method="POST" class="row g-3 site-partner-form">
+                        <form action="{{ route('storePartnershipInquiry') }}" method="POST" class="row g-3 site-partner-form site-channel-form" data-form-type="partnership">
                             @csrf
                             <input type="hidden" name="started_at" value="{{ now()->timestamp }}">
                             <div class="site-hp-field" aria-hidden="true">
@@ -161,10 +161,7 @@
                                 <textarea name="message" class="form-control" rows="5" placeholder="Goals, timeline, how you heard about us…">{{ old('message') }}</textarea>
                                 <small class="text-muted d-block mt-2">Tip: include goals, timeline, and the type of partnership you need.</small>
                             </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-lg fw-semibold text-dark site-form-submit">Send inquiry</button>
-                                <a href="{{ route('contacts') }}" class="btn btn-outline-secondary btn-lg ms-0 ms-md-2 mt-2 mt-md-0">General contact</a>
-                            </div>
+                            @include('frontend.includes.form-channel-submit', ['formType' => 'partnership'])
                         </form>
                     </div>
                 </div>

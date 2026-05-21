@@ -100,10 +100,12 @@
                                         <div class="col-lg-6">
                                             <label class="form-label">Email</label>
                                             <input type="email" class="form-control" value="{{ $data->email }}" name="email">
+                                            <small class="text-muted">Required for public contact forms (email send option).</small>
                                         </div>
                                         <div class="col-lg-4">
                                             <label class="form-label">Phone</label>
                                             <input type="text" class="form-control" value="{{ $data->phone }}" name="phone">
+                                            <small class="text-muted">Used for WhatsApp submissions (wa.me). Phone 2 is a fallback.</small>
                                         </div>
                                         <div class="col-lg-4">
                                             <label class="form-label">Phone 2</label>
