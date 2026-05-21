@@ -131,7 +131,7 @@
                     <div class="col-xl-2 col-lg-6 col-md-4 col-7">
                         <div class="tp-header-3__logo">
                             <a href="{{route('home')}}">
-                                <img src="{{asset('storage\images').($setting->logo ?? '')}}" alt="" width="90px">
+                                <img src="{{asset('storage\images').($setting->logo ?? '')}}" alt="{{ $setting->company ?? 'Abahizi Rwanda' }}" class="site-header__logo-img" width="auto" height="72">
                             </a>
                         </div>
                     </div>

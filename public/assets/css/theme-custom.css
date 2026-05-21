@@ -77,10 +77,47 @@ body {
     white-space: nowrap;
 }
 
+.tp-header-3__logo {
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
+}
+
 .tp-header-3__logo a {
     display: inline-flex;
     align-items: center;
     padding-right: 0.8rem;
+}
+
+.tp-header-3__logo .site-header__logo-img {
+    display: block;
+    height: 72px;
+    width: auto;
+    max-width: min(220px, 100%);
+    object-fit: contain;
+}
+
+@media (max-width: 1199.98px) {
+    .tp-header-3__logo {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .tp-header-3__logo .site-header__logo-img {
+        height: 60px;
+        max-width: 190px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .tp-header-3__logo {
+        padding-top: 0.4rem;
+        padding-bottom: 0.4rem;
+    }
+
+    .tp-header-3__logo .site-header__logo-img {
+        height: 52px;
+        max-width: 165px;
+    }
 }
 
 .tp-header-3__right-box {
