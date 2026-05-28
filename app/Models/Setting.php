@@ -18,6 +18,8 @@ class Setting extends Model
         'page_header_caption' => 'string',
         'google_map_embed_code' => 'string',
         'show_products_publicly' => 'boolean',
+        'show_products_page' => 'boolean',
+        'accept_order_requests' => 'boolean',
     ];
 
     public static function firstOrEmpty(): self

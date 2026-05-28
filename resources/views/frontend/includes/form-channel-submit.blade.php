@@ -13,10 +13,7 @@
     </div>
 @else
     <div class="col-12 site-form-channel">
-        <label class="form-label fw-semibold mb-2">How would you like to send this? <span class="text-danger">*</span></label>
-        <p class="text-muted small mb-3">Choose WhatsApp or email. We will open your app in a new tab with your details pre-filled. We only save your submission after you send the message and confirm below.</p>
-
-        <div class="site-form-channel__choices row g-2 mb-3" role="radiogroup" aria-label="Send via">
+        <div class="site-form-channel__choices row g-2 mb-3" role="radiogroup" aria-label="Send via WhatsApp or email">
             <div class="col-sm-6">
                 <label class="site-form-channel__choice">
                     <input type="radio" name="submission_channel_choice" value="whatsapp" class="site-form-channel__radio" required>
@@ -38,7 +35,7 @@
         </div>
 
         <button type="button" class="btn btn-lg fw-semibold text-dark site-form-submit site-form-channel__open" disabled>
-            <span class="site-form-channel__open-label">Open selected app</span>
+            Submit
         </button>
 
         <div class="site-form-channel__confirm mt-4 d-none" aria-live="polite">

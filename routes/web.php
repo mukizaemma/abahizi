@@ -14,12 +14,15 @@ use App\Http\Controllers\AdminController;
 |
 */
 
+Route::get('/locale/{locale}', [App\Http\Controllers\LocaleController::class, 'switch'])->name('locale.switch');
+
 Route::get('/',[App\Http\Controllers\HomeController::class,'index'])->name('home');
 Route::get('/about-us',[App\Http\Controllers\HomeController::class,'backgroundDetails'])->name('backgroundDetails');
 Route::get('/about/mission',[App\Http\Controllers\HomeController::class,'ourMission'])->name('ourMission');
 Route::get('/about/approach',[App\Http\Controllers\HomeController::class,'ourApproach'])->name('ourApproach');
 Route::get('/about/model',[App\Http\Controllers\HomeController::class,'ourModel'])->name('ourModel');
 Route::get('/about/factory',[App\Http\Controllers\HomeController::class,'ourFactory'])->name('ourFactory');
+Route::get('/manufacturing',[App\Http\Controllers\HomeController::class,'manufacturing'])->name('manufacturing');
 Route::get('/services',[App\Http\Controllers\HomeController::class,'ourServices'])->name('ourServices');
 Route::get('/services/{slug}',[App\Http\Controllers\HomeController::class,'serviceShow'])->name('serviceShow');
 Route::get('/products',[App\Http\Controllers\HomeController::class,'ourProducts'])->name('ourProducts');

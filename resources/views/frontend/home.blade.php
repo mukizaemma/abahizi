@@ -2,9 +2,8 @@
 
 @section('content')
 
-    <!-- slider-area-start -->
-    @include('frontend.includes.slides')
-    <!-- slider-area-end -->
+    @include('frontend.includes.luxury.hero-cinematic')
+    @include('frontend.includes.luxury.impact-ticker')
     
     <!-- about-area-start -->
     <div class="tp-about-4__area tp-about-4__space p-relative fix grey-bg about-home-section">
@@ -118,7 +117,9 @@
 
     <!-- testimonial-area-start -->
     
-    {{-- @include('frontend.includes.testimonials') --}}
+    @if(($testimonials ?? collect())->isNotEmpty())
+        @include('frontend.includes.testimonials')
+    @endif
     <!-- testimonial-area-end -->
 
     @include('frontend.includes.home-products')

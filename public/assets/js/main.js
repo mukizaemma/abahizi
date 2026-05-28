@@ -118,13 +118,8 @@
 	  }
 
 	
-	$(window).on('load', function () {
-
-		$('#preloader').delay(350).fadeOut('slow');
-
-		$('body').delay(350).css({ 'overflow': 'visible' });
-
-	})
+	// Preloader removed (avoid blocking first paint).
+	$(window).on('load', function () {})
 
 	////////////////////////////////////////////////////
 	// 09. Sidebar Js

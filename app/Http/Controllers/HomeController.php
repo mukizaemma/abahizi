@@ -93,7 +93,15 @@ class HomeController extends Controller
         $mission = About::firstOrEmpty();
         $homeGallery = Gallery::latest()->get();
         $slides = Slide::oldest()->get();
-        $testimonials = Testimony::latest()->paginate(3);
+        $testimonials = Testimony::query()
+            ->where(function ($q) {
+                $q->whereNull('status')
+                    ->orWhere('status', 'Publish')
+                    ->orWhere('status', 'Active');
+            })
+            ->latest()
+            ->take(3)
+            ->get();
         $partners = Partner::latest()->get();
         $staff = Team::latest()->get();
 
@@ -149,7 +157,14 @@ class HomeController extends Controller
     }
     public function testimonials(){
         $programs = Program::latest()->get();
-        $testimonials = Testimony:: latest()->get();
+        $testimonials = Testimony::query()
+            ->where(function ($q) {
+                $q->whereNull('status')
+                    ->orWhere('status', 'Publish')
+                    ->orWhere('status', 'Active');
+            })
+            ->latest()
+            ->get();
         $about = Background::firstOrEmpty();
         return view('frontend.testimonials',['testimonials'=>$testimonials,'programs'=>$programs, 'about'=>$about]);
     }
@@ -425,6 +440,12 @@ public function gallery(){
         if (Schema::hasColumn('settings', 'show_products_publicly')) {
             $data->show_products_publicly = $request->boolean('show_products_publicly');
         }
+        if (Schema::hasColumn('settings', 'show_products_page')) {
+            $data->show_products_page = $request->boolean('show_products_page');
+        }
+        if (Schema::hasColumn('settings', 'accept_order_requests')) {
+            $data->accept_order_requests = $request->boolean('accept_order_requests');
+        }
         if (Schema::hasColumn('settings', 'page_header_caption')) {
             $data->page_header_caption = $request->input('page_header_caption');
         }
@@ -555,6 +576,14 @@ public function gallery(){
         return view('frontend.our-factory', compact('about', 'factoryGallery'));
     }
 
+    public function manufacturing()
+    {
+        $about = Background::firstOrEmpty();
+        $services = Service::query()->active()->orderBy('sort_order')->orderBy('title')->get();
+
+        return view('frontend.manufacturing', compact('about', 'services'));
+    }
+
     public function ourServices(){
         $about = Background::firstOrEmpty();
         $services = Service::query()->active()->orderBy('sort_order')->orderBy('title')->get();
@@ -570,6 +599,9 @@ public function gallery(){
     public function ourProducts(Request $request){
         $about = Background::firstOrEmpty();
         $setting = Setting::firstOrEmpty();
+        if (Schema::hasColumn('settings', 'show_products_page') && !($setting->show_products_page ?? true)) {
+            abort(404);
+        }
         $categories = ProductCategory::query()->active()->orderBy('sort_order')->orderBy('name')->get();
 
         $products = collect();
@@ -613,6 +645,13 @@ public function gallery(){
     public function requestOrder(Request $request)
     {
         $about = Background::firstOrEmpty();
+        $setting = Setting::firstOrEmpty();
+        if (Schema::hasColumn('settings', 'accept_order_requests') && !($setting->accept_order_requests ?? true)) {
+            return view('frontend.request-order', compact('about'))->with([
+                'product' => null,
+                'ordersClosed' => true,
+            ]);
+        }
         $product = null;
         if ($request->filled('product')) {
             $product = Product::query()
@@ -621,11 +660,18 @@ public function gallery(){
                 ->first();
         }
 
-        return view('frontend.request-order', compact('about', 'product'));
+        return view('frontend.request-order', compact('about', 'product'))->with(['ordersClosed' => false]);
     }
 
     public function storeOrderRequest(Request $request)
     {
+        $setting = Setting::firstOrEmpty();
+        if (Schema::hasColumn('settings', 'accept_order_requests') && !($setting->accept_order_requests ?? true)) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Order requests are temporarily closed. Please contact us for urgent inquiries.']);
+        }
+
         $ipKey = 'order-request:ip:' . $request->ip();
         if (RateLimiter::tooManyAttempts($ipKey, 5)) {
             return back()

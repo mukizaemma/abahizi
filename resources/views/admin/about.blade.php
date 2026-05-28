@@ -202,16 +202,24 @@
                                 <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row g-3">
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-6 col-xl-3">
+                                            <label class="form-label">Handbags Exported</label>
+                                            <input type="text" class="form-control" name="handbags_exported" value="{{ $background->handbags_exported }}" placeholder="310,000+">
+                                        </div>
+                                        <div class="col-lg-6 col-xl-3">
+                                            <label class="form-label">Full-Time Artisans</label>
+                                            <input type="text" class="form-control" name="artisans_count" value="{{ $background->artisans_count }}" placeholder="260+">
+                                        </div>
+                                        <div class="col-lg-6 col-xl-3">
                                             <label class="form-label">Families Impacted</label>
                                             <input type="text" class="form-control" name="families_impacted" value="{{ $background->families_impacted }}">
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-6 col-xl-3">
                                             <label class="form-label">Jobs Created</label>
                                             <input type="text" class="form-control" name="jobs_created" value="{{ $background->jobs_created }}">
                                         </div>
-                                        <div class="col-lg-4">
-                                            <label class="form-label">Hours of Continuous Vocational Training</label>
+                                        <div class="col-lg-6 col-xl-3">
+                                            <label class="form-label">Hours of Vocational Training</label>
                                             <input type="text" class="form-control" name="training_hours" value="{{ $background->training_hours }}">
                                         </div>
                                         <input type="hidden" name="description" value="{{ $background->description }}">

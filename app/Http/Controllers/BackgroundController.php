@@ -124,6 +124,12 @@ public function saveBackg(Request $request)
     if (Schema::hasColumn('backgrounds', 'training_hours') && $request->has('training_hours')) {
         $data->training_hours = $request->input('training_hours');
     }
+    if (Schema::hasColumn('backgrounds', 'handbags_exported') && $request->has('handbags_exported')) {
+        $data->handbags_exported = $request->input('handbags_exported');
+    }
+    if (Schema::hasColumn('backgrounds', 'artisans_count') && $request->has('artisans_count')) {
+        $data->artisans_count = $request->input('artisans_count');
+    }
 
     // Process image
     if ($request->hasFile('image')) {

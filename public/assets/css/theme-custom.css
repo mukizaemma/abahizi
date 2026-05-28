@@ -164,6 +164,13 @@ body {
     box-sizing: border-box;
 }
 
+.tp-breadcrumb__area.tp-breadcrumb-height--compact {
+    min-height: 0;
+    height: auto;
+    padding-top: clamp(5.5rem, 12vh, 7rem);
+    padding-bottom: clamp(2rem, 5vh, 2.75rem);
+}
+
 .tp-breadcrumb__area.tp-breadcrumb-height > .container {
     width: 100%;
     flex: 0 0 auto;

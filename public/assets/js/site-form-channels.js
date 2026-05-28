@@ -38,16 +38,7 @@
         }
         var channel = selectedChannel(form);
         btn.disabled = !channel;
-        var label = btn.querySelector('.site-form-channel__open-label');
-        if (label) {
-            if (channel === 'whatsapp') {
-                label.textContent = 'Open WhatsApp in a new tab';
-            } else if (channel === 'email') {
-                label.textContent = 'Open email in a new tab';
-            } else {
-                label.textContent = 'Open selected app';
-            }
-        }
+        btn.textContent = 'Submit';
     }
 
     function resetChannelFlow(form) {

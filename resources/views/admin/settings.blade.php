@@ -169,6 +169,28 @@
                                                 When off, product links/cards/pages are hidden from public visitors.
                                             </small>
                                         </div>
+                                        <div class="col-12">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" id="show_products_page" name="show_products_page" value="1" {{ ($data->show_products_page ?? true) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="show_products_page">
+                                                    Show products page in navigation
+                                                </label>
+                                            </div>
+                                            <small class="text-muted d-block mt-2">
+                                                When off, the products page is disabled (404) and removed from the menu.
+                                            </small>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" id="accept_order_requests" name="accept_order_requests" value="1" {{ ($data->accept_order_requests ?? true) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="accept_order_requests">
+                                                    Accept order requests from website
+                                                </label>
+                                            </div>
+                                            <small class="text-muted d-block mt-2">
+                                                When off, the request order form is disabled and visitors are asked to contact you instead.
+                                            </small>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="headers-pane" role="tabpanel" aria-labelledby="headers-tab">

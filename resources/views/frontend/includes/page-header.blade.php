@@ -16,7 +16,7 @@
     }
 @endphp
 
-<div class="tp-breadcrumb__area p-relative fix tp-breadcrumb-height"
+<div class="tp-breadcrumb__area p-relative fix {{ !empty($compact) ? 'tp-breadcrumb-height--compact' : 'tp-breadcrumb-height' }}"
     @if($headerImageUrl) data-background="{{ $headerImageUrl }}" @endif>
     <div class="tp-breadcrumb__shape-1 z-index-5">
         <img src="{{ asset('assets/img/breadcrumb/breadcrumb-shape-1.png') }}" alt="">
@@ -33,6 +33,9 @@
                     </div>
                     @if(!empty($headerCaption))
                         <p class="text-center mb-0 mt-2">{{ $headerCaption }}</p>
+                    @endif
+                    @if(!empty($extraHtml))
+                        {!! $extraHtml !!}
                     @endif
                 </div>
             </div>

@@ -42,6 +42,7 @@
                                     <tr>
                                         <th>Names</th>
                                         <th>Testimony</th>
+                                        <th>Status</th>
                                         <th>Format</th>
                                         <th>Image</th>
                                         <th>Action</th>
@@ -53,9 +54,15 @@
                                         <tr>
                                             <td>{{ $rs->names }}</td>
                                             <td>{!! $rs->testimony !!}</td>
+                                            <td><span class="badge bg-secondary">{{ $rs->status ?? 'Publish' }}</span></td>
                                             <td>{{ !empty($rs->video_url) ? 'Video (YouTube)' : 'Text' }}</td>
-                                            <td><img src="{{ asset('storage/images/testimonies') . $rs->image }}"
-                                                    alt="" width="150px"></td>
+                                            <td>
+                                                @if(!empty($rs->image))
+                                                    <img src="{{ asset('storage/' . ltrim($rs->image, '/')) }}" alt="" width="150px" style="object-fit:cover;border-radius:8px;">
+                                                @else
+                                                    <span class="text-muted small">—</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div class="btn-btn-group ">
                                                     <a type="button" href="{{ route('editTestimony', $rs->id) }}"
@@ -101,6 +108,16 @@
                                                         <label for="projectinput1">Testimony title</label>
                                                         <input type="text" class="form-control" placeholder="title"
                                                             name="title" placeholder="Title if any">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-12 mt-3 mt-lg-0">
+                                                    <div class="form-group">
+                                                        <label>Status</label>
+                                                        <select class="form-select" name="status">
+                                                            <option value="Publish" selected>Publish</option>
+                                                            <option value="Draft">Draft</option>
+                                                            <option value="Inactive">Inactive</option>
+                                                        </select>
                                                     </div>
                                                 </div>
 

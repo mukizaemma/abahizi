@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="{{ app()->getLocale() === 'rw' ? 'rw' : 'en' }}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -27,22 +27,23 @@
     <link rel="stylesheet" href="{{ asset('assets/css/spacing.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme-custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/luxury-demo.css') }}">
 
     @php
-        $primary = $setting->primary_color ?? '#fad200';
-        $secondary = $setting->secondary_color ?? '#2c2c2c';
+        $primary = $setting->primary_color ?? '#c9a962';
+        $secondary = $setting->secondary_color ?? '#1f1f1f';
         $neutral = $setting->neutral_color ?? '#b0b0b0';
-        $fontFamily = $setting->font_family ?? 'Poppins';
+        $fontFamily = $setting->font_family ?? 'DM Sans';
         $googleFontParam = str_replace(' ', '+', $fontFamily);
     @endphp
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family={{ $googleFontParam }}:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family={{ $googleFontParam }}:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         body {
-            font-family: "{{ $fontFamily }}", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: var(--lux-sans, "{{ $fontFamily }}"), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
         :root {
             --brand-primary: {{ $primary }};
@@ -53,15 +54,6 @@
 </head>
 
 <body>
-
-    <!-- preloader -->
-    <div id="preloader">
-        <div class="preloader">
-            <span></span>
-            <span></span>
-        </div>
-    </div>
-    <!-- preloader end  -->
 
     <!-- back-to-top-start  -->
     <button class="scroll-top scroll-to-target" data-target="html">
@@ -141,33 +133,38 @@
                                 <ul>
                                     <li><a href="{{ route('home') }}">Home</a></li>
                                     <li class="has-dropdown">
-                                        <a href="{{ route('ourMission') }}">About</a>
+                                        <a href="{{ route('ourMission') }}">Our Story</a>
                                         <ul class="submenu tp-submenu">
-                                            <li><a href="{{ route('ourMission') }}">Our Mission &amp; Vision</a></li>
+                                            <li><a href="{{ route('ourMission') }}">Mission &amp; Vision</a></li>
+                                            <li><a href="{{ route('ourModel') }}">The B-Corp Journey</a></li>
+                                            <li><a href="{{ route('ourApproach') }}">Employee Ownership</a></li>
                                             <li><a href="{{ route('team') }}">Our Team</a></li>
-                                            <li><a href="{{ route('ourFactory') }}">Our Factory</a></li>
+                                            <li><a href="{{ route('testimonials') }}">Testimonials</a></li>
                                         </ul>
                                     </li>
-                                    @if($navProgramWhatWeDo)
-                                        <li><a href="{{ route('programShow', ['slug' => $navProgramWhatWeDo->slug]) }}">What we do</a></li>
-                                    @endif
-                                    @if($navProgramOurImpact)
-                                        <li><a href="{{ route('programShow', ['slug' => $navProgramOurImpact->slug]) }}">Our Impact</a></li>
-                                    @endif
-                                    <li class="{{ $navImpactReports->isNotEmpty() ? 'has-dropdown' : '' }}">
-                                        <a href="{{ route('impactReports') }}">Impact Reports</a>
-                                        @if($navImpactReports->isNotEmpty())
-                                            <ul class="submenu tp-submenu">
-                                                @foreach($navImpactReports as $impactReport)
-                                                    <li>
-                                                        <a href="{{ route('impactReportShow', ['slug' => $impactReport->slug]) }}">
-                                                            {{ $impactReport->heading }}
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
+                                    <li class="has-dropdown">
+                                        <a href="{{ route('manufacturing') }}">Manufacturing Services</a>
+                                        <ul class="submenu tp-submenu">
+                                            <li><a href="{{ route('ourFactory') }}">CMT Factory</a></li>
+                                            <li><a href="{{ route('manufacturing') }}#lean">Lean Operations</a></li>
+                                            <li><a href="{{ route('ourServices') }}">Expertise &amp; Services</a></li>
+                                            @if(($setting->show_products_page ?? true))
+                                                <li><a href="{{ route('ourProducts') }}">Products</a></li>
+                                            @endif
+                                        </ul>
                                     </li>
+                                    @if(($setting->show_products_page ?? true))
+                                        <li><a href="{{ route('ourProducts') }}">Products</a></li>
+                                    @endif
+                                    <li class="has-dropdown">
+                                        <a href="{{ route('impactPage') }}">Our Impact</a>
+                                        <ul class="submenu tp-submenu">
+                                            <li><a href="{{ route('impactPage', ['tab' => 'empower']) }}">Empower Workers</a></li>
+                                            <li><a href="{{ route('impactPage', ['tab' => 'improve']) }}">Improve Community</a></li>
+                                            <li><a href="{{ route('impactReports') }}">Impact Reports</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="{{ route('contacts') }}">Contact Us</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -176,14 +173,13 @@
                         <div class="tp-header-3__right-box">
                             <div class="tp-header-3__right-action text-end">
                                 <ul class="d-flex align-items-center justify-content-end">
-                                    {{-- <li>
-                                        <div class="tp-header-3__icon-box d-none d-md-block">
-                                            <button class="search-open-btn"><i class="flaticon-loupe"></i></button><a href="{{ route('login') }}"><i class="flaticon-user"></i></a>
-                                        </div>
-                                    </li>                                     --}}
                                     <li>
                                         <div class="tp-header-3__btn d-none d-md-block">
-                                            <a class="tp-btn" href="{{ route('getInvolved') }}">Get involved</a>
+                                            @if(($setting->accept_order_requests ?? true))
+                                                <a class="tp-btn" href="{{ route('requestOrder') }}">Enquiry</a>
+                                            @else
+                                                <a class="tp-btn" href="{{ route('contacts') }}">Contact Us</a>
+                                            @endif
                                         </div>
                                     </li>  
                                     <li>
@@ -225,15 +221,11 @@
                         <h3 class="site-footer__heading">Explore</h3>
                         <ul class="site-footer__nav list-unstyled mb-0">
                             <li><a href="{{ route('home') }}">Home</a></li>
-                            <li><a href="{{ route('ourMission') }}">Our Mission &amp; Vision</a></li>
-                            <li><a href="{{ route('team') }}">Our Team</a></li>
-                            @if($navProgramWhatWeDo)
-                                <li><a href="{{ route('programShow', ['slug' => $navProgramWhatWeDo->slug]) }}">What we do</a></li>
-                            @endif
-                            @if($navProgramOurImpact)
-                                <li><a href="{{ route('programShow', ['slug' => $navProgramOurImpact->slug]) }}">Our Impact</a></li>
-                            @endif
+                            <li><a href="{{ route('ourMission') }}">Mission &amp; Vision</a></li>
+                            <li><a href="{{ route('manufacturing') }}">Manufacturing Services</a></li>
+                            <li><a href="{{ route('impactPage') }}">Our Impact</a></li>
                             <li><a href="{{ route('impactReports') }}">Impact Reports</a></li>
+                            <li><a href="{{ route('contacts') }}">Contact Us</a></li>
                         </ul>
                     </div>
 
@@ -281,7 +273,7 @@
                             <div class="site-footer__cta-group">
                                 <a href="{{ route('requestOrder') }}" class="site-footer__btn site-footer__btn--order">
                                     <i class="fas fa-clipboard-list" aria-hidden="true"></i>
-                                    Request an order
+                                    Enquiry
                                 </a>
                                 <a href="{{ route('getInvolved') }}" class="site-footer__btn site-footer__btn--ghost">
                                     Get involved
@@ -338,8 +330,8 @@
     <script src="{{ asset('assets/js/ajax-form.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script src="{{ asset('assets/js/site-form-channels.js') }}"></script>
-
-
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
+    <script src="{{ asset('assets/js/luxury-site.js') }}"></script>
 
 </body>
 

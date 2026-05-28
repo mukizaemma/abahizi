@@ -1,18 +1,26 @@
 @extends('layouts.frontbase')
 
-@section('title', 'Request an order')
+@section('title', 'Enquiry')
 
 @section('content')
 
 @include('frontend.includes.page-header', [
-    'title' => 'Request an order',
-    'caption' => 'We produce to order for partners, retailers, and organisations. Share what you need and we will follow up with timelines and pricing.',
+    'title' => 'Enquiry',
+    'caption' => 'Tell us how you would like to partner with Abahizi Rwanda — manufacturing, community initiatives, or collaboration.',
 ])
 
 <section class="py-5 grey-bg site-form-page">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
+                @if(($ordersClosed ?? false) === true)
+                    <div class="alert alert-info mb-4">
+                        Enquiries are currently closed. Please contact us and we will respond with the right next step.
+                    </div>
+                    <div class="text-center">
+                        <a href="{{ route('contacts') }}" class="tp-btn">Contact us</a>
+                    </div>
+                @else
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
@@ -64,8 +72,8 @@
                                 <input type="email" name="email" class="form-control" required value="{{ old('email') }}" autocomplete="email">
                             </div>
                             <div class="col-12">
-                                <label class="form-label">Describe what you need <span class="text-danger">*</span></label>
-                                <textarea name="product_description" class="form-control" rows="6" required placeholder="Product types, quantities, colours, delivery timeline, organisation name (if any)…">{{ old('product_description') }}</textarea>
+                                <label class="form-label">Your enquiry <span class="text-danger">*</span></label>
+                                <textarea name="product_description" class="form-control" rows="6" required placeholder="Manufacturing: product types, materials, quantities, delivery timeline.\nCommunity initiatives: program area, goals, timeline.\nPartnership: what you want to explore and how we can help.">{{ old('product_description') }}</textarea>
                             </div>
                             @if($product)
                                 <input type="hidden" name="product_reference" value="{{ $product->title }}">
@@ -74,6 +82,7 @@
                         </form>
                     </div>
                 </div>
+                @endif
             </div>
         </div>
     </div>

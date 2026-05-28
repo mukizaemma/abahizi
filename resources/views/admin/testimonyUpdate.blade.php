@@ -16,7 +16,7 @@
         </div>
         <div id="layoutSidenav_content">
             <div class="card-header">
-                <a href="{{ route('testimony') }}" class="btn btn-primary">Back</a>
+                <a href="{{ route('getTestimonials') }}" class="btn btn-primary">Back</a>
                 @if (session()->has('success'))
                     <div class="arlert alert-success">
                         <button class="close" type="button" data-dismiss="alert">X</button>
@@ -52,6 +52,17 @@
                                                 name="title">
                                         </div>
                                     </div>
+                                    <div class="col-lg-6 col-sm-12 mt-3">
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <select class="form-select" name="status">
+                                                @php $st = $data->status ?? 'Publish'; @endphp
+                                                <option value="Publish" @selected($st === 'Publish')>Publish</option>
+                                                <option value="Draft" @selected($st === 'Draft')>Draft</option>
+                                                <option value="Inactive" @selected($st === 'Inactive')>Inactive</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                 </div>
                                 <div class="form-group">
@@ -69,7 +80,11 @@
                                     <div class="col-lg-6 col-sm-12">
                                         <label>Select File</label>
                                         <label id="projectinput7" class="file center-block">
-                                            <img src="{{ asset('storage/images/testimonies') . $data->image }}" alt="" width="120px">
+                                            @if(!empty($data->image))
+                                                <img src="{{ asset('storage/' . ltrim($data->image, '/')) }}" alt="" width="120px" style="object-fit:cover;border-radius:8px;">
+                                            @else
+                                                <span class="text-muted small">No image</span>
+                                            @endif
                                         </label>
                                     </div>
                                     <div class="col-lg-6 col-sm-12">
