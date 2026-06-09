@@ -10,6 +10,11 @@
 
 @section('content')
 
+@php
+    use App\Support\PageHeaderService;
+    $pageHeaderStore = PageHeaderService::storedHeaders($data);
+@endphp
+
 <div id="layoutSidenav">
     <div id="layoutSidenav_nav">
         @include('admin.includes.sidenav')
@@ -19,7 +24,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
                     <h1>Site settings</h1>
-                    <p class="text-muted mb-0">Manage account details, contact links, and brand colors.</p>
+                    <p class="text-muted mb-0">Manage account details, contact links, brand colors, and page headers.</p>
                 </div>
 
                 @if (session()->has('success'))
@@ -100,12 +105,10 @@
                                         <div class="col-lg-6">
                                             <label class="form-label">Email</label>
                                             <input type="email" class="form-control" value="{{ $data->email }}" name="email">
-                                            <small class="text-muted">Required for public contact forms (email send option).</small>
                                         </div>
                                         <div class="col-lg-4">
                                             <label class="form-label">Phone</label>
                                             <input type="text" class="form-control" value="{{ $data->phone }}" name="phone">
-                                            <small class="text-muted">Used for WhatsApp submissions (wa.me). Phone 2 is a fallback.</small>
                                         </div>
                                         <div class="col-lg-4">
                                             <label class="form-label">Phone 2</label>
@@ -115,59 +118,55 @@
                                             <label class="form-label">Phone 3</label>
                                             <input type="text" class="form-control" value="{{ $data->phone2 }}" name="phone2">
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-6">
                                             <label class="form-label">Facebook</label>
-                                            <input type="text" class="form-control" value="{{ $data->facebook }}" name="facebook">
+                                            <input type="url" class="form-control" value="{{ $data->facebook }}" name="facebook">
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-6">
                                             <label class="form-label">Instagram</label>
-                                            <input type="text" class="form-control" value="{{ $data->instagram }}" name="instagram">
+                                            <input type="url" class="form-control" value="{{ $data->instagram }}" name="instagram">
                                         </div>
-                                        <div class="col-lg-4">
+                                        <div class="col-lg-6">
                                             <label class="form-label">YouTube</label>
-                                            <input type="text" class="form-control" value="{{ $data->youtube }}" name="youtube">
+                                            <input type="url" class="form-control" value="{{ $data->youtube }}" name="youtube">
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label">Google map embed code</label>
-                                            <textarea class="form-control" rows="5" name="google_map_embed_code" placeholder='<iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe> OR https://www.google.com/maps/embed?pb=...'>{{ $data->google_map_embed_code }}</textarea>
-                                            <small class="text-muted d-block mt-1">Paste either the full iframe code from Google Maps or just the embed URL.</small>
+                                            <label class="form-label">Google Map embed code</label>
+                                            <textarea class="form-control" rows="4" name="google_map_embed_code" placeholder="Paste iframe embed code">{{ $data->google_map_embed_code }}</textarea>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="tab-pane fade" id="colors-pane" role="tabpanel" aria-labelledby="colors-tab">
                                     <div class="row g-3">
-                                        <div class="col-lg-3">
-                                            <label class="form-label d-block">Primary color</label>
-                                            <input type="color" class="form-control form-control-color" name="primary_color" value="{{ $data->primary_color ?? '#fad200' }}">
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Primary color</label>
+                                            <input type="color" class="form-control form-control-color w-100" name="primary_color" value="{{ $data->primary_color ?? '#fad200' }}">
                                         </div>
-                                        <div class="col-lg-3">
-                                            <label class="form-label d-block">Secondary color</label>
-                                            <input type="color" class="form-control form-control-color" name="secondary_color" value="{{ $data->secondary_color ?? '#2c2c2c' }}">
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Secondary color</label>
+                                            <input type="color" class="form-control form-control-color w-100" name="secondary_color" value="{{ $data->secondary_color ?? '#2c2c2c' }}">
                                         </div>
-                                        <div class="col-lg-3">
-                                            <label class="form-label d-block">Neutral color</label>
-                                            <input type="color" class="form-control form-control-color" name="neutral_color" value="{{ $data->neutral_color ?? '#b0b0b0' }}">
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Neutral color</label>
+                                            <input type="color" class="form-control form-control-color w-100" name="neutral_color" value="{{ $data->neutral_color ?? '#b0b0b0' }}">
                                         </div>
-                                        <div class="col-lg-3">
-                                            <label class="form-label">Google font family</label>
-                                            <input type="text" class="form-control" name="font_family" placeholder="e.g. Poppins, Roboto" value="{{ $data->font_family ?? 'Poppins' }}">
-                                            <small class="text-muted">Copy the family name from <a href="https://fonts.google.com" target="_blank" rel="noopener">Google Fonts</a>.</small>
+                                        <div class="col-lg-6">
+                                            <label class="form-label">Font family</label>
+                                            <input type="text" class="form-control" name="font_family" value="{{ $data->font_family ?? 'DM Sans' }}">
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="tab-pane fade" id="visibility-pane" role="tabpanel" aria-labelledby="visibility-tab">
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" role="switch" id="show_products_publicly" name="show_products_publicly" value="1" {{ ($data->show_products_publicly ?? false) ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="show_products_publicly">
-                                                    Show products publicly on website
+                                                    Show product catalog publicly
                                                 </label>
                                             </div>
-                                            <small class="text-muted d-block mt-2">
-                                                When off, product links/cards/pages are hidden from public visitors.
-                                            </small>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-check form-switch">
@@ -176,9 +175,6 @@
                                                     Show products page in navigation
                                                 </label>
                                             </div>
-                                            <small class="text-muted d-block mt-2">
-                                                When off, the products page is disabled (404) and removed from the menu.
-                                            </small>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-check form-switch">
@@ -187,27 +183,80 @@
                                                     Accept order requests from website
                                                 </label>
                                             </div>
-                                            <small class="text-muted d-block mt-2">
-                                                When off, the request order form is disabled and visitors are asked to contact you instead.
-                                            </small>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="tab-pane fade" id="headers-pane" role="tabpanel" aria-labelledby="headers-tab">
-                                    <div class="row g-3">
-                                        <div class="col-lg-6">
-                                            <label class="form-label">Default page header image</label>
-                                            <input type="file" class="form-control" name="page_header_image">
-                                            <small class="text-muted d-block mt-1">Used by all breadcrumb headers unless a page provides its own image.</small>
-                                            @if(!empty($data->page_header_image))
-                                                <img src="{{ asset('storage/images') . $data->page_header_image }}" alt="Page header image" width="180" class="mt-2 rounded border p-1 bg-white">
-                                            @endif
+                                    <p class="text-muted mb-4">All inner pages use a full-screen header image with title and caption. Leave a field empty to use the site default shown on each page.</p>
+
+                                    <div class="card mb-4 border">
+                                        <div class="card-header bg-light fw-semibold">Homepage hero defaults</div>
+                                        <div class="card-body">
+                                            <p class="text-muted small mb-3">Manage slide images and captions under <strong>Home Slides</strong> in the admin menu. Settings here apply when a slide has no caption, or when no slides exist.</p>
+                                            <div class="row g-3">
+                                                <div class="col-lg-6">
+                                                    <label class="form-label">Default hero caption</label>
+                                                    <input type="text" class="form-control" name="hero_headline" value="{{ $data->hero_headline }}" placeholder="Premium Custom Handbags. Crafted in Rwanda.">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label class="form-label">Hero video URL (optional)</label>
+                                                    <input type="url" class="form-control" name="hero_video_url" value="{{ $data->hero_video_url }}" placeholder="https://... (only used when no slides exist)">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label class="form-label">Fallback hero image</label>
+                                                    <input type="file" class="form-control" name="hero_poster" accept="image/*">
+                                                    <small class="text-muted">Used only when no slides are uploaded in Home Slides.</small>
+                                                    @if(!empty($data->hero_poster))
+                                                        <img src="{{ asset('storage/images/' . ltrim($data->hero_poster, '/')) }}" alt="Hero poster" width="220" class="mt-2 rounded border">
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <label class="form-label">Default header caption</label>
-                                            <textarea class="form-control" rows="4" name="page_header_caption" placeholder="Short caption shown below each page title">{{ $data->page_header_caption }}</textarea>
-                                            <small class="text-muted d-block mt-1">This keeps page hero sections consistent site-wide.</small>
+                                    </div>
+
+                                    <div class="card mb-4 border">
+                                        <div class="card-header bg-light fw-semibold">Default fallback (all pages)</div>
+                                        <div class="card-body">
+                                            <div class="row g-3">
+                                                <div class="col-lg-6">
+                                                    <label class="form-label">Default header image</label>
+                                                    <input type="file" class="form-control" name="page_header_image" accept="image/*">
+                                                    @if(!empty($data->page_header_image))
+                                                        <img src="{{ asset('storage/images') . $data->page_header_image }}" alt="Default header" width="180" class="mt-2 rounded border p-1 bg-white">
+                                                    @endif
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <label class="form-label">Default header caption</label>
+                                                    <textarea class="form-control" rows="4" name="page_header_caption" placeholder="Used when a page has no custom caption">{{ $data->page_header_caption }}</textarea>
+                                                </div>
+                                            </div>
                                         </div>
+                                    </div>
+
+                                    <div class="row g-4">
+                                        @foreach(PageHeaderService::definitions() as $pageKey => $pageLabel)
+                                            @php
+                                                $stored = (array) ($pageHeaderStore[$pageKey] ?? []);
+                                                $storedImage = $stored['image'] ?? null;
+                                            @endphp
+                                            <div class="col-lg-6">
+                                                <div class="card h-100 border">
+                                                    <div class="card-header bg-light py-2">
+                                                        <strong>{{ $pageLabel }}</strong>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <label class="form-label">Caption</label>
+                                                        <textarea class="form-control mb-3" rows="3" name="page_headers[{{ $pageKey }}][caption]" placeholder="Optional caption for this page">{{ $stored['caption'] ?? '' }}</textarea>
+                                                        <label class="form-label">Header image</label>
+                                                        <input type="file" class="form-control" name="page_headers[{{ $pageKey }}][image]" accept="image/*">
+                                                        @if(!empty($storedImage))
+                                                            <img src="{{ PageHeaderService::imageUrlFromStored($storedImage) }}" alt="{{ $pageLabel }} header" width="180" class="mt-2 rounded border">
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>

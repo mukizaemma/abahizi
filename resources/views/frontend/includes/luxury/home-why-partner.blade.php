@@ -58,10 +58,6 @@
                         @endforeach
                     </div>
 
-                    <div class="home-why-partner__actions d-flex flex-wrap gap-3">
-                        <a href="{{ route('contacts') }}" class="tp-btn">{{ __('site.hero.cta_primary') }} <span aria-hidden="true">→</span></a>
-                        <a href="{{ route('ourFactory') }}" class="home-why-partner__link-btn">{{ __('site.nav.factory') }}</a>
-                    </div>
                 </div>
             </div>
 

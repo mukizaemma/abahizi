@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>{{ $setting->company ?? ''}}</title>
-    <meta name="description" content="A Community-based Initiative Dedicated to Transforming Lives through Holistic Empowerment, Leadership Development, and Spiritual Growth">
+    <meta name="description" content="Premium custom handbag manufacturing in Masoro, Rwanda. B-Corp certified CMT factory delivering ethical production for global fashion brands.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="form-channel-intent-url" content="{{ route('formChannel.intent') }}">
@@ -148,12 +148,11 @@
                                     <li class="has-dropdown">
                                         <a href="{{ route('impactPage') }}">{{ __('site.nav.impact') }}</a>
                                         <ul class="submenu tp-submenu">
-                                            <li><a href="{{ route('impactPage', ['tab' => 'empower']) }}">{{ __('site.nav.employee_empowerment') }}</a></li>
-                                            <li><a href="{{ route('impactPage', ['tab' => 'improve']) }}">{{ __('site.nav.community') }}</a></li>
-                                            <li><a href="{{ route('impactPage', ['tab' => 'reports']) }}">{{ __('site.nav.social_impact_reports') }}</a></li>
+                                            <li><a href="{{ route('impactEmployeeEmpowerment') }}">{{ __('site.nav.employee_empowerment') }}</a></li>
+                                            <li><a href="{{ route('impactCommunity') }}">{{ __('site.nav.community') }}</a></li>
+                                            <li><a href="{{ route('impactReports') }}">{{ __('site.nav.social_impact_reports') }}</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="{{ route('contacts') }}">{{ __('site.nav.contact') }}</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -164,7 +163,7 @@
                                 <ul class="d-flex align-items-center justify-content-end">
                                     <li>
                                         <div class="tp-header-3__btn d-none d-md-block">
-                                            <a class="tp-btn" href="{{ route('contacts') }}">{{ __('site.nav.contact') }}</a>
+                                            <a class="tp-btn tp-btn--lux" href="{{ route('contacts') }}">{{ __('site.nav.inquiry') }}</a>
                                         </div>
                                     </li>  
                                     <li>
@@ -199,7 +198,7 @@
                                 <span class="site-footer__wordmark h4 text-white mb-0">{{ $setting->company ?? 'Abahizi Rwanda' }}</span>
                             @endif
                         </a>
-                        <p class="site-footer__tagline mt-3 mb-0">From your heart to theirs—help us impact lives that truly matter.</p>
+                        <p class="site-footer__tagline mt-3 mb-0">{{ __('site.footer.tagline') }}</p>
                     </div>
 
                     <div class="col-12 col-sm-6 col-lg-4 site-footer__col">
@@ -210,7 +209,6 @@
                             <li><a href="{{ route('ourFactory') }}">{{ __('site.nav.factory') }}</a></li>
                             <li><a href="{{ route('impactPage') }}">{{ __('site.nav.impact') }}</a></li>
                             <li><a href="{{ route('impactReports') }}">{{ __('site.nav.social_impact_reports') }}</a></li>
-                            <li><a href="{{ route('contacts') }}">{{ __('site.nav.contact') }}</a></li>
                         </ul>
                     </div>
 
@@ -256,9 +254,9 @@
 
                         <div class="site-footer__cta-block">
                             <div class="site-footer__cta-group">
-                                <a href="{{ route('contacts') }}" class="site-footer__btn site-footer__btn--order">
+                                <a href="{{ route('contacts') }}" class="site-footer__btn site-footer__btn--order tp-btn--lux">
                                     <i class="fas fa-envelope" aria-hidden="true"></i>
-                                    {{ __('site.nav.contact') }}
+                                    {{ __('site.nav.inquiry') }}
                                 </a>
                             </div>
                         </div>
@@ -277,8 +275,6 @@
                     </div>
                     <div class="col-12 col-md-auto text-center text-md-end">
                         <a href="{{ route('ourProducts') }}" class="site-footer__mini-link">Products</a>
-                        <span class="site-footer__copy-sep">·</span>
-                        <a href="{{ route('contacts') }}" class="site-footer__mini-link">{{ __('site.nav.contact') }}</a>
                     </div>
                 </div>
             </div>

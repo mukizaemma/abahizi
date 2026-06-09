@@ -32,17 +32,19 @@
                 </div>
 
                 <div class="card mb-4">
-                    <div class="card-header">
-                        <button class="btn btn-primary float-right" data-bs-toggle="modal"
-                            data-bs-target="#myModal"><i class="fa fa-plus"></i> Add Image</button>
-
+                    <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <div>
+                            <strong>Homepage hero slides</strong>
+                            <p class="text-muted small mb-0 mt-1">Images and captions shown on the homepage hero. Add multiple slides for a smooth zooming slideshow.</p>
+                        </div>
+                        <button class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#myModal"><i class="fa fa-plus"></i> Add slide</button>
                     </div>
                     <div class="card-body">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Image Caption</th>
-                                    {{-- <th>Sub Heading</th> --}}
+                                    <th>Hero caption</th>
                                     <th>Image</th>
                                     <th>Action</th>
                                 </tr>
@@ -74,7 +76,7 @@
 
                                     <!-- Modal Header -->
                                     <div class="modal-header">
-                                        <h4 class="modal-title">Adding New Image</h4>
+                                        <h4 class="modal-title">Add homepage hero slide</h4>
                                         <button type="button" class="btn-close text-black"
                                             data-bs-dismiss="modal"></button>
                                     </div>
@@ -88,7 +90,7 @@
                                                 <div class="row mb-4">
 
                                                     <div class="col-lg-6 col-sm-12">
-                                                            <label>Select Slide Image <br><span style="color: red">(This image should be resized to 694x1894 pixels)</span></label>
+                                                            <label>Hero image <br><span class="text-muted small">Landscape recommended (1920×1080 or similar)</span></label>
                                                             <label id="projectinput7" class="file center-block">
                                                                 <input type="file" id="image" name="image"
                                                                     required="">
@@ -100,9 +102,10 @@
                                                 <div class="row">
 
                                                     <div class="col-12">
-                                                        <label for="projectinput8">Image Caption</label>
+                                                        <label for="projectinput8">Hero caption</label>
                                                         <input type="text" class="form-control"
-                                                        placeholder="Image heading" name="heading">
+                                                        placeholder="e.g. Premium Custom Handbags. Crafted in Rwanda." name="heading">
+                                                        <small class="text-muted">Shown as the large headline on this slide. Leave empty to use the site default from Settings → Page headers.</small>
                                                 </div>
                                                 </div>
                                             </div>

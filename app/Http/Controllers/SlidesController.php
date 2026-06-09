@@ -36,8 +36,8 @@ class SlidesController extends Controller
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
         $data = new Slide();
-        $data->heading = $request->input('heading', 'Default Heading');
-        $data->subheading = "Abahizi Rwanda";
+        $data->heading = trim((string) $request->input('heading', ''));
+        $data->subheading = '';
     
         if ($request->hasFile('image')) {
             $data->image = $request->file('image')->store('images/slides', 'public');
@@ -65,8 +65,7 @@ class SlidesController extends Controller
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
         $data = Slide::findOrFail($id);
-        $data->heading = $request->input('heading');
-        //$data->subheading = $request->input('subheading');
+        $data->heading = trim((string) $request->input('heading', ''));
 
         if ($request->hasFile('image')) {
             if (!empty($data->image) && Storage::disk('public')->exists($data->image)) {

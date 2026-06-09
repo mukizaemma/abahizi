@@ -7,7 +7,7 @@
     ];
 @endphp
 
-<section class="home-process pt-80 pb-80" aria-labelledby="home-process-title">
+<section class="lux-section home-process" aria-labelledby="home-process-title">
     <div class="container">
         <div class="text-center mb-4 mb-lg-5">
             <p class="lux-section-head__eyebrow mb-2">{{ __('site.home.process_eyebrow') }}</p>
@@ -23,9 +23,5 @@
                 </li>
             @endforeach
         </ol>
-
-        <div class="text-center mt-4 mt-lg-5">
-            <a href="{{ route('contacts') }}" class="tp-btn">{{ __('site.hero.cta_primary') }}</a>
-        </div>
     </div>
 </section>

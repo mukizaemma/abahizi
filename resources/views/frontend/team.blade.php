@@ -6,6 +6,7 @@
 
 
         @include('frontend.includes.page-header', [
+            'pageKey' => 'team',
             'title' => 'Our Team',
         ])
 

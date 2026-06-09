@@ -27,10 +27,10 @@
     ];
 @endphp
 
-<section class="lux-specs" aria-labelledby="lux-specs-heading">
+<section class="lux-section lux-specs" aria-labelledby="lux-specs-heading">
     <div class="container">
         <div class="lux-section-head text-center">
-            <p class="lux-section-head__eyebrow">For sourcing managers</p>
+            <p class="lux-section-head__eyebrow">{{ __('site.factory.specs_eyebrow') }}</p>
             <h2 id="lux-specs-heading" class="lux-section-head__title">{{ __('site.manufacturing.specs_title') }}</h2>
         </div>
 

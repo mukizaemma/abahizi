@@ -5,6 +5,7 @@
 @section('content')
 
     @include('frontend.includes.page-header', [
+        'pageKey' => 'factory',
         'title' => __('site.manufacturing.title'),
         'caption' => 'CMT handbag manufacturing with lean discipline and artisan excellence in Masoro, Rwanda.',
     ])

@@ -1,6 +1,6 @@
 @extends('layouts.frontbase')
 
-@section('title', 'Our Factory')
+@section('title', __('site.nav.factory'))
 
 @section('content')
 
@@ -8,61 +8,79 @@
         $factoryHeaderImage = !empty($about->factory_services_image)
             ? asset('storage/images/' . $about->factory_services_image)
             : null;
-        $factoryDescription = trim((string) ($about->factory_description ?? ''));
     @endphp
 
     @include('frontend.includes.page-header', [
-        'title' => 'Our Factory',
+        'pageKey' => 'factory',
+        'title' => __('site.nav.factory'),
+        'caption' => __('site.factory.header_caption'),
         'image' => $factoryHeaderImage,
     ])
 
-    <section class="page-standalone grey-bg pt-60 pb-90">
-        <div class="container">
-            <div class="row justify-content-center mb-5">
-                <div class="col-12 col-xl-10 col-xxl-9">
-                    <div class="postbox__text">
-                        <p class="mb-0 fw-bold" style="font-size: 1.2rem; line-height: 1.8; color: #2c2c2c;">
-                            {!! $factoryDescription !== '' ? $factoryDescription : 'Our production space brings together tailoring workshops, quality craftsmanship, and hands-on learning where trainees and staff create products that carry our mission forward.' !!}
-                        </p>
-                    </div>
-                </div>
-            </div>
+    @include('frontend.includes.luxury.factory-what')
+    @include('frontend.includes.luxury.lean-timeline')
+    @include('frontend.includes.luxury.factory-specs-tabs')
 
-            @if(($factoryGallery ?? collect())->count() > 0)
-                <div class="row g-4">
+    @if(($factoryGallery ?? collect())->isNotEmpty())
+        <section class="lux-section factory-gallery" aria-labelledby="factory-gallery-title">
+            <div class="container">
+                <div class="text-center mb-4 mb-lg-5">
+                    <p class="lux-section-head__eyebrow mb-2">{{ __('site.factory.gallery_eyebrow') }}</p>
+                    <h2 id="factory-gallery-title" class="lux-section-head__title mb-0">{{ __('site.factory.gallery_title') }}</h2>
+                </div>
+
+                <div class="row g-3 g-md-4">
                     @foreach($factoryGallery as $galleryImage)
-                        <div class="col-md-6 col-lg-4">
+                        <div class="col-6 col-md-4 col-lg-4">
                             <a href="{{ asset('storage/images/gallery/' . $galleryImage->image) }}" class="factory-gallery-card popup-image d-block">
-                                <img src="{{ asset('storage/images/gallery/' . $galleryImage->image) }}" alt="{{ $galleryImage->caption ?? 'Factory gallery image' }}">
+                                <img
+                                    src="{{ asset('storage/images/gallery/' . $galleryImage->image) }}"
+                                    alt="{{ $galleryImage->caption ?? __('site.factory.gallery_alt') }}"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                                @if(!empty($galleryImage->caption))
+                                    <span class="factory-gallery-card__caption">{{ $galleryImage->caption }}</span>
+                                @endif
                             </a>
                         </div>
                     @endforeach
                 </div>
-            @endif
-        </div>
-    </section>
+            </div>
+        </section>
+    @endif
 
-    <style>
-        .factory-gallery-card {
-            border-radius: 14px;
-            overflow: hidden;
-            border: 1px solid rgba(44, 44, 44, 0.08);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            background: #f5f5f5;
-        }
+    @if(($services ?? collect())->isNotEmpty())
+        <section class="lux-section factory-services grey-bg">
+            <div class="container">
+                <div class="lux-section-head text-center mb-4 mb-lg-5">
+                    <p class="lux-section-head__eyebrow">{{ __('site.factory.services_eyebrow') }}</p>
+                    <h2 class="lux-section-head__title">{{ __('site.nav.expertise') }}</h2>
+                </div>
+                <div class="row g-4">
+                    @foreach($services as $service)
+                        <div class="col-md-6 col-lg-4">
+                            <article class="lux-card lux-card--lift lux-card--media h-100">
+                                @if($service->image)
+                                    <div class="lux-card__media">
+                                        <img src="{{ asset('storage/images/' . $service->image) }}" alt="{{ $service->title }}" loading="lazy" decoding="async">
+                                    </div>
+                                @endif
+                                <div class="lux-card__body">
+                                    <h3 class="lux-card__title">
+                                        <a href="{{ route('serviceShow', $service->slug) }}" class="lux-card__link">{{ $service->title }}</a>
+                                    </h3>
+                                    <p class="lux-card__desc">{{ \Illuminate\Support\Str::limit(strip_tags($service->description ?? ''), 120) }}</p>
+                                    <a href="{{ route('serviceShow', $service->slug) }}" class="lux-card__action">{{ __('site.factory.learn_more') }} <span aria-hidden="true">→</span></a>
+                                </div>
+                            </article>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
 
-        .factory-gallery-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.12);
-        }
-
-        .factory-gallery-card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            display: block;
-        }
-    </style>
+    @include('frontend.includes.bottom')
 
 @endsection

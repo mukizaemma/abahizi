@@ -1,5 +1,6 @@
 @php
-    $initiatives = [
+    $mapOnly = (bool) ($mapOnly ?? false);
+    $initiatives = $mapOnly ? [] : [
         'Nutrition programs for families and children',
         'Computer literacy & digital skills',
         'Mental health and psychosocial support',
@@ -9,21 +10,31 @@
     $mapEmbed = trim((string) ($setting->google_map_embed_code ?? ''));
 @endphp
 
-<section class="lux-community" aria-labelledby="lux-community-heading">
+<section class="lux-community {{ $mapOnly ? 'lux-community--map-only' : '' }}" aria-labelledby="lux-community-heading">
     <div class="container">
-        <div class="lux-section-head text-center mb-4">
-            <p class="lux-section-head__eyebrow">Beyond the factory floor</p>
-            <h2 id="lux-community-heading" class="lux-section-head__title">{{ __('site.impact.community_title') }}</h2>
-        </div>
-        <div class="row g-4 g-lg-5 align-items-stretch">
-            <div class="col-lg-5">
-                <ul class="lux-community__list">
-                    @foreach($initiatives as $item)
-                        <li>{{ $item }}</li>
-                    @endforeach
-                </ul>
+        @unless($mapOnly)
+            <div class="lux-section-head text-center mb-4">
+                <p class="lux-section-head__eyebrow">Beyond the factory floor</p>
+                <h2 id="lux-community-heading" class="lux-section-head__title">{{ __('site.impact.community_title') }}</h2>
             </div>
-            <div class="col-lg-7">
+        @endunless
+        <div class="row g-4 g-lg-5 align-items-stretch">
+            @unless($mapOnly)
+                <div class="col-lg-5">
+                    <ul class="lux-community__list">
+                        @foreach($initiatives as $item)
+                            <li>{{ $item }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endunless
+            <div class="{{ $mapOnly ? 'col-12' : 'col-lg-7' }}">
+                @if($mapOnly)
+                    <div class="lux-section-head text-center mb-4">
+                        <p class="lux-section-head__eyebrow">{{ __('site.impact.community_map_eyebrow') }}</p>
+                        <h2 id="lux-community-heading" class="lux-section-head__title">{{ __('site.impact.community_map_title') }}</h2>
+                    </div>
+                @endif
                 <div class="lux-community__map-card">
                     @if($mapEmbed !== '')
                         <div class="lux-community__map ratio ratio-16x9">

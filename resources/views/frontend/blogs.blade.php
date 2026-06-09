@@ -6,6 +6,7 @@
 
 
         @include('frontend.includes.page-header', [
+            'pageKey' => 'updates',
             'title' => 'Our Recent Updates',
         ])
 

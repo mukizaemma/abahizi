@@ -5,6 +5,7 @@
 @section('content')
 
     @include('frontend.includes.page-header', [
+        'pageKey' => 'default',
         'title' => 'Our Approach',
     ])
 

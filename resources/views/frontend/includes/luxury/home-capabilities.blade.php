@@ -23,7 +23,7 @@
     ];
 @endphp
 
-<section class="home-capabilities grey-bg pt-80 pb-80" aria-labelledby="home-capabilities-title">
+<section class="lux-section home-capabilities grey-bg" aria-labelledby="home-capabilities-title">
     <div class="container">
         <div class="text-center mb-4 mb-lg-5">
             <p class="lux-section-head__eyebrow mb-2">{{ __('site.home.capabilities_eyebrow') }}</p>

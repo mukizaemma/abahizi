@@ -29,6 +29,8 @@ Route::get('/services/{slug}',[App\Http\Controllers\HomeController::class,'servi
 Route::get('/products',[App\Http\Controllers\HomeController::class,'ourProducts'])->name('ourProducts');
 Route::get('/products/{slug}',[App\Http\Controllers\HomeController::class,'productShow'])->name('productShow');
 Route::get('/impact',[App\Http\Controllers\HomeController::class,'impactPage'])->name('impactPage');
+Route::get('/impact/employee-empowerment',[App\Http\Controllers\HomeController::class,'impactEmployeeEmpowerment'])->name('impactEmployeeEmpowerment');
+Route::get('/impact/community',[App\Http\Controllers\HomeController::class,'impactCommunity'])->name('impactCommunity');
 Route::get('/impact-reports',[App\Http\Controllers\HomeController::class,'impactReportsIndex'])->name('impactReports');
 Route::get('/impact-reports/{slug}',[App\Http\Controllers\HomeController::class,'impactReportShow'])->name('impactReportShow');
 Route::get('/team',[App\Http\Controllers\HomeController::class,'team'])->name('team');

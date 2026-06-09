@@ -1,48 +1,31 @@
 @php
-    $headerTitle = $title ?? '';
-    $headerCaption = $caption ?? ($setting->page_header_caption ?? null);
-    $headerClasses = 'tp-breadcrumb__area p-relative fix';
-    $headerClasses .= !empty($compact) ? ' tp-breadcrumb-height--compact' : ' tp-breadcrumb-height';
-    if (!empty($imageTop)) {
-        $headerClasses .= ' tp-breadcrumb__area--image-top';
-    }
-    if (!empty($hideShapes)) {
-        $headerClasses .= ' tp-breadcrumb__area--no-shapes';
-    }
+    use App\Support\PageHeaderService;
 
-    $headerImageUrl = null;
-    if (!empty($image)) {
-        $headerImageUrl = $image;
-    } elseif (!empty($setting->page_header_image ?? null)) {
-        $headerImageUrl = asset('storage/images' . $setting->page_header_image);
-    } elseif (!empty($about->image2 ?? null)) {
-        $headerImageUrl = asset('storage/images/' . $about->image2);
-    } elseif (!empty($about->image1 ?? null)) {
-        $headerImageUrl = asset('storage/images/' . $about->image1);
-    } elseif (!empty($about->image ?? null)) {
-        $headerImageUrl = asset('storage/images/' . $about->image);
-    }
+    $resolved = PageHeaderService::resolve(
+        $pageKey ?? null,
+        $title ?? null,
+        $caption ?? null,
+        $image ?? null,
+        $about ?? null,
+    );
+
+    $headerTitle = $resolved['title'];
+    $headerCaption = $resolved['caption'];
+    $headerImageUrl = $resolved['image'];
 @endphp
 
-<div class="{{ $headerClasses }}"
-    @if($headerImageUrl) data-background="{{ $headerImageUrl }}" @endif>
-    @empty($hideShapes)
-    <div class="tp-breadcrumb__shape-1 z-index-5">
-        <img src="{{ asset('assets/img/breadcrumb/breadcrumb-shape-1.png') }}" alt="">
-    </div>
-    <div class="tp-breadcrumb__shape-2 z-index-5">
-        <img src="{{ asset('assets/img/breadcrumb/breadcrumb-shape-2.png') }}" alt="">
-    </div>
-    @endempty
+<section
+    class="tp-breadcrumb__area tp-breadcrumb-height tp-breadcrumb__area--fullscreen tp-breadcrumb__area--no-shapes p-relative fix"
+    @if($headerImageUrl) data-background="{{ $headerImageUrl }}" @endif
+    aria-label="{{ $headerTitle }}"
+>
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="tp-breadcrumb__content z-index-5 text-center">
-                    <div class="page-header__top">
-                        <h3 class="tp-breadcrumb__title text-center mb-0">{{ $headerTitle }}</h3>
-                    </div>
+                    <h1 class="tp-breadcrumb__title text-center mb-0">{{ $headerTitle }}</h1>
                     @if(!empty($headerCaption))
-                        <p class="text-center mb-0 mt-2">{{ $headerCaption }}</p>
+                        <p class="tp-breadcrumb__caption text-center mb-0 mt-3">{{ $headerCaption }}</p>
                     @endif
                     @if(!empty($extraHtml))
                         {!! $extraHtml !!}
@@ -51,4 +34,4 @@
             </div>
         </div>
     </div>
-</div>
+</section>

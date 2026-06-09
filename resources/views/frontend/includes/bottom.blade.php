@@ -31,8 +31,8 @@
                     <span class="site-impact-quote__mark site-impact-quote__mark--end" aria-hidden="true">”</span>
                 </blockquote>
                 <div class="site-impact-quote__actions d-flex flex-wrap justify-content-center gap-3">
-                    <a class="tp-btn site-impact-quote__btn" href="{{ route('contacts') }}">
-                        {{ __('site.hero.cta_primary') }} <span aria-hidden="true">→</span>
+                    <a class="tp-btn tp-btn--lux site-impact-quote__btn" href="{{ route('contacts') }}">
+                        {{ __('site.nav.inquiry') }} <span aria-hidden="true">→</span>
                     </a>
                     <a class="tp-btn site-impact-quote__btn site-impact-quote__btn--ghost" href="{{ route('impactPage') }}">
                         {{ __('site.nav.impact') }} <span aria-hidden="true">→</span>

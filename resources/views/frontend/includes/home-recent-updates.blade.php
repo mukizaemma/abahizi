@@ -1,5 +1,5 @@
 @if(($recentUpdates ?? collect())->isNotEmpty())
-    <section class="home-recent-updates pt-90 pb-90 grey-bg" aria-labelledby="home-recent-updates-title">
+    <section class="lux-section home-recent-updates grey-bg" aria-labelledby="home-recent-updates-title">
         <div class="container">
             <div class="row align-items-end justify-content-between g-3 mb-4 mb-lg-5">
                 <div class="col-lg-8">

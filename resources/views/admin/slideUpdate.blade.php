@@ -56,7 +56,7 @@
                                         </label>
                                 </div>
                                 <div class="col-lg-4 col-sm-12">
-                                        <label>Change Image <br><span style="color: red">(This image should be resized to 694x1894 pixels)</span></label>
+                                        <label>Change image <br><span class="text-muted small">Landscape recommended (1920×1080 or similar)</span></label>
                                         <label id="projectinput7" class="file center-block">
                                             <input type="file" id="image" name="image">
                                             <span class="file-custom"></span>
@@ -66,9 +66,10 @@
 
                             <div class="row">
                                 <div class="col-12">
-                                    <label for="projectinput8">Image Caption </label>
+                                    <label for="projectinput8">Hero caption</label>
                                     <input type="text" class="form-control"
-                                    value="{{$data->heading}}" name="heading">
+                                    value="{{$data->heading}}" name="heading" placeholder="Large headline for this slide">
+                                    <small class="text-muted">Leave empty to use the site default from Settings → Page headers.</small>
                             </div>
                             </div>
 

@@ -42,6 +42,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Controllers\Concerns\ValidatesFormChannelSubmission;
 use App\Support\FormChannelService;
+use App\Support\PageHeaderService;
 
 class HomeController extends Controller
 {
@@ -507,6 +508,7 @@ public function gallery(){
         $data->address = $request->input('address');
         $data->phone = $request->input('phone');
         $data->phone1 = $request->input('phone1');
+        $data->phone2 = $request->input('phone2');
         $data->email = $request->input('email');
         $data->keywords = $request->input('keywords');
         $data->facebook = $request->input('facebook');
@@ -541,7 +543,38 @@ public function gallery(){
         if (Schema::hasColumn('settings', 'google_map_embed_code')) {
             $data->google_map_embed_code = $request->input('google_map_embed_code');
         }
+        if (Schema::hasColumn('settings', 'hero_video_url')) {
+            $data->hero_video_url = $request->input('hero_video_url');
+        }
+        if (Schema::hasColumn('settings', 'hero_headline')) {
+            $data->hero_headline = $request->input('hero_headline');
+        }
+        if (Schema::hasColumn('settings', 'hero_subheadline')) {
+            $data->hero_subheadline = $request->input('hero_subheadline');
+        }
+        if (Schema::hasColumn('settings', 'page_headers')) {
+            $headers = is_array($data->page_headers) ? $data->page_headers : [];
+            $inputHeaders = (array) $request->input('page_headers', []);
 
+            foreach (PageHeaderService::editablePageKeys() as $pageKey) {
+                $existing = (array) ($headers[$pageKey] ?? []);
+                $incoming = (array) ($inputHeaders[$pageKey] ?? []);
+
+                if (array_key_exists('caption', $incoming)) {
+                    $existing['caption'] = trim((string) $incoming['caption']);
+                }
+
+                $fileKey = "page_headers.{$pageKey}.image";
+                if ($request->hasFile($fileKey)) {
+                    $path = $request->file($fileKey)->store('public/images/page-headers');
+                    $existing['image'] = 'page-headers/' . basename($path);
+                }
+
+                $headers[$pageKey] = $existing;
+            }
+
+            $data->page_headers = $headers;
+        }
 
         if ($request->hasFile('logo') && request('logo') != '') {
             $dir = 'public/images';
@@ -562,6 +595,11 @@ public function gallery(){
             $fileName = str_replace($dir, '', $path);
 
             $data->page_header_image = $fileName;
+        }
+
+        if (Schema::hasColumn('settings', 'hero_poster') && $request->hasFile('hero_poster')) {
+            $path = $request->file('hero_poster')->store('public/images/page-headers');
+            $data->hero_poster = 'page-headers/' . basename($path);
         }
 
         // Allow password change only for this specific admin account
@@ -667,15 +705,14 @@ public function gallery(){
     public function ourFactory(){
         $about = Background::firstOrEmpty();
         $factoryGallery = Gallery::query()->latest()->take(9)->get();
-        return view('frontend.our-factory', compact('about', 'factoryGallery'));
+        $services = Service::query()->active()->orderBy('sort_order')->orderBy('title')->get();
+
+        return view('frontend.our-factory', compact('about', 'factoryGallery', 'services'));
     }
 
     public function manufacturing()
     {
-        $about = Background::firstOrEmpty();
-        $services = Service::query()->active()->orderBy('sort_order')->orderBy('title')->get();
-
-        return view('frontend.manufacturing', compact('about', 'services'));
+        return redirect()->route('ourFactory', [], 301);
     }
 
     public function ourServices(){
@@ -775,15 +812,37 @@ public function gallery(){
     }
 
     public function impactPage(){
+        $tab = request('tab');
+        if ($tab === 'empower') {
+            return redirect()->route('impactEmployeeEmpowerment', [], 301);
+        }
+        if ($tab === 'improve') {
+            return redirect()->route('impactCommunity', [], 301);
+        }
+        if ($tab === 'reports') {
+            return redirect()->route('impactReports', [], 301);
+        }
+
         $about = Background::firstOrEmpty();
-        $initiatives = Activity::query()
+        $hubCommunityImage = Activity::query()
             ->where(function ($q) {
                 $q->whereNull('status')
                     ->orWhere('status', 'Active');
             })
+            ->whereNotNull('image')
+            ->where('image', '!=', '')
             ->latest()
-            ->take(9)
-            ->get();
+            ->first();
+        $hubReportImage = Schema::hasTable('annual_reports')
+            ? AnnualReport::query()->active()->with('images')->ordered()->first()
+            : null;
+
+        return view('frontend.impact', compact('about', 'hubCommunityImage', 'hubReportImage'));
+    }
+
+    public function impactEmployeeEmpowerment()
+    {
+        $about = Background::firstOrEmpty();
         $impacts = Impact::query()->where('status', 'Active')->latest()->get();
         $testimonials = Testimony::query()
             ->where(function ($q) {
@@ -794,7 +853,22 @@ public function gallery(){
             ->latest()
             ->take(8)
             ->get();
-        return view('frontend.impact', compact('about', 'initiatives', 'impacts', 'testimonials'));
+
+        return view('frontend.impact-employee-empowerment', compact('about', 'impacts', 'testimonials'));
+    }
+
+    public function impactCommunity()
+    {
+        $about = Background::firstOrEmpty();
+        $initiatives = Activity::query()
+            ->where(function ($q) {
+                $q->whereNull('status')
+                    ->orWhere('status', 'Active');
+            })
+            ->latest()
+            ->get();
+
+        return view('frontend.impact-community', compact('about', 'initiatives'));
     }
 
     public function handoverPage()
