@@ -120,8 +120,12 @@ class FormChannelService
                 $lines[] = 'Product: ' . trim((string) $payload['product_reference']);
             }
 
+            if (! empty($payload['quantity'])) {
+                $lines[] = 'Quantity: ' . trim((string) $payload['quantity']);
+            }
+
             $lines[] = '';
-            $lines[] = 'Request details:';
+            $lines[] = 'Order details / comments:';
             $lines[] = trim((string) ($payload['product_description'] ?? ''));
 
             return implode("\n", $lines);

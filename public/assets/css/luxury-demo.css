@@ -469,6 +469,191 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
     font-size: 0.95rem;
 }
 
+/* Factory capabilities on image banner */
+.factory-capabilities-banner {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.factory-capabilities-banner--parallax {
+    background-color: #0a0e12;
+}
+
+.factory-capabilities-banner__parallax {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -18%;
+    bottom: -18%;
+    z-index: 0;
+    background-image: var(--factory-cap-parallax-image);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    will-change: transform;
+    transform: translate3d(0, 0, 0) scale(1.08);
+}
+
+.factory-capabilities-banner--parallax .factory-capabilities-banner__parallax {
+    background-attachment: fixed;
+}
+
+.factory-capabilities-banner__bg {
+    position: relative;
+    z-index: 1;
+    padding: clamp(4rem, 9vh, 6.5rem) 0;
+}
+
+.factory-capabilities-banner__bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(
+        165deg,
+        rgba(6, 10, 16, 0.82) 0%,
+        rgba(6, 10, 16, 0.68) 42%,
+        rgba(6, 10, 16, 0.78) 100%
+    );
+}
+
+.factory-capabilities-banner__bg > .container {
+    position: relative;
+    z-index: 1;
+}
+
+.factory-capabilities-banner__head {
+    max-width: 40rem;
+    margin: 0 auto clamp(2rem, 5vw, 3rem);
+}
+
+.factory-capabilities-banner__eyebrow {
+    margin: 0 0 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--brand-primary, #fad200);
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
+}
+
+.factory-capabilities-banner__title {
+    margin: 0;
+    font-family: var(--lux-serif);
+    font-size: clamp(1.85rem, 4vw, 2.65rem);
+    font-weight: 600;
+    line-height: 1.15;
+    color: #fff;
+    text-shadow: 0 3px 24px rgba(0, 0, 0, 0.55);
+}
+
+.factory-capabilities-banner__cards {
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.factory-capabilities-banner__actions {
+    padding-top: 0.25rem;
+}
+
+.factory-cap-card {
+    padding: clamp(1.25rem, 3vw, 1.65rem);
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    border-radius: 16px;
+    height: 100%;
+}
+
+.factory-cap-card__title {
+    margin: 0 0 1rem;
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+    font-size: clamp(1rem, 2vw, 1.12rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #fff;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.65);
+}
+
+.factory-cap-card__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.factory-cap-card__list li {
+    position: relative;
+    margin-bottom: 0.7rem;
+    padding-left: 1.15rem;
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.96);
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+}
+
+.factory-cap-card__list li:last-child {
+    margin-bottom: 0;
+}
+
+.factory-cap-card__list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.58em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand-primary, #fad200);
+    box-shadow: 0 0 10px rgba(250, 210, 0, 0.55);
+}
+
+.factory-capabilities-banner__btn.tp-btn {
+    border-radius: 999px;
+    padding: 0.9rem 2rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+}
+
+.factory-capabilities-banner__btn--ghost.tp-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    color: #fff;
+    box-shadow: none;
+}
+
+.factory-capabilities-banner__btn--ghost.tp-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #fff;
+    color: #fff;
+}
+
+@media (max-width: 767.98px) {
+    .factory-capabilities-banner--parallax .factory-capabilities-banner__parallax {
+        background-attachment: scroll;
+        top: -10%;
+        bottom: -10%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .factory-capabilities-banner__parallax {
+        transform: none !important;
+        top: 0;
+        bottom: 0;
+    }
+}
+
+.factory-gallery__grid {
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.factory-gallery-card img {
+    height: clamp(200px, 24vw, 280px);
+}
+
 /* Specs tabs */
 .lux-specs {
     background: #fff;

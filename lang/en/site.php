@@ -77,7 +77,7 @@ return [
         'header_caption' => 'A mechanized CMT factory in Masoro—combining lean production, artisan craftsmanship, and measurable community impact.',
         'intro_default' => 'Abahizi Rwanda is a full-service bag manufacturing partner—not a charity workshop. We produce premium handbags and accessories for global brands from our Masoro facility.',
         'how_eyebrow' => 'How we do it',
-        'specs_eyebrow' => 'For sourcing managers',
+        'specs_eyebrow' => '',
         'what_eyebrow' => 'What we do',
         'what_title' => 'World-class bag manufacturing with purpose',
         'what_cards' => [

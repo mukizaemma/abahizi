@@ -15,10 +15,6 @@
         }
         $galleryItems->push($im);
     }
-    $waPhone = preg_replace('/\D+/', '', $setting->phone ?? $setting->phone1 ?? '');
-    $productPageUrl = url(route('productShow', $product->slug));
-    $waShareText = rawurlencode('Check out '.$product->title.' — '.$productPageUrl);
-    $waShareUrl = $waPhone ? 'https://wa.me/'.$waPhone.'?text='.$waShareText : 'https://api.whatsapp.com/send?text='.$waShareText;
     $disc = $product->discountPercent();
     $headerImageUrl = !empty($setting->page_header_image ?? null)
         ? asset('storage/images' . $setting->page_header_image)
@@ -48,7 +44,7 @@
 
 <section class="shop-product-detail py-5 grey-bg">
     <div class="container">
-        <div class="row g-4 g-lg-5">
+        <div class="row g-4 g-lg-5 align-items-start">
             <div class="col-lg-7">
                 @if($galleryItems->count() > 0)
                     @include('frontend.includes.gallery-featured', [
@@ -61,7 +57,7 @@
                 @endif
             </div>
             <div class="col-lg-5">
-                <div class="shop-product-detail__panel bg-white rounded-3 shadow-sm p-4 p-lg-4 h-100">
+                <div class="shop-product-detail__panel bg-white rounded-3 shadow-sm p-4 p-lg-4">
                     @if($product->category)
                         <p class="text-uppercase small text-muted letter-spacing mb-2">{{ $product->category->name }}</p>
                     @endif
@@ -75,22 +71,31 @@
                             <span class="badge bg-danger">-{{ $disc }}%</span>
                         @endif
                     </div>
-                    <p class="small text-muted mb-3">Indicative guide pricing. We produce to order for partners, bulk buyers, and organisations — not retail shelf stock.</p>
+                    <p class="small text-muted mb-3">Indicative guide pricing. We produce to order for partners, bulk buyers, and organisations.</p>
                     @if($product->color)
                         <p class="mb-3"><span class="text-muted">Color:</span> <strong>{{ $product->color }}</strong></p>
                     @endif
                     <div class="postbox__text shop-product-detail__desc mb-4">{!! $product->description !!}</div>
-                    <div class="d-grid gap-2">
-                        <a href="{{ $waShareUrl }}" class="btn btn-lg text-dark fw-semibold shop-detail-btn-primary" target="_blank" rel="noopener">
-                            <i class="fab fa-whatsapp me-2"></i> Share on WhatsApp
-                        </a>
-                        <a href="{{ route('contacts') }}" class="btn btn-outline-secondary">Contact us</a>
-                    </div>
+                    <a href="#product-order-form" class="btn btn-lg text-dark fw-semibold shop-detail-btn-primary w-100">
+                        <i class="fas fa-cart-shopping me-2" aria-hidden="true"></i> Order this product
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<section class="product-order-section grey-bg pb-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-10">
+                @include('frontend.includes.product-order-form', ['product' => $product, 'setting' => $setting])
+            </div>
+        </div>
+    </div>
+</section>
+
+@include('frontend.includes.product-story-section')
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -116,11 +121,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-
-@include('frontend.includes.request-order-cta', ['product' => $product])
-
-@include('frontend.includes.product-story-section')
-
-@include('frontend.includes.backImage')
 
 @endsection

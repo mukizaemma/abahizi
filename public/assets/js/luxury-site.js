@@ -188,11 +188,57 @@
         }
     }
 
+    function initParallaxSections() {
+        var sections = document.querySelectorAll('[data-lux-parallax]');
+        if (!sections.length) {
+            return;
+        }
+
+        var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reducedMotion) {
+            return;
+        }
+
+        var ticking = false;
+
+        function updateParallax() {
+            sections.forEach(function (section) {
+                var layer = section.querySelector('[data-lux-parallax-layer]');
+                if (!layer) {
+                    return;
+                }
+
+                var rect = section.getBoundingClientRect();
+                var viewport = window.innerHeight || document.documentElement.clientHeight;
+                if (rect.bottom < 0 || rect.top > viewport) {
+                    return;
+                }
+
+                var progress = (viewport - rect.top) / (viewport + rect.height);
+                var offset = (progress - 0.5) * 90;
+                layer.style.transform = 'translate3d(0, ' + offset.toFixed(2) + 'px, 0) scale(1.08)';
+            });
+            ticking = false;
+        }
+
+        function onScroll() {
+            if (!ticking) {
+                ticking = true;
+                window.requestAnimationFrame(updateParallax);
+            }
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        updateParallax();
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         initCounters('[data-lux-counter-section]', '[data-lux-counter-target]');
         initJourneySlider();
         initLazyImages();
         initHeroSlides();
+        initParallaxSections();
 
         var heroVideo = document.querySelector('.lux-hero__video');
         if (heroVideo) {

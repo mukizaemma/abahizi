@@ -28,6 +28,7 @@
                     <a href="{{ route('factory.admin.services') }}" class="btn {{ $section === 'services' ? 'btn-primary' : 'btn-outline-primary' }}">Factory Services</a>
                     <a href="{{ route('factory.admin.impact') }}" class="btn {{ $section === 'impact' ? 'btn-primary' : 'btn-outline-primary' }}">Community Impact</a>
                     <a href="{{ route('factory.admin.training') }}" class="btn {{ $section === 'training' ? 'btn-primary' : 'btn-outline-primary' }}">Training Facilities</a>
+                    <a href="{{ route('factory.admin.gallery') }}" class="btn {{ $section === 'gallery' ? 'btn-primary' : 'btn-outline-primary' }}">Factory Gallery</a>
                 </div>
 
                 <div class="card">
@@ -107,6 +108,93 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save training facilities</button>
                             </form>
+                        @endif
+
+                        @if($section === 'gallery')
+                            <p class="text-muted mb-4">Upload photos for the factory page gallery. The six most recent images appear on the public page in two rows of three.</p>
+
+                            <div class="card mb-4 border">
+                                <div class="card-header bg-light fw-semibold">Add gallery image</div>
+                                <div class="card-body">
+                                    <form action="{{ route('factory.admin.gallery.store') }}" method="POST" enctype="multipart/form-data" class="row g-3 align-items-end">
+                                        @csrf
+                                        <div class="col-md-5">
+                                            <label class="form-label">Image</label>
+                                            <input type="file" class="form-control" name="image" accept="image/*" required>
+                                            <small class="text-muted">Landscape recommended (1200×800 or similar).</small>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <label class="form-label">Caption (optional)</label>
+                                            <input type="text" class="form-control" name="caption" maxlength="255" placeholder="e.g. Cutting table, Masoro factory">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-primary w-100"><i class="fa fa-plus me-1"></i> Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Preview</th>
+                                            <th>Caption</th>
+                                            <th>Uploaded</th>
+                                            <th class="text-end">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($factoryGalleryImages ?? [] as $galleryImage)
+                                            <tr>
+                                                <td>
+                                                    <img src="{{ \App\Models\FactoryGalleryImage::publicUrl($galleryImage->image) }}" alt="" width="120" class="rounded border">
+                                                </td>
+                                                <td>{{ $galleryImage->caption ?: '—' }}</td>
+                                                <td class="text-muted small">{{ $galleryImage->created_at?->format('M j, Y') }}</td>
+                                                <td class="text-end">
+                                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editFactoryGallery{{ $galleryImage->id }}">Edit</button>
+                                                    <a href="{{ route('factory.admin.gallery.destroy', $galleryImage->id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this gallery image?')">Delete</a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-muted text-center py-4">No factory gallery images yet. Add your first image above.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            @foreach($factoryGalleryImages ?? [] as $galleryImage)
+                                <div class="modal fade" id="editFactoryGallery{{ $galleryImage->id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form action="{{ route('factory.admin.gallery.update', $galleryImage->id) }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Edit gallery image</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Replace image (optional)</label>
+                                                        <input type="file" class="form-control" name="image" accept="image/*">
+                                                    </div>
+                                                    <div class="mb-0">
+                                                        <label class="form-label">Caption</label>
+                                                        <input type="text" class="form-control" name="caption" value="{{ $galleryImage->caption }}" maxlength="255">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         @endif
                     </div>
                 </div>

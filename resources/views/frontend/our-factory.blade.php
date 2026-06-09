@@ -19,7 +19,6 @@
 
     @include('frontend.includes.luxury.factory-what')
     @include('frontend.includes.luxury.lean-timeline')
-    @include('frontend.includes.luxury.factory-specs-tabs')
 
     @if(($factoryGallery ?? collect())->isNotEmpty())
         <section class="lux-section factory-gallery" aria-labelledby="factory-gallery-title">
@@ -29,12 +28,19 @@
                     <h2 id="factory-gallery-title" class="lux-section-head__title mb-0">{{ __('site.factory.gallery_title') }}</h2>
                 </div>
 
-                <div class="row g-3 g-md-4">
+                <div class="row g-3 g-md-4 factory-gallery__grid">
                     @foreach($factoryGallery as $galleryImage)
-                        <div class="col-6 col-md-4 col-lg-4">
-                            <a href="{{ asset('storage/images/gallery/' . $galleryImage->image) }}" class="factory-gallery-card popup-image d-block">
+                        @php
+                            $galleryUrl = $galleryImage instanceof \App\Models\FactoryGalleryImage
+                                ? \App\Models\FactoryGalleryImage::publicUrl($galleryImage->image)
+                                : (str_contains((string) $galleryImage->image, '/')
+                                    ? asset('storage/' . ltrim($galleryImage->image, '/'))
+                                    : asset('storage/images/gallery/' . $galleryImage->image));
+                        @endphp
+                        <div class="col-6 col-lg-4">
+                            <a href="{{ $galleryUrl }}" class="factory-gallery-card popup-image d-block h-100">
                                 <img
-                                    src="{{ asset('storage/images/gallery/' . $galleryImage->image) }}"
+                                    src="{{ $galleryUrl }}"
                                     alt="{{ $galleryImage->caption ?? __('site.factory.gallery_alt') }}"
                                     loading="lazy"
                                     decoding="async"
@@ -81,6 +87,6 @@
         </section>
     @endif
 
-    @include('frontend.includes.bottom')
+    @include('frontend.includes.luxury.factory-capabilities-banner')
 
 @endsection

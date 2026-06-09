@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\News;
+use App\Models\OrderRequest;
 
 use App\Models\Team;
 // use Google\Recaptcha\Recaptcha;
@@ -14,6 +15,7 @@ use App\Models\Impact;
 use App\Models\Member;
 use App\Models\Country;
 use App\Models\Gallery;
+use App\Models\FactoryGalleryImage;
 use App\Models\Message;
 use App\Models\Partner;
 use App\Models\Program;
@@ -704,7 +706,9 @@ public function gallery(){
 
     public function ourFactory(){
         $about = Background::firstOrEmpty();
-        $factoryGallery = Gallery::query()->latest()->take(9)->get();
+        $factoryGallery = Schema::hasTable('factory_gallery_images')
+            ? FactoryGalleryImage::query()->latest()->take(6)->get()
+            : Gallery::query()->latest()->take(6)->get();
         $services = Service::query()->active()->orderBy('sort_order')->orderBy('title')->get();
 
         return view('frontend.our-factory', compact('about', 'factoryGallery', 'services'));
@@ -755,7 +759,12 @@ public function gallery(){
             $products = $query->orderBy('sort_order')->orderBy('title')->get();
         }
 
-        return view('frontend.our-products', compact('about', 'products', 'categories', 'setting'));
+        $catalogEnabled = (bool) ($setting->show_products_publicly ?? false);
+        $hasCatalogProducts = $catalogEnabled
+            && Schema::hasTable('products')
+            && Product::query()->active()->exists();
+
+        return view('frontend.our-products', compact('about', 'products', 'categories', 'setting', 'catalogEnabled', 'hasCatalogProducts'));
     }
 
     public function productShow($slug){
@@ -780,6 +789,118 @@ public function gallery(){
         ]);
 
         return redirect()->route('contacts', $params);
+    }
+
+    public function storeOrderRequest(Request $request)
+    {
+        $setting = Setting::firstOrEmpty();
+
+        if (! ($setting->show_products_publicly ?? false)) {
+            abort(404);
+        }
+
+        if (! ($setting->accept_order_requests ?? true)) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Product orders are not being accepted at the moment. Please use the contact page.']);
+        }
+
+        $availability = FormChannelService::availability($setting);
+        if (! $availability['channels_ready']) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Orders are unavailable until both a valid site email and WhatsApp number are configured in admin settings.']);
+        }
+
+        $ipKey = 'product-order:ip:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($ipKey, 5)) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Too many attempts. Please wait a few minutes and try again.']);
+        }
+
+        RateLimiter::hit($ipKey, 10 * 60);
+
+        $channelGate = $this->validateFormChannelGate($request, 'order');
+
+        $validated = $request->validate([
+            'full_name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:64'],
+            'email' => ['required', 'email', 'max:255'],
+            'product_description' => ['required', 'string', 'min:10', 'max:20000'],
+            'product_slug' => ['nullable', 'string', 'max:255'],
+            'product_reference' => ['nullable', 'string', 'max:255'],
+            'product_id' => ['nullable', 'integer', 'exists:products,id'],
+            'quantity' => ['nullable', 'integer', 'min:1', 'max:99999'],
+            'website' => ['nullable', 'max:0'],
+            'started_at' => ['nullable', 'integer'],
+        ]);
+
+        $phoneDigits = preg_replace('/\D+/', '', (string) $validated['phone']);
+        if (strlen($phoneDigits) < 10) {
+            return back()
+                ->withInput()
+                ->withErrors(['phone' => 'Enter a valid phone number with at least 10 digits.']);
+        }
+
+        if (FormChannelService::normalizeEmail($validated['email']) === null) {
+            return back()
+                ->withInput()
+                ->withErrors(['email' => 'Enter a valid email address you actively use.']);
+        }
+
+        $startedAt = (int) ($request->input('started_at') ?? 0);
+        if ($startedAt > 0 && (time() - $startedAt) < 3) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Form submitted too quickly. Please review your details and try again.']);
+        }
+
+        if (FormChannelService::containsSpamLinks((string) $validated['product_description'])) {
+            return back()
+                ->withInput()
+                ->withErrors(['product_description' => 'Please remove links from your order details.']);
+        }
+
+        $productId = $validated['product_id'] ?? null;
+        $productReference = trim((string) ($validated['product_reference'] ?? ''));
+
+        if ($productId === null && $request->filled('product_slug')) {
+            $product = Product::query()->active()->where('slug', (string) $request->input('product_slug'))->first();
+            if ($product) {
+                $productId = $product->id;
+                if ($productReference === '') {
+                    $productReference = $product->title;
+                }
+            }
+        }
+
+        $orderDetails = trim((string) $validated['product_description']);
+        if (! empty($validated['quantity'])) {
+            $orderDetails = 'Quantity: ' . (int) $validated['quantity'] . "\n\n" . $orderDetails;
+        }
+
+        OrderRequest::create([
+            'full_name' => $validated['full_name'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'],
+            'product_description' => $orderDetails,
+            'product_id' => $productId,
+            'product_reference' => $productReference !== '' ? $productReference : null,
+            'submission_channel' => $channelGate['channel'],
+        ]);
+
+        $redirectUrl = route('ourProducts');
+        if ($productId) {
+            $slug = (string) ($request->input('product_slug') ?: Product::find($productId)?->slug);
+            if ($slug !== '') {
+                $redirectUrl = route('productShow', $slug);
+            }
+        }
+
+        return redirect()
+            ->to($redirectUrl . '#product-order-form')
+            ->with('order_success', 'Thank you. We recorded your order after you sent it via ' . FormChannelService::channelLabel($channelGate['channel']) . '. Our team will follow up shortly.');
     }
 
     public function impactReportsIndex()

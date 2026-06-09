@@ -8,6 +8,6 @@
     @include('frontend.includes.luxury.home-process')
     @include('frontend.includes.luxury.home-why-partner')
     @include('frontend.includes.home-recent-updates')
-    @include('frontend.includes.bottom')
+    @include('frontend.includes.luxury.factory-capabilities-banner')
 
 @endsection

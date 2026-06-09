@@ -45,7 +45,7 @@ Route::get('/Messages',[App\Http\Controllers\HomeController::class,'messages'])-
 Route::get('/Gallery',[App\Http\Controllers\HomeController::class,'gallery'])->name('gallery');
 Route::get('/contacts',[App\Http\Controllers\HomeController::class,'contacts'])->name('contacts');
 Route::get('/request-order',[App\Http\Controllers\HomeController::class,'requestOrder'])->name('requestOrder');
-Route::post('/request-order',[App\Http\Controllers\HomeController::class,'requestOrder'])->name('storeOrderRequest');
+Route::post('/request-order',[App\Http\Controllers\HomeController::class,'storeOrderRequest'])->name('storeOrderRequest');
 Route::get('/get-involved', function () {
     return redirect()->route('contacts', [], 301);
 })->name('getInvolved');
@@ -112,6 +112,10 @@ Route::middleware(['auth', 'admin.role'
     Route::get('/factory/services', [App\Http\Controllers\FactoryAdminController::class, 'services'])->name('factory.admin.services');
     Route::get('/factory/community-impact', [App\Http\Controllers\FactoryAdminController::class, 'impact'])->name('factory.admin.impact');
     Route::get('/factory/training-facilities', [App\Http\Controllers\FactoryAdminController::class, 'training'])->name('factory.admin.training');
+    Route::get('/factory/gallery', [App\Http\Controllers\FactoryAdminController::class, 'gallery'])->name('factory.admin.gallery');
+    Route::post('/factory/gallery/images', [App\Http\Controllers\FactoryAdminController::class, 'storeGalleryImage'])->name('factory.admin.gallery.store');
+    Route::post('/factory/gallery/images/{id}', [App\Http\Controllers\FactoryAdminController::class, 'updateGalleryImage'])->name('factory.admin.gallery.update');
+    Route::get('/factory/gallery/images/{id}/delete', [App\Http\Controllers\FactoryAdminController::class, 'destroyGalleryImage'])->name('factory.admin.gallery.destroy');
     Route::post('/factory/{section}', [App\Http\Controllers\FactoryAdminController::class, 'save'])->name('factory.admin.save');
 
     Route::get('/aboutUs',[App\Http\Controllers\BackgroundController::class,'background'])->name('background');

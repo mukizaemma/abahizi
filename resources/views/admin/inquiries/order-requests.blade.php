@@ -79,7 +79,9 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($row->product_reference)
+                                                @if($row->product)
+                                                    <div class="fw-semibold">{{ $row->product->title }}</div>
+                                                @elseif($row->product_reference)
                                                     {{ $row->product_reference }}
                                                 @else
                                                     —

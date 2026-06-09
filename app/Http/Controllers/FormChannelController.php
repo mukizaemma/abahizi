@@ -139,7 +139,22 @@ class FormChannelController extends Controller
             'product_description' => ['required', 'string', 'max:20000'],
             'product_slug' => ['nullable', 'string', 'max:255'],
             'product_reference' => ['nullable', 'string', 'max:255'],
+            'product_id' => ['nullable', 'integer'],
+            'quantity' => ['nullable', 'integer', 'min:1', 'max:99999'],
         ]);
+
+        $phoneDigits = preg_replace('/\D+/', '', (string) $validated['phone']);
+        if (strlen($phoneDigits) < 10) {
+            throw ValidationException::withMessages([
+                'phone' => 'Enter a valid phone number with at least 10 digits.',
+            ]);
+        }
+
+        if (FormChannelService::normalizeEmail($validated['email']) === null) {
+            throw ValidationException::withMessages([
+                'email' => 'Enter a valid email address.',
+            ]);
+        }
 
         return $validated;
     }

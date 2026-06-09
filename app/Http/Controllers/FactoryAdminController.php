@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Background;
+use App\Models\FactoryGalleryImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -45,6 +46,67 @@ class FactoryAdminController extends Controller
             'background' => $this->backgroundRow(),
             'section' => 'training',
         ]);
+    }
+
+    public function gallery()
+    {
+        return view('admin.factory.edit', [
+            'background' => $this->backgroundRow(),
+            'section' => 'gallery',
+            'factoryGalleryImages' => FactoryGalleryImage::query()->latest()->get(),
+        ]);
+    }
+
+    public function storeGalleryImage(Request $request)
+    {
+        $data = $request->validate([
+            'caption' => ['nullable', 'string', 'max:255'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:5120'],
+        ]);
+
+        $image = new FactoryGalleryImage();
+        $image->caption = trim((string) ($data['caption'] ?? ''));
+        $image->image = $request->file('image')->store('images/factory-gallery', 'public');
+        $image->sort_order = (int) FactoryGalleryImage::query()->max('sort_order') + 1;
+        $image->save();
+
+        return redirect()->route('factory.admin.gallery')->with('success', 'Factory gallery image added.');
+    }
+
+    public function updateGalleryImage(Request $request, int $id)
+    {
+        $image = FactoryGalleryImage::findOrFail($id);
+
+        $data = $request->validate([
+            'caption' => ['nullable', 'string', 'max:255'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:5120'],
+        ]);
+
+        $image->caption = trim((string) ($data['caption'] ?? ''));
+
+        if ($request->hasFile('image')) {
+            if (! empty($image->image) && Storage::disk('public')->exists($image->image)) {
+                Storage::disk('public')->delete($image->image);
+            }
+            $image->image = $request->file('image')->store('images/factory-gallery', 'public');
+        }
+
+        $image->save();
+
+        return redirect()->route('factory.admin.gallery')->with('success', 'Factory gallery image updated.');
+    }
+
+    public function destroyGalleryImage(int $id)
+    {
+        $image = FactoryGalleryImage::findOrFail($id);
+
+        if (! empty($image->image) && Storage::disk('public')->exists($image->image)) {
+            Storage::disk('public')->delete($image->image);
+        }
+
+        $image->delete();
+
+        return redirect()->route('factory.admin.gallery')->with('success', 'Factory gallery image removed.');
     }
 
     public function save(Request $request, string $section)
