@@ -10,9 +10,35 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Background;
 use App\Models\Homepage;
+use App\Support\SectionBackgroundService;
 
 class BackgroundController extends Controller
 {
+    protected function sectionBackgroundValidationRules(): array
+    {
+        $rules = [];
+        foreach (SectionBackgroundService::editableKeys() as $field) {
+            $rules[$field] = 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096';
+        }
+
+        return $rules;
+    }
+
+    protected function storeSectionBackgroundImage(Request $request, Background $data, string $field, string $filenamePrefix): void
+    {
+        if (! Schema::hasColumn('backgrounds', $field) || ! $request->hasFile($field)) {
+            return;
+        }
+
+        if ($data->{$field} && Storage::disk('public')->exists('images/' . $data->{$field})) {
+            Storage::disk('public')->delete('images/' . $data->{$field});
+        }
+
+        $filename = $filenamePrefix . time() . '_' . Str::random(5) . '.' . $request->file($field)->getClientOriginalExtension();
+        $request->file($field)->storeAs('images', $filename, 'public');
+        $data->{$field} = $filename;
+    }
+
     public function background(){
         $data = background::first();
         if($data===null)
@@ -58,7 +84,7 @@ public function saveBackg(Request $request)
         'factory_services_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
         'factory_community_impact_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
         'factory_training_facilities_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:4096',
-    ]);
+    ] + $this->sectionBackgroundValidationRules());
 
     $data = Background::firstOrEmpty();
     if ($request->has('description')) {
@@ -165,14 +191,13 @@ public function saveBackg(Request $request)
     }
 
     // Core values section background (About page parallax)
-    if (Schema::hasColumn('backgrounds', 'core_values_background') && $request->hasFile('core_values_background')) {
-        if ($data->core_values_background && Storage::disk('public')->exists('images/' . $data->core_values_background)) {
-            Storage::disk('public')->delete('images/' . $data->core_values_background);
+    $this->storeSectionBackgroundImage($request, $data, 'core_values_background', 'cv_bg_');
+    foreach (SectionBackgroundService::editableKeys() as $field) {
+        if ($field === 'core_values_background') {
+            continue;
         }
-
-        $cvFilename = 'cv_bg_' . time() . '_' . Str::random(5) . '.' . $request->file('core_values_background')->getClientOriginalExtension();
-        $request->file('core_values_background')->storeAs('images', $cvFilename, 'public');
-        $data->core_values_background = $cvFilename;
+        $prefix = str_replace('_background', '_', $field);
+        $this->storeSectionBackgroundImage($request, $data, $field, $prefix);
     }
 
     // Process model image

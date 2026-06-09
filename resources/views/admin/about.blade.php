@@ -9,6 +9,9 @@
 @endsection
 
 @section('content')
+@php
+    use App\Support\SectionBackgroundService;
+@endphp
 
 <div id="layoutSidenav">
     <div id="layoutSidenav_nav">
@@ -43,6 +46,9 @@
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="impact-tab" data-bs-toggle="tab" data-bs-target="#impact-pane" type="button" role="tab">Impact</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="section-backgrounds-tab" data-bs-toggle="tab" data-bs-target="#section-backgrounds-pane" type="button" role="tab">Section backgrounds</button>
                             </li>
                         </ul>
 
@@ -134,13 +140,8 @@
                                                 <img src="{{ asset('storage/images/' . $background->image2) }}" width="120" class="mt-2 rounded border p-1 bg-white">
                                             @endif
                                         </div>
-                                        <div class="col-lg-6">
-                                            <label class="form-label">Core values section background (About page)</label>
-                                            <p class="text-muted small mb-2">Full-width image behind “Our Core Values.” If not set, the pages header image is used.</p>
-                                            <input type="file" class="form-control" name="core_values_background" accept="image/*">
-                                            @if(!empty($background->core_values_background))
-                                                <img src="{{ asset('storage/images/' . $background->core_values_background) }}" width="220" class="mt-2 rounded border p-1 bg-white" alt="Core values background preview">
-                                            @endif
+                                        <div class="col-12">
+                                            <p class="text-muted small mb-0">Parallax and full-width section backgrounds are managed under the <strong>Section backgrounds</strong> tab. Page-specific breadcrumb heroes are under <a href="{{ route('settings') }}#page-headers">Settings → Page headers</a>.</p>
                                         </div>
                                         <div class="col-12">
                                             <input type="hidden" name="donations" value="{{ $background->donations }}">
@@ -229,6 +230,34 @@
                                         <div class="col-12">
                                             <p class="text-muted mb-2">For item-based impact metrics (title + value), use the <a href="{{ route('impacts.index') }}">Impact Items</a> page.</p>
                                             <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save impact stats</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="section-backgrounds-pane" role="tabpanel" aria-labelledby="section-backgrounds-tab">
+                                <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <p class="text-muted mb-4">Upload a dedicated image for each full-width or parallax section. If a section has no image, the site uses the listed fallbacks automatically.</p>
+                                    <div class="row g-4">
+                                        @foreach(SectionBackgroundService::definitions() as $field => $definition)
+                                            @php
+                                                $storedFile = SectionBackgroundService::storedFilename($background, $field);
+                                                $previewUrl = $storedFile
+                                                    ? SectionBackgroundService::urlFromFilename($storedFile)
+                                                    : SectionBackgroundService::resolve($field, $background);
+                                            @endphp
+                                            <div class="col-md-6 col-xl-4">
+                                                <label class="form-label fw-semibold">{{ $definition['label'] }}</label>
+                                                <p class="text-muted small mb-2">{{ $definition['help'] }}</p>
+                                                <input type="file" class="form-control" name="{{ $field }}" accept="image/*">
+                                                @if($previewUrl)
+                                                    <img src="{{ $previewUrl }}" width="220" class="mt-2 rounded border p-1 bg-white" alt="{{ $definition['label'] }} preview">
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save section backgrounds</button>
                                         </div>
                                     </div>
                                 </form>

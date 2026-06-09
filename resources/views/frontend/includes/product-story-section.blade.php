@@ -3,12 +3,7 @@
     $heading = trim((string) ($productStoryHeading ?? ''));
     $show = $pts->isNotEmpty() || $heading !== '';
 
-    $storyBgFile = $about->core_values_background ?? $about->image2 ?? $about->image1 ?? $about->image ?? '';
-    $storyBgUrl = $storyBgFile !== ''
-        ? (str_starts_with((string) $storyBgFile, 'http')
-            ? $storyBgFile
-            : asset('storage/images/' . ltrim($storyBgFile, '/')))
-        : '';
+    $storyBgUrl = \App\Support\SectionBackgroundService::resolve('product_story_background', $about) ?? '';
 @endphp
 @if($show)
 <section class="product-story-section {{ $storyBgUrl ? 'product-story-section--parallax' : 'product-story-section--plain' }}"

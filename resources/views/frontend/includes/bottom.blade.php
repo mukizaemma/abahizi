@@ -1,11 +1,6 @@
 @php
     $ctaAbout = $about ?? \App\Models\Background::firstOrEmpty();
-    $ctaFile = $ctaAbout->image2 ?? $ctaAbout->image ?? $ctaAbout->image1 ?? '';
-    $ctaBgUrl = $ctaFile !== ''
-        ? (str_starts_with((string) $ctaFile, 'http')
-            ? $ctaFile
-            : asset('storage/images/' . ltrim($ctaFile, '/')))
-        : asset('assets/img/cta/cta-bg-3.jpg');
+    $ctaBgUrl = \App\Support\SectionBackgroundService::resolve('impact_cta_background', $ctaAbout);
 
     $impactQuote = trim(strip_tags(html_entity_decode($ctaAbout->manufacturing_impact_content ?? '')));
     if ($impactQuote === '') {

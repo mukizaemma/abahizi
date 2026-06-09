@@ -1,12 +1,7 @@
 @php
     $ctaBgRow = $about ?? \App\Models\Background::firstOrEmpty();
     $missionRow = $mission ?? \App\Models\About::firstOrEmpty();
-    $ctaFile = $ctaBgRow->core_values_background ?? $ctaBgRow->image2 ?? $ctaBgRow->image ?? $ctaBgRow->image1 ?? '';
-    $ctaBgUrl = $ctaFile !== ''
-        ? (str_starts_with((string) $ctaFile, 'http')
-            ? $ctaFile
-            : asset('storage/images/' . ltrim($ctaFile, '/')))
-        : '';
+    $ctaBgUrl = \App\Support\SectionBackgroundService::resolve('programs_dual_cta_background', $ctaBgRow) ?? '';
 @endphp
 
 <section

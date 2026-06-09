@@ -1,10 +1,7 @@
 @php
-    $cvBgFile = $about->core_values_background ?? $about->image2 ?? $about->image1 ?? $about->image ?? '';
-    $parallaxUrl = $cvBgFile !== ''
-        ? (str_starts_with((string) $cvBgFile, 'http')
-            ? $cvBgFile
-            : asset('storage/images/' . ltrim($cvBgFile, '/')))
-        : '';
+    use App\Support\SectionBackgroundService;
+
+    $parallaxUrl = SectionBackgroundService::resolve('core_values_background', $about) ?? '';
     $coreValueItems = \App\Support\CoreValues::parseItems($mission->core_values_list ?? null, $mission->values ?? '');
 
     $sectionClassExtra = $coreValuesParallaxSectionClass ?? '';
