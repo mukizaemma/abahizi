@@ -3,34 +3,50 @@
         <div class="nav flex-column pt-2">
 
             <x-admin.nav-link
-                :href="route('programs')"
-                icon="fa-list-alt"
-                :active="request()->routeIs(['programs', 'editProgram', 'saveProgram', 'updateProgram', 'destroyProgram', 'addProgramImage', 'deleteProgramImage'])"
+                :href="route('redirects')"
+                icon="fa-inbox"
+                :active="request()->routeIs(['redirects', 'dashboard', 'webMessages', 'messageReply'])"
             >
-                Programs
-            </x-admin.nav-link>
-            <x-admin.nav-link
-                :href="route('getProjects')"
-                icon="fa-project-diagram"
-                :active="request()->routeIs(['getProjects', 'editProject', 'saveProject', 'updateProject', 'destroyProject', 'addProjectImage', 'deleteProjectImage'])"
-            >
-                Initiatives
+                Messages
             </x-admin.nav-link>
 
+            <p class="admin-nav-section-title mb-0 mt-3">Homepage</p>
             <x-admin.nav-link
-                :href="route('factory.admin.overview')"
-                icon="fa-industry"
-                :active="request()->routeIs('factory.admin.*')"
+                :href="route('slides')"
+                icon="fa-images"
+                :active="request()->routeIs(['slides', 'editSlide', 'saveSlide', 'updateSlide', 'destroySlide'])"
             >
-                Factory
+                Home slides
             </x-admin.nav-link>
-
+            <x-admin.nav-link
+                :href="route('images')"
+                icon="fa-image"
+                :active="request()->routeIs(['images', 'editGallery', 'saveGallery', 'updateGallery', 'destroyGallery'])"
+            >
+                Craft gallery
+            </x-admin.nav-link>
             <x-admin.nav-link
                 :href="route('blog.index')"
                 icon="fa-newspaper"
                 :active="request()->routeIs(['blog.index', 'editBlog', 'saveBlog', 'updateBlog', 'deleteBlog', 'publishBlog', 'unpublishBlog', 'deleteBlogImage'])"
             >
-                Blogs / Updates
+                News &amp; updates
+            </x-admin.nav-link>
+
+            <p class="admin-nav-section-title mb-0 mt-3">About</p>
+            <x-admin.nav-link
+                :href="route('about')"
+                icon="fa-bullseye"
+                :active="request()->routeIs(['about', 'background', 'saveAbout', 'saveBackg'])"
+            >
+                About &amp; story
+            </x-admin.nav-link>
+            <x-admin.nav-link
+                :href="route('staff')"
+                icon="fa-users"
+                :active="request()->routeIs(['staff', 'editStaff', 'saveStaff', 'updateStaff', 'destroyStaff'])"
+            >
+                Team
             </x-admin.nav-link>
             <x-admin.nav-link
                 :href="route('getTestimonials')"
@@ -39,22 +55,17 @@
             >
                 Testimonials
             </x-admin.nav-link>
+
+            <p class="admin-nav-section-title mb-0 mt-3">Factory</p>
             <x-admin.nav-link
-                :href="route('slides')"
-                icon="fa-images"
-                :active="request()->routeIs(['slides', 'editSlide', 'saveSlide', 'updateSlide', 'destroySlide'])"
+                :href="route('factory.admin.overview')"
+                icon="fa-industry"
+                :active="request()->routeIs('factory.admin.*')"
             >
-                Home Slides
-            </x-admin.nav-link>
-            <x-admin.nav-link
-                :href="route('images')"
-                icon="fa-image"
-                :active="request()->routeIs(['images', 'editGallery', 'saveGallery', 'updateGallery', 'destroyGallery'])"
-            >
-                Gallery Images
+                Factory content
             </x-admin.nav-link>
 
-            <p class="admin-nav-section-title mb-0 mt-3">Manufacturing</p>
+            <p class="admin-nav-section-title mb-0 mt-3">Products</p>
             <x-admin.nav-link
                 :href="route('catalogProducts.index')"
                 icon="fa-store"
@@ -83,34 +94,28 @@
             >
                 Order requests
             </x-admin.nav-link>
-            <x-admin.nav-link
-                :href="route('partnershipInquiries.index')"
-                icon="fa-handshake"
-                :active="request()->routeIs('partnershipInquiries.index')"
-            >
-                Partnership inquiries
-            </x-admin.nav-link>
 
+            <p class="admin-nav-section-title mb-0 mt-3">Impact</p>
             <x-admin.nav-link
-                :href="route('about')"
-                icon="fa-bullseye"
-                :active="request()->routeIs(['about', 'background'])"
+                :href="route('impacts.index')"
+                icon="fa-chart-line"
+                :active="request()->routeIs(['impacts.index', 'editImpact', 'saveImpact', 'updateImpact', 'destroyImpact'])"
             >
-                About
+                Impact stats
             </x-admin.nav-link>
-
             <x-admin.nav-link
                 :href="route('impactReports.admin.index')"
                 icon="fa-file-pdf"
                 :active="request()->routeIs(['impactReports.admin.*', 'impactReports.admin.edit', 'impactReports.admin.gallery.store', 'impactReports.admin.gallery.destroy'])"
             >
-                Impact Reports
+                Impact reports
             </x-admin.nav-link>
 
+            <p class="admin-nav-section-title mb-0 mt-3">Site</p>
             <x-admin.nav-link
                 :href="route('settings')"
                 icon="fa-cogs"
-                :active="request()->routeIs('settings')"
+                :active="request()->routeIs(['settings', 'saveSetting'])"
             >
                 Site settings
             </x-admin.nav-link>
