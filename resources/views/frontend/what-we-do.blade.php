@@ -9,38 +9,56 @@
         'title' => 'What We Do',
     ])
 
-    <section class="page-standalone grey-bg pt-60 pb-90">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 col-xl-10 col-xxl-9">
-                    <article class="page-standalone-card">
-                        <div class="page-standalone-card__body postbox__text">
-                            @if(!empty($about->what_we_do))
-                                {!! $about->what_we_do !!}
-                            @else
-                                <p class="lead mb-0" style="font-size: 1.15rem; line-height: 1.75; color: #333;">
-                                    We combine ethical manufacturing with community programs that create lasting opportunity for women and families across Rwanda.
-                                </p>
-                            @endif
-                        </div>
-                    </article>
+    @php
+        use App\Support\HowItWorks;
 
-                    @if(!empty($about->how_it_works))
-                        <article class="page-standalone-card mt-4">
-                            <header class="page-standalone-card__head">
-                                <span class="page-standalone-card__icon" aria-hidden="true"><i class="flaticon-mission"></i></span>
-                                <div>
-                                    <p class="page-standalone-card__eyebrow">Our approach</p>
-                                    <h2 class="page-standalone-card__title mb-0">How it works</h2>
-                                </div>
-                            </header>
-                            <div class="page-standalone-card__body postbox__text">
-                                {!! $about->how_it_works !!}
-                            </div>
-                        </article>
-                    @endif
-                </div>
+        $intro = HowItWorks::parseIntro($about->what_we_do ?? '');
+        $steps = HowItWorks::parseSteps($about->how_it_works ?? '');
+
+        if ($steps === []) {
+            $steps = HowItWorks::parseSteps($about->what_we_do ?? '');
+        }
+
+        if ($steps === []) {
+            $steps = HowItWorks::fallbackSteps();
+        }
+    @endphp
+
+    <section class="what-we-do-intro lux-section" aria-labelledby="what-we-do-intro-title">
+        <div class="container">
+            <div class="what-we-do-intro__head text-center wow tpfadeUp" data-wow-duration=".85s">
+                <p class="what-we-do-intro__eyebrow">{{ __('site.nav.what_we_do') }}</p>
+                <h2 id="what-we-do-intro-title" class="what-we-do-intro__title">{{ $intro['title'] }}</h2>
+                <p class="what-we-do-intro__lead mx-auto">{{ $intro['lead'] }}</p>
             </div>
+
+            @if(trim(strip_tags($intro['body'])) !== '')
+                <article class="what-we-do-intro__body postbox__text wow tpfadeUp" data-wow-duration=".85s" data-wow-delay=".08s">
+                    {!! $intro['body'] !!}
+                </article>
+            @endif
+        </div>
+    </section>
+
+    <section class="what-we-do-process lux-section grey-bg" aria-labelledby="what-we-do-process-title">
+        <div class="container">
+            <header class="what-we-do-process__head text-center wow tpfadeUp" data-wow-duration=".85s">
+                <p class="what-we-do-process__eyebrow">Our approach</p>
+                <h2 id="what-we-do-process-title" class="what-we-do-process__title">How it works</h2>
+                <p class="what-we-do-process__subtitle mx-auto">A clear, collaborative path from concept to export-ready production.</p>
+            </header>
+
+            <ol class="what-we-do-process__grid">
+                @foreach($steps as $i => $step)
+                    <li class="what-we-do-process__card wow tpfadeUp" data-wow-duration=".85s" data-wow-delay="{{ number_format($i * 0.07, 2) }}s">
+                        <span class="what-we-do-process__index">{{ str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT) }}</span>
+                        <h3 class="what-we-do-process__card-title">{{ $step['title'] }}</h3>
+                        @if($step['desc'] !== '')
+                            <p class="what-we-do-process__card-desc mb-0">{{ $step['desc'] }}</p>
+                        @endif
+                    </li>
+                @endforeach
+            </ol>
         </div>
     </section>
 

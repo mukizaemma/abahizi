@@ -26,7 +26,7 @@ class SectionBackgroundService
             ],
             'factory_capabilities_background' => [
                 'label' => 'Factory capabilities banner',
-                'help' => 'Parallax banner with capacity cards on the homepage and factory page.',
+                'help' => 'Parallax banner with capacity cards — homepage, factory page, impact pages, and other footers.',
                 'fallbacks' => ['image2', 'image', 'image1'],
                 'default' => 'assets/img/cta/cta-bg-3.jpg',
             ],
@@ -35,12 +35,6 @@ class SectionBackgroundService
                 'help' => 'Parallax background on the products page story block.',
                 'fallbacks' => ['core_values_background', 'image2', 'image1', 'image'],
                 'default' => null,
-            ],
-            'impact_cta_background' => [
-                'label' => 'Impact quote / CTA band',
-                'help' => '“Manufacturing with purpose” quote section background.',
-                'fallbacks' => ['image2', 'image', 'image1'],
-                'default' => 'assets/img/cta/cta-bg-3.jpg',
             ],
             'programs_dual_cta_background' => [
                 'label' => 'Mission & vision dual CTA',

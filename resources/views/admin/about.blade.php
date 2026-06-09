@@ -168,7 +168,8 @@
                                             <textarea rows="6" class="form-control" name="what_we_do" data-editor="rich">{!! $background->what_we_do !!}</textarea>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label">How it works (use one step per line or bullet)</label>
+                                            <label class="form-label">How it works</label>
+                                            <p class="text-muted small mb-2">Use one step per line or bullet. Format as <strong>Step title:</strong> short description — these appear as cards on the What We Do page.</p>
                                             <textarea rows="6" class="form-control" name="how_it_works" data-editor="rich">{!! $background->how_it_works !!}</textarea>
                                         </div>
                                         <div class="col-lg-6">
