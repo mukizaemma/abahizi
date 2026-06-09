@@ -30,9 +30,8 @@
                         </div>
                     </div>
                 @endif
-                <div class="{{ $imageUrl ? 'col-lg-7' : 'col-12' }} wow tpfadeUp" data-wow-duration=".9s" data-wow-delay=".15s">
-                    <p class="lux-section-head__eyebrow mb-2">{{ __('site.home.testimonial_eyebrow') }}</p>
-                    <h2 id="home-featured-testimonial-title" class="visually-hidden">Testimonial</h2>
+                <div class="{{ $imageUrl ? 'col-lg-7' : 'col-12' }} lux-section-head lux-section-head--solo wow tpfadeUp" data-wow-duration=".9s" data-wow-delay=".15s">
+                    <h2 id="home-featured-testimonial-title" class="lux-section-head__title mb-3">{{ __('site.home.testimonial_eyebrow') }}</h2>
                     <blockquote class="home-featured-testimonial__quote">
                         <span class="home-featured-testimonial__mark" aria-hidden="true">"</span>
                         {{ $quote }}

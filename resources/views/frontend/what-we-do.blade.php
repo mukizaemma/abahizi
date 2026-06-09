@@ -26,9 +26,8 @@
 
     <section class="what-we-do-intro lux-section" aria-labelledby="what-we-do-intro-title">
         <div class="container">
-            <div class="what-we-do-intro__head text-center wow tpfadeUp" data-wow-duration=".85s">
-                <p class="what-we-do-intro__eyebrow">{{ __('site.nav.what_we_do') }}</p>
-                <h2 id="what-we-do-intro-title" class="what-we-do-intro__title">{{ $intro['title'] }}</h2>
+            <div class="what-we-do-intro__head text-center wow tpfadeUp lux-section-head lux-section-head--solo" data-wow-duration=".85s">
+                <h2 id="what-we-do-intro-title" class="what-we-do-intro__title lux-section-head__title">{{ $intro['title'] }}</h2>
                 <p class="what-we-do-intro__lead mx-auto">{{ $intro['lead'] }}</p>
             </div>
 
@@ -42,9 +41,8 @@
 
     <section class="what-we-do-process lux-section grey-bg" aria-labelledby="what-we-do-process-title">
         <div class="container">
-            <header class="what-we-do-process__head text-center wow tpfadeUp" data-wow-duration=".85s">
-                <p class="what-we-do-process__eyebrow">Our approach</p>
-                <h2 id="what-we-do-process-title" class="what-we-do-process__title">How it works</h2>
+            <header class="what-we-do-process__head text-center wow tpfadeUp lux-section-head lux-section-head--solo" data-wow-duration=".85s">
+                <h2 id="what-we-do-process-title" class="what-we-do-process__title lux-section-head__title">How it works</h2>
                 <p class="what-we-do-process__subtitle mx-auto">A clear, collaborative path from concept to export-ready production.</p>
             </header>
 

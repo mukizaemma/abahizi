@@ -5,7 +5,9 @@
 
 <section class="lux-trust" aria-labelledby="lux-trust-heading">
     <div class="container">
-        <p id="lux-trust-heading" class="lux-trust__eyebrow">{{ __('site.trust.eyebrow') }}</p>
+        <div class="lux-section-head lux-section-head--solo text-center mb-4">
+            <h2 id="lux-trust-heading" class="lux-section-head__title">{{ __('site.trust.eyebrow') }}</h2>
+        </div>
         <div class="lux-trust__logos">
             @forelse($brandPartners as $partner)
                 @php

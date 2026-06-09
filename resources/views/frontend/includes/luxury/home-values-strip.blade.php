@@ -9,7 +9,9 @@
 
 <section class="home-values-strip" aria-labelledby="home-values-strip-heading">
     <div class="container">
-        <p id="home-values-strip-heading" class="home-values-strip__eyebrow">{{ __('site.home.values_eyebrow') }}</p>
+        <div class="lux-section-head lux-section-head--solo text-center mb-4 mb-md-5">
+            <h2 id="home-values-strip-heading" class="lux-section-head__title">{{ __('site.home.values_eyebrow') }}</h2>
+        </div>
         <div class="home-values-strip__grid">
             @foreach($values as $i => $item)
                 <article class="home-values-strip__item wow tpfadeUp" data-wow-duration=".85s" data-wow-delay="{{ number_format($i * 0.08, 2) }}s">

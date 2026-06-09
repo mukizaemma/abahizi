@@ -10,8 +10,7 @@
 
 <section class="lux-section lux-timeline grey-bg" id="lean" aria-labelledby="lux-timeline-heading">
     <div class="container">
-        <div class="lux-section-head text-center mb-0">
-            <p class="lux-section-head__eyebrow">{{ __('site.factory.how_eyebrow') }}</p>
+        <div class="lux-section-head lux-section-head--solo text-center mb-0">
             <h2 id="lux-timeline-heading" class="lux-section-head__title">{{ __('site.manufacturing.lean_title') }}</h2>
         </div>
         <ol class="lux-timeline__track">

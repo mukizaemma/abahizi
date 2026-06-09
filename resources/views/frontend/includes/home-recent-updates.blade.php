@@ -2,8 +2,7 @@
     <section class="lux-section home-recent-updates grey-bg" aria-labelledby="home-recent-updates-title">
         <div class="container">
             <div class="row align-items-end justify-content-between g-3 mb-4 mb-lg-5">
-                <div class="col-lg-8">
-                    <p class="lux-section-head__eyebrow mb-2">{{ __('site.home.updates_eyebrow') }}</p>
+                <div class="col-lg-8 lux-section-head lux-section-head--solo">
                     <h2 id="home-recent-updates-title" class="lux-section-head__title mb-0">{{ __('site.home.updates_title') }}</h2>
                 </div>
                 <div class="col-lg-auto">

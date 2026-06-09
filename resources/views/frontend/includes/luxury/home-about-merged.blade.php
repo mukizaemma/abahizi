@@ -16,8 +16,7 @@
 <section class="home-about-merged grey-bg pt-80 pb-70" aria-labelledby="home-about-merged-title">
     <div class="container">
         <div class="row justify-content-center mb-4 mb-lg-5">
-            <div class="col-12 col-lg-10 col-xl-8 text-center">
-                <p class="lux-section-head__eyebrow mb-2">{{ __('site.home.about_eyebrow') }}</p>
+            <div class="col-12 col-lg-10 col-xl-8 text-center lux-section-head lux-section-head--solo">
                 <h2 id="home-about-merged-title" class="lux-section-head__title mb-3">{{ __('site.home.about_title') }}</h2>
                 <p class="home-about-merged__lead mb-0">{{ $aboutLead }}</p>
             </div>

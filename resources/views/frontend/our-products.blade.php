@@ -33,8 +33,7 @@
     @if($hasCatalogProducts ?? false)
         <section class="shop-catalog-section py-5" aria-labelledby="shop-catalog-title">
             <div class="container">
-                <div class="text-center mb-4 mb-lg-5">
-                    <p class="lux-section-head__eyebrow mb-2">Made in Masoro</p>
+                <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
                     <h2 id="shop-catalog-title" class="lux-section-head__title mb-2">Browse our catalog</h2>
                     <p class="text-muted mb-0 mx-auto" style="max-width: 40rem;">Select a product to view details and submit an order via WhatsApp or email.</p>
                 </div>

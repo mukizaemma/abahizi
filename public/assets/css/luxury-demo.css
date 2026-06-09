@@ -387,6 +387,46 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
     color: var(--lux-charcoal);
 }
 
+/* Single heading — no eyebrow label; subtle accent underline */
+.lux-section-head--solo .lux-section-head__title,
+.home-why-partner__title,
+.home-process__title-main,
+.factory-capabilities-banner__title,
+.what-we-do-intro__title,
+.what-we-do-process__title {
+    position: relative;
+}
+
+.lux-section-head--solo.text-center .lux-section-head__title::after,
+.home-process__title-main::after,
+.factory-capabilities-banner__title::after {
+    content: "";
+    display: block;
+    width: 3.25rem;
+    height: 3px;
+    margin: 0.85rem auto 0;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--brand-primary, #fad200), rgba(250, 210, 0, 0.15));
+}
+
+.lux-section-head--solo:not(.text-center) .lux-section-head__title::after,
+.lux-section-head--solo:not(.text-center) .factory-impact__journey-title::after,
+.home-why-partner__title::after,
+.what-we-do-intro__title::after,
+.what-we-do-process__title::after {
+    content: "";
+    display: block;
+    width: 3.25rem;
+    height: 3px;
+    margin: 0.85rem 0 0;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--brand-primary, #fad200), rgba(250, 210, 0, 0.15));
+}
+
+.lux-section-head--solo .lux-section-head__title {
+    margin-bottom: 0;
+}
+
 /* Lean timeline */
 .lux-timeline {
     background: #fff;
@@ -2020,23 +2060,28 @@ img[loading="lazy"] {
 .home-why-partner {
     background: #fff;
 }
+.home-why-partner__inner {
+    padding-left: clamp(1.25rem, 4vw, 3rem);
+    padding-right: clamp(1.25rem, 4vw, 3rem);
+}
 .home-why-partner__head {
-    max-width: 46rem;
-    margin: 0 auto clamp(2rem, 5vw, 3rem);
+    width: 100%;
+    margin: 0 0 clamp(2rem, 4vw, 2.75rem);
 }
 .home-why-partner__title {
     font-family: var(--lux-serif);
-    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-size: clamp(1.85rem, 3.2vw, 2.65rem);
     line-height: 1.2;
     margin-bottom: 1rem;
     color: var(--lux-charcoal);
+    max-width: 52rem;
 }
 .home-why-partner__lead {
-    font-size: 1.05rem;
-    line-height: 1.7;
-    color: #4a4a4a;
-    max-width: 42rem;
+    font-size: clamp(1.02rem, 1.5vw, 1.12rem);
+    line-height: 1.75;
+    color: #444;
     margin-bottom: 0;
+    max-width: none;
 }
 .home-why-partner__grid {
     display: grid;

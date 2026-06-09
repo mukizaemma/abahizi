@@ -26,8 +26,7 @@
 <section class="lux-section factory-what" aria-labelledby="factory-what-title">
     <div class="container">
         <div class="row justify-content-center mb-4 mb-lg-5">
-            <div class="col-lg-10 col-xl-9 text-center">
-                <p class="lux-section-head__eyebrow mb-2">{{ __('site.factory.what_eyebrow') }}</p>
+            <div class="col-lg-10 col-xl-9 text-center lux-section-head lux-section-head--solo">
                 <h2 id="factory-what-title" class="lux-section-head__title mb-3">{{ __('site.factory.what_title') }}</h2>
                 <p class="lux-lead mb-0">{{ $intro }}</p>
             </div>

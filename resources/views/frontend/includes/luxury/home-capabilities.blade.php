@@ -25,8 +25,7 @@
 
 <section class="lux-section home-capabilities grey-bg" aria-labelledby="home-capabilities-title">
     <div class="container">
-        <div class="text-center mb-4 mb-lg-5">
-            <p class="lux-section-head__eyebrow mb-2">{{ __('site.home.capabilities_eyebrow') }}</p>
+        <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
             <h2 id="home-capabilities-title" class="lux-section-head__title">{{ __('site.home.capabilities_title') }}</h2>
         </div>
 

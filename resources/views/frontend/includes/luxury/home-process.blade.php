@@ -22,7 +22,6 @@
     <div class="home-process__content">
         <div class="container">
             <div class="text-center mb-4 mb-lg-5">
-                <p class="home-process__eyebrow mb-2">{{ __('site.home.process_eyebrow') }}</p>
                 <h2 id="home-process-title" class="home-process__title-main">{{ __('site.home.process_title') }}</h2>
             </div>
 

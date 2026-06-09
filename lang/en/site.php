@@ -56,7 +56,7 @@ return [
         'updates_cta' => 'View all updates',
         'updates_read' => 'Read more',
         'why_partner_eyebrow' => 'Manufacturing partnership',
-        'why_partner_title' => 'Why partner with Abahizi for your bag manufacturing',
+        'why_partner_title' => 'Why partner with Abahizi CBC for your bag manufacturing',
         'why_partner_visual_label' => 'Production track record',
     ],
     'trust' => [

@@ -56,7 +56,7 @@ return [
         'updates_cta' => 'Reba amakuru yose',
         'updates_read' => 'Soma byinshi',
         'why_partner_eyebrow' => 'Ubufatanyabikorwa mu gukora',
-        'why_partner_title' => 'Impamvu wo gukorana na Abahizi mu gukora agafuka',
+        'why_partner_title' => 'Impamvu wo gukorana na Abahizi CBC mu gukora agafuka',
         'why_partner_visual_label' => 'Inyandiko y\'ibyo twakoze',
     ],
     'trust' => [

@@ -42,7 +42,6 @@
     <div class="factory-capabilities-banner__bg">
         <div class="container">
             <div class="factory-capabilities-banner__head text-center">
-                <p class="factory-capabilities-banner__eyebrow">{{ __('site.factory.specs_eyebrow') }}</p>
                 <h2 id="factory-capabilities-heading" class="factory-capabilities-banner__title">{{ __('site.manufacturing.specs_title') }}</h2>
             </div>
 

@@ -10,7 +10,7 @@
 
 <section class="lux-journey" aria-labelledby="lux-journey-heading">
     <div class="container">
-        <div class="lux-section-head mb-4">
+        <div class="lux-section-head lux-section-head--solo mb-4">
             <h2 id="lux-journey-heading" class="lux-section-head__title mb-0">{{ __('site.impact.artisan_journey') }}</h2>
         </div>
 

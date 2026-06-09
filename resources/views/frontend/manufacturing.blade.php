@@ -28,8 +28,7 @@
     @if($services->isNotEmpty())
         <section class="pt-60 pb-90">
             <div class="container">
-                <div class="lux-section-head text-center mb-4">
-                    <p class="lux-section-head__eyebrow">Services</p>
+                <div class="lux-section-head lux-section-head--solo text-center mb-4">
                     <h2 class="lux-section-head__title">{{ __('site.nav.expertise') }}</h2>
                 </div>
                 <div class="row g-4">

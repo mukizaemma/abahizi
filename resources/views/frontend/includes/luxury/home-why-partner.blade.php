@@ -12,10 +12,11 @@
     };
 
     $intro = $plainText($about->solution_statement ?? '');
+    $intro = str_replace('Abahizi Rwanda', 'Abahizi CBC', $intro);
     if ($intro === '') {
         $intro = 'Abahizi CBC is a full-service bag manufacturing partner in Masoro—combining export-ready production with a workforce invested in quality, consistency, and long-term collaboration.';
     } else {
-        $intro = \Illuminate\Support\Str::limit($intro, 320, '…');
+        $intro = \Illuminate\Support\Str::limit($intro, 520, '…');
     }
 
     $reasons = [
@@ -29,11 +30,10 @@
 @endphp
 
 <section class="home-why-partner lux-section" aria-labelledby="home-why-partner-title">
-    <div class="container">
-        <div class="home-why-partner__head text-center wow tpfadeUp" data-wow-duration=".9s">
-            <p class="lux-section-head__eyebrow mb-2">{{ __('site.home.why_partner_eyebrow') }}</p>
+    <div class="container-fluid home-why-partner__inner">
+        <div class="home-why-partner__head wow tpfadeUp" data-wow-duration=".9s">
             <h2 id="home-why-partner-title" class="home-why-partner__title">{{ __('site.home.why_partner_title') }}</h2>
-            <p class="home-why-partner__lead mx-auto">{{ $intro }}</p>
+            <p class="home-why-partner__lead">{{ $intro }}</p>
         </div>
 
         <div class="home-why-partner__grid">

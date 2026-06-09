@@ -29,8 +29,7 @@
 
 <section class="lux-section lux-specs" aria-labelledby="lux-specs-heading">
     <div class="container">
-        <div class="lux-section-head text-center">
-            <p class="lux-section-head__eyebrow">{{ __('site.factory.specs_eyebrow') }}</p>
+        <div class="lux-section-head lux-section-head--solo text-center">
             <h2 id="lux-specs-heading" class="lux-section-head__title">{{ __('site.manufacturing.specs_title') }}</h2>
         </div>
 

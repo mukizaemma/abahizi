@@ -58,7 +58,7 @@
         'caption' => __('site.impact.caption'),
     ])
 
-    <section class="lux-section impact-hub" aria-label="{{ __('site.impact.hub_eyebrow') }}">
+    <section class="lux-section impact-hub" aria-label="{{ __('site.impact.hub_title') }}">
         <div class="container">
             <div class="row g-4 g-lg-4">
                 @foreach($hubCards as $i => $card)

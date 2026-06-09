@@ -16,8 +16,7 @@
 
             @if(($impacts ?? collect())->isNotEmpty())
                 <div class="impact-detail__block">
-                    <div class="lux-section-head text-center mb-4 mb-lg-5">
-                        <p class="lux-section-head__eyebrow">{{ __('site.impact.empower_metrics_eyebrow') }}</p>
+                    <div class="lux-section-head lux-section-head--solo text-center mb-4 mb-lg-5">
                         <h2 class="lux-section-head__title">{{ __('site.impact.empower_metrics_title') }}</h2>
                     </div>
                     <div class="row g-4">

@@ -23,8 +23,7 @@
     @if(($factoryGallery ?? collect())->isNotEmpty())
         <section class="lux-section factory-gallery" aria-labelledby="factory-gallery-title">
             <div class="container">
-                <div class="text-center mb-4 mb-lg-5">
-                    <p class="lux-section-head__eyebrow mb-2">{{ __('site.factory.gallery_eyebrow') }}</p>
+                <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
                     <h2 id="factory-gallery-title" class="lux-section-head__title mb-0">{{ __('site.factory.gallery_title') }}</h2>
                 </div>
 
@@ -59,8 +58,7 @@
     @if(($services ?? collect())->isNotEmpty())
         <section class="lux-section factory-services grey-bg">
             <div class="container">
-                <div class="lux-section-head text-center mb-4 mb-lg-5">
-                    <p class="lux-section-head__eyebrow">{{ __('site.factory.services_eyebrow') }}</p>
+                <div class="lux-section-head lux-section-head--solo text-center mb-4 mb-lg-5">
                     <h2 class="lux-section-head__title">{{ __('site.nav.expertise') }}</h2>
                 </div>
                 <div class="row g-4">

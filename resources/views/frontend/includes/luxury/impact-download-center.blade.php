@@ -4,8 +4,7 @@
 
 <section class="lux-downloads" aria-labelledby="lux-downloads-heading">
     <div class="container">
-        <div class="lux-section-head text-center">
-            <p class="lux-section-head__eyebrow">Data for partners & advocates</p>
+        <div class="lux-section-head lux-section-head--solo text-center">
             <h2 id="lux-downloads-heading" class="lux-section-head__title">{{ __('site.impact.downloads_title') }}</h2>
         </div>
         <div class="row g-4 justify-content-center">

@@ -33,8 +33,7 @@
 
 <section class="lux-section factory-impact grey-bg" aria-labelledby="factory-impact-title">
     <div class="container">
-        <div class="text-center mb-4 mb-lg-5">
-            <p class="lux-section-head__eyebrow mb-2">{{ __('site.factory.impact_eyebrow') }}</p>
+        <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
             <h2 id="factory-impact-title" class="lux-section-head__title mb-3">{{ __('site.factory.impact_title') }}</h2>
             <p class="lux-lead mb-0 mx-auto" style="max-width: 42rem;">{{ __('site.factory.impact_lead') }}</p>
         </div>
@@ -55,8 +54,7 @@
 
         <div class="factory-impact__journey lux-card">
             <div class="row g-4 align-items-center">
-                <div class="col-lg-5">
-                    <p class="lux-section-head__eyebrow mb-2">{{ __('site.impact.artisan_journey') }}</p>
+                <div class="col-lg-5 lux-section-head lux-section-head--solo">
                     <h3 class="factory-impact__journey-title">{{ __('site.factory.journey_title') }}</h3>
                     <p class="factory-impact__journey-lead mb-0">{{ __('site.factory.journey_lead') }}</p>
                 </div>

@@ -13,8 +13,7 @@
 <section class="lux-community {{ $mapOnly ? 'lux-community--map-only' : '' }}" aria-labelledby="lux-community-heading">
     <div class="container">
         @unless($mapOnly)
-            <div class="lux-section-head text-center mb-4">
-                <p class="lux-section-head__eyebrow">Beyond the factory floor</p>
+            <div class="lux-section-head lux-section-head--solo text-center mb-4">
                 <h2 id="lux-community-heading" class="lux-section-head__title">{{ __('site.impact.community_title') }}</h2>
             </div>
         @endunless
@@ -30,8 +29,7 @@
             @endunless
             <div class="{{ $mapOnly ? 'col-12' : 'col-lg-7' }}">
                 @if($mapOnly)
-                    <div class="lux-section-head text-center mb-4">
-                        <p class="lux-section-head__eyebrow">{{ __('site.impact.community_map_eyebrow') }}</p>
+                    <div class="lux-section-head lux-section-head--solo text-center mb-4">
                         <h2 id="lux-community-heading" class="lux-section-head__title">{{ __('site.impact.community_map_title') }}</h2>
                     </div>
                 @endif

@@ -54,8 +54,7 @@
 <section class="lux-section home-craft-showcase" aria-labelledby="home-craft-showcase-title">
     <div class="container">
         <div class="row align-items-end justify-content-between g-3 mb-4 mb-lg-5">
-            <div class="col-lg-7">
-                <p class="lux-section-head__eyebrow mb-2">{{ __('site.home.craft_eyebrow') }}</p>
+            <div class="col-lg-7 lux-section-head lux-section-head--solo">
                 <h2 id="home-craft-showcase-title" class="lux-section-head__title mb-2">{{ __('site.home.craft_title') }}</h2>
                 <p class="home-craft-showcase__lead mb-0">{{ __('site.home.craft_lead') }}</p>
             </div>

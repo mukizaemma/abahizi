@@ -65,9 +65,8 @@
             </div>
 
             <div class="contact-form-zone">
-                <div class="contact-form-zone__intro text-center">
-                    <p class="lux-section-head__eyebrow mb-2">Send an inquiry</p>
-                    <h2 class="contact-form-zone__title">Tell us what you need</h2>
+                <div class="contact-form-zone__intro text-center lux-section-head lux-section-head--solo">
+                    <h2 class="contact-form-zone__title lux-section-head__title">Tell us what you need</h2>
                     <p class="contact-page-lead text-muted mb-0 mx-auto">Fill in your details, choose WhatsApp or email, then send your message in the app that opens. We only save your inquiry after you confirm it was sent.</p>
                 </div>
 
@@ -156,9 +155,8 @@
             </div>
 
             <div class="contact-map-zone">
-                <div class="contact-map-zone__head text-center">
-                    <p class="lux-section-head__eyebrow mb-2">Find us</p>
-                    <h2 class="contact-map-zone__title">Masoro factory &amp; community</h2>
+                <div class="contact-map-zone__head text-center lux-section-head lux-section-head--solo">
+                    <h2 class="contact-map-zone__title lux-section-head__title">Masoro factory &amp; community</h2>
                     <p class="contact-map-zone__lead text-muted mb-0">Visit our workshop in Rulindo District — partnerships, tours, and inquiries welcome.</p>
                 </div>
                 <div class="contact-map-zone__inner">

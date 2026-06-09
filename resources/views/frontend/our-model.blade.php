@@ -17,7 +17,6 @@
                         <header class="page-standalone-card__head">
                             <span class="page-standalone-card__icon" aria-hidden="true"><i class="flaticon-giving"></i></span>
                             <div>
-                                <p class="page-standalone-card__eyebrow">How change happens</p>
                                 <h2 class="page-standalone-card__title mb-0">Our model</h2>
                             </div>
                         </header>
