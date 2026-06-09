@@ -7,7 +7,7 @@
     $steps = [
         ['title' => 'Brief & design', 'desc' => 'Share your specs, materials, and timeline—we align on scope and sampling.'],
         ['title' => 'Sampling', 'desc' => 'Prototype and refine until the product meets your quality standards.'],
-        ['title' => 'Production', 'desc' => 'Lean CMT flow with artisan detailing at every stage of assembly.'],
+        ['title' => 'Production', 'desc' => 'Lean CMT flow with factory employee detailing at every stage of assembly.'],
         ['title' => 'Quality & delivery', 'desc' => 'Multi-point inspection before your order ships to market.'],
     ];
 @endphp

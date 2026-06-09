@@ -7,7 +7,7 @@
     @include('frontend.includes.page-header', [
         'pageKey' => 'factory',
         'title' => __('site.manufacturing.title'),
-        'caption' => 'CMT handbag manufacturing with lean discipline and artisan excellence in Masoro, Rwanda.',
+        'caption' => 'CMT handbag manufacturing with lean discipline and factory employee excellence in Masoro, Rwanda.',
     ])
 
     <section class="pt-60 pb-30 grey-bg">
@@ -15,7 +15,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center">
                     <p class="lux-lead mb-0">
-                        {{ strip_tags(html_entity_decode($about->factory_description ?? 'Abahizi Rwanda is a mechanized CMT factory—not a charity workshop. We deliver premium handbags and accessories for global brands with lean operations, rigorous QA, and zero supply-chain compromise on ethics.')) }}
+                        {{ strip_tags(html_entity_decode($about->factory_description ?? 'Abahizi CBC is a mechanized CMT factory—not a charity workshop. We deliver premium handbags and accessories for global brands with lean operations, rigorous QA, and zero supply-chain compromise on ethics.')) }}
                     </p>
                 </div>
             </div>

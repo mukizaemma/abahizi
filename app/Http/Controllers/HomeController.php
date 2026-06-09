@@ -603,17 +603,6 @@ public function gallery(){
             $data->hero_poster = 'page-headers/' . basename($path);
         }
 
-        // Allow password change only for this specific admin account
-        if ((Auth::user()->email ?? null) === 'admin@iremetech.com' && $request->filled('new_password')) {
-            $request->validate([
-                'new_password' => ['required', 'string', 'min:8', 'confirmed'],
-            ]);
-
-            $user = Auth::user();
-            $user->password = Hash::make($request->input('new_password'));
-            $user->save();
-        }
-
         $data->save();
 
         return redirect()->back()->with('success', 'Setting has been updated successfully');

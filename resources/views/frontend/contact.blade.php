@@ -168,7 +168,7 @@
                                 {!! $mapIframeHtml !!}
                             </div>
                         @else
-                            <iframe src="{{ $resolvedMapSrc }}" width="100%" height="100%" class="contact-map-wrap__iframe" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Abahizi Rwanda location map"></iframe>
+                            <iframe src="{{ $resolvedMapSrc }}" width="100%" height="100%" class="contact-map-wrap__iframe" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Abahizi CBC location map"></iframe>
                         @endif
                     </div>
                     <div class="contact-map-caption">

@@ -13,7 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>@yield('title', 'Dashboard') — Abahizi Rwanda</title>
+        <title>@yield('title', 'Dashboard') — Abahizi CBC</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family={{ $googleFontParam }}:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -42,7 +42,7 @@
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand ps-3" href="{{ route('redirects') }}">Abahizi Rwanda</a>
+            <a class="navbar-brand ps-3" href="{{ route('redirects') }}">Abahizi CBC</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" type="button" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>
 
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0" action="#" onsubmit="return false;">
@@ -59,6 +59,9 @@
                         <span class="d-none d-lg-inline">{{ Auth::user()->name ?? 'Admin' }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminUserDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('admin.profile.edit') }}">My profile</a>
+                        </li>
                         <li>
                             <a class="dropdown-item" href="{{ route('home') }}" target="_blank" rel="noopener">View site</a>
                         </li>

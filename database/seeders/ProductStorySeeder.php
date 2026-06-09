@@ -29,9 +29,9 @@ class ProductStorySeeder extends Seeder
         }
 
         $paragraphs = [
-            'Abahizi Rwanda employs over 268 local full-time artisans, 90% of which are women, and 77% are parents. The majority of the workforce are mothers, daughters, sisters, and have worked at Abahizi Rwanda for over three years.',
-            'Our products are hand made by exceptionally skilled artisans. This makes every Abahizi Rwanda product a hand-crafted treasure. Each of our bags represents the skills of a gifted artisan in Masoro, Rwanda.',
-            'We provide all of our artisans with full benefits. Employees receive health insurance for themselves and their entire families, paid maternity leave, leave, sick days, and vacation days.',
+            'Abahizi CBC employs over 268 local full-time factory employees, 90% of which are women, and 77% are parents. The majority of the workforce are mothers, daughters, sisters, and have worked at Abahizi CBC for over three years.',
+            'Our products are hand made by exceptionally skilled factory employees. This makes every Abahizi CBC product a hand-crafted treasure. Each of our bags represents the skills of a gifted factory employee in Masoro, Rwanda.',
+            'We provide all of our factory employees with full benefits. Employees receive health insurance for themselves and their entire families, paid maternity leave, leave, sick days, and vacation days.',
             'Other wide range support includes life skills training programs that equip employees with health education, financial literacy, counseling, leadership training, and English classes.',
             'Our social enterprise approach to business creates economic and social good for everyone we touch: our business, our employees, and our community.',
         ];

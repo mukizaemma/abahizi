@@ -40,7 +40,7 @@
                             </div>
                         @elseif(!empty($about->image))
                             <div class="page-standalone-media__frame">
-                                <img src="{{ asset('storage/images/' . $about->image) }}" alt="Abahizi Rwanda" class="page-standalone-media__img page-standalone-media__img--cover">
+                                <img src="{{ asset('storage/images/' . $about->image) }}" alt="Abahizi CBC" class="page-standalone-media__img page-standalone-media__img--cover">
                             </div>
                         @else
                             <div class="page-standalone-media__placeholder d-flex align-items-center justify-content-center text-center p-4">

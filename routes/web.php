@@ -258,6 +258,9 @@ Route::middleware(['auth', 'admin.role'
     Route::post('/admin/users/{user}', [App\Http\Controllers\UserAdminController::class, 'update'])->name('admin.users.update');
     Route::get('/admin/users/{user}/delete', [App\Http\Controllers\UserAdminController::class, 'destroy'])->name('admin.users.destroy');
 
+    Route::get('/admin/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::post('/admin/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('admin.profile.update');
+
 });
 
 

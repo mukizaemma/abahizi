@@ -46,7 +46,7 @@
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <label for="projectinput1">About Donations at Abahizi Rwanda</label>
+                                                    <label for="projectinput1">About Donations at Abahizi CBC</label>
                                                     <textarea id="background" rows="10" class="form-control" name="donations" data-editor="rich">{!!$data->donations!!}</textarea>
                                                 </div>
                                             </div>

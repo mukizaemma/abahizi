@@ -13,7 +13,7 @@
 
     $intro = $plainText($about->solution_statement ?? '');
     if ($intro === '') {
-        $intro = 'Abahizi Rwanda is a full-service bag manufacturing partner in Masoro—combining export-ready production with a workforce invested in quality, consistency, and long-term collaboration.';
+        $intro = 'Abahizi CBC is a full-service bag manufacturing partner in Masoro—combining export-ready production with a workforce invested in quality, consistency, and long-term collaboration.';
     } else {
         $intro = \Illuminate\Support\Str::limit($intro, 320, '…');
     }
@@ -21,7 +21,7 @@
     $reasons = [
         ['icon' => 'fa-ruler-combined', 'title' => 'Custom bag development', 'desc' => 'Totes, crossbody bags, pouches, and embellished pieces built to your materials, hardware, and brand specs.'],
         ['icon' => 'fa-industry', 'title' => 'Scalable CMT production', 'desc' => 'Lean manufacturing from sampling through bulk orders—with multi-point quality checks before export.'],
-        ['icon' => 'fa-gem', 'title' => 'Artisan craftsmanship', 'desc' => 'Hand stitching, leather work, beading, and finishing by a skilled, full-time production team.'],
+        ['icon' => 'fa-gem', 'title' => 'Factory employee craftsmanship', 'desc' => 'Hand stitching, leather work, beading, and finishing by a skilled, full-time production team.'],
         ['icon' => 'fa-handshake', 'title' => 'Reliable partnership', 'desc' => 'Clear timelines, responsive communication, and a factory team focused on meeting partner expectations.'],
         ['icon' => 'fa-people-group', 'title' => 'Empowered workforce', 'desc' => 'Stable employment, skills training, and community support that strengthen retention and workmanship.'],
         ['icon' => 'fa-earth-africa', 'title' => 'Made in Rwanda', 'desc' => 'Ethical production rooted in Masoro—delivering quality bags for regional and global markets.'],

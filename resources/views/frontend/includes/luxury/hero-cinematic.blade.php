@@ -37,7 +37,7 @@
 
 <section
     class="lux-hero lux-hero--minimal lux-hero--slides"
-    aria-label="Abahizi Rwanda"
+    aria-label="Abahizi CBC"
     @if(! $useVideo && $heroSlides->count() > 1)
         data-lux-hero-slides
         data-lux-hero-interval="9000"

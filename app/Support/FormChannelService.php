@@ -109,7 +109,7 @@ class FormChannelService
     {
         if ($formType === 'order') {
             $lines = [
-                'Product order request (Abahizi Rwanda website)',
+                'Product order request (Abahizi CBC website)',
                 '',
                 'Name: ' . trim((string) ($payload['full_name'] ?? '')),
                 'Phone: ' . trim((string) ($payload['phone'] ?? '')),
@@ -133,7 +133,7 @@ class FormChannelService
 
         if ($formType === 'contact') {
             $lines = [
-                'General inquiry (Abahizi Rwanda website)',
+                'General inquiry (Abahizi CBC website)',
                 '',
                 'Name: ' . trim((string) ($payload['names'] ?? $payload['full_name'] ?? '')),
                 'Phone: ' . trim((string) ($payload['phone'] ?? '')),
@@ -160,7 +160,7 @@ class FormChannelService
         }
 
         $lines = [
-            'Partnership / collaboration inquiry (Abahizi Rwanda website)',
+            'Partnership / collaboration inquiry (Abahizi CBC website)',
             '',
             'Name: ' . trim((string) ($payload['full_name'] ?? '')),
         ];

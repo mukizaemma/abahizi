@@ -77,22 +77,6 @@
                                                 <img src="{{ asset('storage/images') . $data->logo }}" alt="Logo" width="130" class="mt-2 rounded border p-1 bg-white">
                                             @endif
                                         </div>
-
-                                        @if ((Auth::user()->email ?? null) === 'admin@iremetech.com')
-                                            <div class="col-12 mt-2">
-                                                <hr>
-                                                <h6 class="mb-1">Change admin password</h6>
-                                                <small class="text-muted">Only available for admin@iremetech.com</small>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label class="form-label">New Password</label>
-                                                <input type="password" class="form-control" name="new_password" autocomplete="new-password" placeholder="Enter new password">
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label class="form-label">Confirm New Password</label>
-                                                <input type="password" class="form-control" name="new_password_confirmation" autocomplete="new-password" placeholder="Confirm new password">
-                                            </div>
-                                        @endif
                                     </div>
                                 </div>
 

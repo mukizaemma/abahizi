@@ -19,7 +19,7 @@
             if (!empty($img->image)) {
                 $craftImages->push([
                     'url' => asset('storage/images/gallery/' . $img->image),
-                    'alt' => $img->caption ?? 'Abahizi Rwanda craftsmanship',
+                    'alt' => $img->caption ?? 'Abahizi CBC craftsmanship',
                     'link' => route('ourFactory'),
                     'placeholder' => false,
                 ]);
@@ -30,7 +30,7 @@
     if ($craftImages->count() < 6 && !empty($about->factory_services_image ?? null)) {
         $craftImages->push([
             'url' => asset('storage/images/' . $about->factory_services_image),
-            'alt' => 'Abahizi Rwanda factory',
+            'alt' => 'Abahizi CBC factory',
             'link' => route('ourFactory'),
             'placeholder' => false,
         ]);

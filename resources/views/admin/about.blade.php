@@ -209,7 +209,7 @@
                                             <input type="text" class="form-control" name="handbags_exported" value="{{ $background->handbags_exported }}" placeholder="310,000+">
                                         </div>
                                         <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Full-Time Artisans</label>
+                                            <label class="form-label">Full-Time Factory Employees</label>
                                             <input type="text" class="form-control" name="artisans_count" value="{{ $background->artisans_count }}" placeholder="260+">
                                         </div>
                                         <div class="col-lg-6 col-xl-3">

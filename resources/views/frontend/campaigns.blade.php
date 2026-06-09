@@ -17,7 +17,7 @@
                     <h2 style="color: #444; font-size: 28px; margin-bottom: 15px;">💛 Why Your Support Matters</h2>
                     <p style="font-size: 16px; color: #333; line-height: 1.7; margin-bottom: 20px;">
                         Teenage pregnancy has left many girls in our communities raising children alone, without skills or support. 
-                        Each program under <strong>Abahizi Rwanda-</strong> equips single teen mothers with practical skills — from tailoring to childcare and counseling — helping them regain confidence, earn a sustainable income, and raise healthy children.
+                        Each program under <strong>Abahizi CBC-</strong> equips single teen mothers with practical skills — from tailoring to childcare and counseling — helping them regain confidence, earn a sustainable income, and raise healthy children.
                     </p>
                     <p style="font-size: 16px; color: #333; line-height: 1.7; margin-bottom: 20px;">
                         <strong>Your donation or partnership helps provide:</strong> quality training, tools, materials, and psychosocial support. 

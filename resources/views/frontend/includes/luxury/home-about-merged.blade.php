@@ -7,7 +7,7 @@
         '…'
     );
     $solutionText = \Illuminate\Support\Str::limit(
-        strip_tags(html_entity_decode($about->solution_statement ?? 'Abahizi Rwanda bridges this gap—combining premium bag manufacturing with holistic support for employees and the communities we serve.')),
+        strip_tags(html_entity_decode($about->solution_statement ?? 'Abahizi CBC bridges this gap—combining premium bag manufacturing with holistic support for employees and the communities we serve.')),
         220,
         '…'
     );

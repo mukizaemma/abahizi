@@ -20,7 +20,7 @@
                     <div class="lux-journey__placeholder" aria-hidden="true"></div>
                 </div>
                 <div class="lux-journey__content">
-                    <h3 class="lux-journey__name">Artisan leadership story</h3>
+                    <h3 class="lux-journey__name">Factory employee leadership story</h3>
                     <p class="lux-journey__role text-muted">From vocational training to employee-owner</p>
                     <ol class="lux-journey__milestones">
                         @foreach($defaultMilestones as $milestone)

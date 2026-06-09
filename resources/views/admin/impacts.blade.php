@@ -19,7 +19,7 @@
             <div class="container-fluid px-4">
                 {{-- <h1 class="mt-4">Dashboard</h1> --}}
                 <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">Abahizi Rwanda Impacts</li>
+                    <li class="breadcrumb-item active">Abahizi CBC Impacts</li>
                 </ol>
                 <div class="row">
                     @if(session()->has('success'))
@@ -109,7 +109,7 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="impact_value">Impact Value</label>
-                                                            <input type="text" class="form-control @error('value') is-invalid @enderror" id="impact_value" name="value" value="{{ old('value') }}" placeholder="e.g. 270+ artisans">
+                                                            <input type="text" class="form-control @error('value') is-invalid @enderror" id="impact_value" name="value" value="{{ old('value') }}" placeholder="e.g. 270+ factory employees">
                                                             @error('value')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>

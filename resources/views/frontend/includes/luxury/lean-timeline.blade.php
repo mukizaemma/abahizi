@@ -2,7 +2,7 @@
     $steps = [
         ['title' => 'Material Sourcing & Inspection', 'desc' => 'Ethical sourcing with rigorous incoming quality checks.'],
         ['title' => 'Precision Cutting', 'desc' => 'Mechanized cutting for consistency, waste reduction, and scale.'],
-        ['title' => 'Hand-Beading & Embellishments', 'desc' => 'Artisan detailing that elevates every premium piece.'],
+        ['title' => 'Hand-Beading & Embellishments', 'desc' => 'Factory employee detailing that elevates every premium piece.'],
         ['title' => 'Assembly & Stitching', 'desc' => 'CMT assembly combining lean flow with master craftsmanship.'],
         ['title' => 'Rigorous Quality Assurance', 'desc' => 'Multi-point inspection before export to global partners.'],
     ];

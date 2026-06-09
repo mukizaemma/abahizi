@@ -123,7 +123,7 @@
                     <div class="col-xl-2 col-lg-6 col-md-4 col-7">
                         <div class="tp-header-3__logo">
                             <a href="{{route('home')}}">
-                                <img src="{{asset('storage\images').($setting->logo ?? '')}}" alt="{{ $setting->company ?? 'Abahizi Rwanda' }}" class="site-header__logo-img" width="auto" height="72">
+                                <img src="{{asset('storage\images').($setting->logo ?? '')}}" alt="{{ $setting->company ?? 'Abahizi CBC' }}" class="site-header__logo-img" width="auto" height="72">
                             </a>
                         </div>
                     </div>
@@ -193,9 +193,9 @@
                     <div class="col-12 col-lg-4 site-footer__col">
                         <a href="{{ route('home') }}" class="site-footer__logo-link d-inline-block">
                             @if(!empty($setting->logo))
-                                <img src="{{ asset('storage/images' . $setting->logo) }}" alt="{{ $setting->company ?? 'Abahizi Rwanda' }}" class="site-footer__logo" height="88" width="auto">
+                                <img src="{{ asset('storage/images' . $setting->logo) }}" alt="{{ $setting->company ?? 'Abahizi CBC' }}" class="site-footer__logo" height="88" width="auto">
                             @else
-                                <span class="site-footer__wordmark h4 text-white mb-0">{{ $setting->company ?? 'Abahizi Rwanda' }}</span>
+                                <span class="site-footer__wordmark h4 text-white mb-0">{{ $setting->company ?? 'Abahizi CBC' }}</span>
                             @endif
                         </a>
                         <p class="site-footer__tagline mt-3 mb-0">{{ __('site.footer.tagline') }}</p>
@@ -269,7 +269,7 @@
             <div class="container py-3 py-md-4">
                 <div class="row align-items-center justify-content-between g-2">
                     <div class="col-12 col-md-auto text-center text-md-start">
-                        <span class="site-footer__copy">&copy; Abahizi Rwanda <span id="footer-year"></span></span>
+                        <span class="site-footer__copy">&copy; Abahizi CBC <span id="footer-year"></span></span>
                         <span class="site-footer__copy-sep d-none d-md-inline">·</span>
                         <span class="site-footer__credit">Site by <a href="https://iremetech.com" target="_blank" rel="noopener noreferrer">Ireme Technologies</a></span>
                     </div>

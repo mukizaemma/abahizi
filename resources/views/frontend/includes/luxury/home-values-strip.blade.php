@@ -1,7 +1,7 @@
 @php
     $values = [
         ['icon' => 'fa-bag-shopping', 'title' => 'Custom bag manufacturing', 'desc' => 'Handbags, leather goods, and accessories tailored to your specifications.'],
-        ['icon' => 'fa-hands-holding-circle', 'title' => 'Artisan-led production', 'desc' => 'Skilled women artisans bring precision stitching, beading, and finishing to every order.'],
+        ['icon' => 'fa-hands-holding-circle', 'title' => 'Factory employee-led production', 'desc' => 'Skilled women factory employees bring precision stitching, beading, and finishing to every order.'],
         ['icon' => 'fa-people-group', 'title' => 'Community empowerment', 'desc' => 'Stable jobs, training, and support programs that strengthen families across Rwanda.'],
         ['icon' => 'fa-globe-africa', 'title' => 'Export-ready quality', 'desc' => 'Lean processes and rigorous QC so your products meet international standards.'],
     ];

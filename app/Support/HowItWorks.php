@@ -234,7 +234,7 @@ class HowItWorks
             ],
             [
                 'title' => 'Production',
-                'desc' => 'Once approved, our artisans produce at scale with precision and consistency.',
+                'desc' => 'Once approved, our factory employees produce at scale with precision and consistency.',
             ],
             [
                 'title' => 'Quality control & delivery',
