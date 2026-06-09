@@ -43,14 +43,12 @@
                     </p>
                 </article>
 
-                @if(!empty($navProgramOurImpact))
-                    <a
-                        class="tp-btn programs-dual-cta__impact-btn"
-                        href="{{ route('programShow', ['slug' => $navProgramOurImpact->slug]) }}"
-                    >
-                        Our Impacts <span aria-hidden="true">→</span>
-                    </a>
-                @endif
+                <a
+                    class="tp-btn programs-dual-cta__impact-btn"
+                    href="{{ route('impactPage') }}"
+                >
+                    {{ __('site.nav.impact') }} <span aria-hidden="true">→</span>
+                </a>
             </div>
         </div>
     </div>

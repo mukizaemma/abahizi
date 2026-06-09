@@ -40,7 +40,7 @@
                     <p class="text-muted mb-4" style="max-width: 860px; margin: 0 auto; font-size: 1.06rem; line-height: 1.8;">
                         We manufacture premium handbags and accessories tailored to each partner’s specifications — materials, hardware, finishing, and volumes. Share what you need and we’ll propose timelines and production options.
                     </p>
-                    <a href="{{ route('requestOrder') }}" class="tp-btn">Submit your requirements</a>
+                    <a href="{{ route('contacts') }}" class="tp-btn">Contact us about your requirements</a>
                 </div>
             @else
                 <form action="{{ route('ourProducts') }}" method="GET" class="shop-catalog-filters card border-0 shadow-sm mb-4 mb-lg-5 p-3 p-md-4 bg-white">

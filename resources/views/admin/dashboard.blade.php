@@ -17,7 +17,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
                     <h1>Recent messages</h1>
-                    <p class="text-muted mb-0">Contact form submissions from the website.</p>
+                        <p class="text-muted mb-0">Contact form submissions from the website — includes preferred WhatsApp or email channel.</p>
                 </div>
 
                 <div class="card mb-4">
@@ -34,6 +34,8 @@
                                         <th scope="col">Date</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Email</th>
+                                        <th scope="col">Phone</th>
+                                        <th scope="col">Preferred channel</th>
                                         <th scope="col">Message</th>
                                         <th scope="col" class="text-end">Actions</th>
                                     </tr>
@@ -45,6 +47,16 @@
                                             <td><span class="text-nowrap">{{ $rs->created_at }}</span></td>
                                             <td>{{ $rs->names }}</td>
                                             <td><a href="mailto:{{ $rs->email }}">{{ $rs->email }}</a></td>
+                                            <td>{{ $rs->phone ?? '—' }}</td>
+                                            <td>
+                                                @if($rs->submission_channel === 'whatsapp')
+                                                    <span class="badge bg-success-subtle text-success border">WhatsApp</span>
+                                                @elseif($rs->submission_channel === 'email')
+                                                    <span class="badge bg-primary-subtle text-primary border">Email</span>
+                                                @else
+                                                    <span class="text-muted">—</span>
+                                                @endif
+                                            </td>
                                             <td><span class="cell-clamp d-inline-block" title="{{ $rs->message }}">{{ $rs->message }}</span></td>
                                             <td class="text-end">
                                                 <div class="btn-group btn-group-sm" role="group">
@@ -54,7 +66,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="border-0">
+                                            <td colspan="8" class="border-0">
                                                 <div class="admin-empty-state">
                                                     <i class="fas fa-inbox d-block"></i>
                                                     <p class="mb-0">No messages yet. They will appear here when visitors use the contact form.</p>

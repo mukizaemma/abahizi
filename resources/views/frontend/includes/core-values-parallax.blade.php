@@ -53,7 +53,7 @@
 
             @if($showCvCta)
                 <div class="home-core-values-cta-wrap text-center">
-                    <a href="{{ route('getInvolved') }}" class="tp-btn home-core-values-cta-btn">Get involved</a>
+                    <a href="{{ route('contacts') }}" class="tp-btn home-core-values-cta-btn">{{ __('site.nav.contact') }}</a>
                 </div>
             @endif
         </div>

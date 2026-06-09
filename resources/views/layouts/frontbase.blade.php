@@ -131,40 +131,29 @@
                         <div class="tp-header-3__main-menu">
                             <nav class="tp-main-menu-content">
                                 <ul>
-                                    <li><a href="{{ route('home') }}">Home</a></li>
+                                    <li><a href="{{ route('home') }}">{{ __('site.nav.home') }}</a></li>
                                     <li class="has-dropdown">
-                                        <a href="{{ route('ourMission') }}">Our Story</a>
+                                        <a href="{{ route('ourMission') }}">{{ __('site.nav.about_us') }}</a>
                                         <ul class="submenu tp-submenu">
-                                            <li><a href="{{ route('ourMission') }}">Mission &amp; Vision</a></li>
-                                            <li><a href="{{ route('ourModel') }}">The B-Corp Journey</a></li>
-                                            <li><a href="{{ route('ourApproach') }}">Employee Ownership</a></li>
-                                            <li><a href="{{ route('team') }}">Our Team</a></li>
-                                            <li><a href="{{ route('testimonials') }}">Testimonials</a></li>
+                                            <li><a href="{{ route('ourMission') }}">{{ __('site.nav.mission') }}</a></li>
+                                            <li><a href="{{ route('whatWeDo') }}">{{ __('site.nav.what_we_do') }}</a></li>
+                                            <li><a href="{{ route('team') }}">{{ __('site.nav.team') }}</a></li>
+                                            <li><a href="{{ route('testimonials') }}">{{ __('site.nav.testimonials') }}</a></li>
                                         </ul>
                                     </li>
-                                    <li class="has-dropdown">
-                                        <a href="{{ route('manufacturing') }}">Manufacturing Services</a>
-                                        <ul class="submenu tp-submenu">
-                                            <li><a href="{{ route('ourFactory') }}">CMT Factory</a></li>
-                                            <li><a href="{{ route('manufacturing') }}#lean">Lean Operations</a></li>
-                                            <li><a href="{{ route('ourServices') }}">Expertise &amp; Services</a></li>
-                                            @if(($setting->show_products_page ?? true))
-                                                <li><a href="{{ route('ourProducts') }}">Products</a></li>
-                                            @endif
-                                        </ul>
-                                    </li>
+                                    <li><a href="{{ route('ourFactory') }}">{{ __('site.nav.factory') }}</a></li>
                                     @if(($setting->show_products_page ?? true))
-                                        <li><a href="{{ route('ourProducts') }}">Products</a></li>
+                                        <li><a href="{{ route('ourProducts') }}">{{ __('site.nav.products') }}</a></li>
                                     @endif
                                     <li class="has-dropdown">
-                                        <a href="{{ route('impactPage') }}">Our Impact</a>
+                                        <a href="{{ route('impactPage') }}">{{ __('site.nav.impact') }}</a>
                                         <ul class="submenu tp-submenu">
-                                            <li><a href="{{ route('impactPage', ['tab' => 'empower']) }}">Empower Workers</a></li>
-                                            <li><a href="{{ route('impactPage', ['tab' => 'improve']) }}">Improve Community</a></li>
-                                            <li><a href="{{ route('impactReports') }}">Impact Reports</a></li>
+                                            <li><a href="{{ route('impactPage', ['tab' => 'empower']) }}">{{ __('site.nav.employee_empowerment') }}</a></li>
+                                            <li><a href="{{ route('impactPage', ['tab' => 'improve']) }}">{{ __('site.nav.community') }}</a></li>
+                                            <li><a href="{{ route('impactPage', ['tab' => 'reports']) }}">{{ __('site.nav.social_impact_reports') }}</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="{{ route('contacts') }}">Contact Us</a></li>
+                                    <li><a href="{{ route('contacts') }}">{{ __('site.nav.contact') }}</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -175,11 +164,7 @@
                                 <ul class="d-flex align-items-center justify-content-end">
                                     <li>
                                         <div class="tp-header-3__btn d-none d-md-block">
-                                            @if(($setting->accept_order_requests ?? true))
-                                                <a class="tp-btn" href="{{ route('requestOrder') }}">Enquiry</a>
-                                            @else
-                                                <a class="tp-btn" href="{{ route('contacts') }}">Contact Us</a>
-                                            @endif
+                                            <a class="tp-btn" href="{{ route('contacts') }}">{{ __('site.nav.contact') }}</a>
                                         </div>
                                     </li>  
                                     <li>
@@ -220,12 +205,12 @@
                     <div class="col-12 col-sm-6 col-lg-4 site-footer__col">
                         <h3 class="site-footer__heading">Explore</h3>
                         <ul class="site-footer__nav list-unstyled mb-0">
-                            <li><a href="{{ route('home') }}">Home</a></li>
-                            <li><a href="{{ route('ourMission') }}">Mission &amp; Vision</a></li>
-                            <li><a href="{{ route('manufacturing') }}">Manufacturing Services</a></li>
-                            <li><a href="{{ route('impactPage') }}">Our Impact</a></li>
-                            <li><a href="{{ route('impactReports') }}">Impact Reports</a></li>
-                            <li><a href="{{ route('contacts') }}">Contact Us</a></li>
+                            <li><a href="{{ route('home') }}">{{ __('site.nav.home') }}</a></li>
+                            <li><a href="{{ route('ourMission') }}">{{ __('site.nav.mission') }}</a></li>
+                            <li><a href="{{ route('ourFactory') }}">{{ __('site.nav.factory') }}</a></li>
+                            <li><a href="{{ route('impactPage') }}">{{ __('site.nav.impact') }}</a></li>
+                            <li><a href="{{ route('impactReports') }}">{{ __('site.nav.social_impact_reports') }}</a></li>
+                            <li><a href="{{ route('contacts') }}">{{ __('site.nav.contact') }}</a></li>
                         </ul>
                     </div>
 
@@ -271,12 +256,9 @@
 
                         <div class="site-footer__cta-block">
                             <div class="site-footer__cta-group">
-                                <a href="{{ route('requestOrder') }}" class="site-footer__btn site-footer__btn--order">
-                                    <i class="fas fa-clipboard-list" aria-hidden="true"></i>
-                                    Enquiry
-                                </a>
-                                <a href="{{ route('getInvolved') }}" class="site-footer__btn site-footer__btn--ghost">
-                                    Get involved
+                                <a href="{{ route('contacts') }}" class="site-footer__btn site-footer__btn--order">
+                                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                                    {{ __('site.nav.contact') }}
                                 </a>
                             </div>
                         </div>
@@ -296,7 +278,7 @@
                     <div class="col-12 col-md-auto text-center text-md-end">
                         <a href="{{ route('ourProducts') }}" class="site-footer__mini-link">Products</a>
                         <span class="site-footer__copy-sep">·</span>
-                        <a href="{{ route('requestOrder') }}" class="site-footer__mini-link">Order request</a>
+                        <a href="{{ route('contacts') }}" class="site-footer__mini-link">{{ __('site.nav.contact') }}</a>
                     </div>
                 </div>
             </div>

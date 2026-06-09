@@ -10,9 +10,8 @@
 
 <section class="lux-journey" aria-labelledby="lux-journey-heading">
     <div class="container">
-        <div class="lux-section-head">
-            <p class="lux-section-head__eyebrow">Stories that move markets</p>
-            <h2 id="lux-journey-heading" class="lux-section-head__title">{{ __('site.impact.artisan_journey') }}</h2>
+        <div class="lux-section-head mb-4">
+            <h2 id="lux-journey-heading" class="lux-section-head__title mb-0">{{ __('site.impact.artisan_journey') }}</h2>
         </div>
 
         @if($journeyProfiles->isEmpty())

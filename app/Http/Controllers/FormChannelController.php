@@ -25,7 +25,7 @@ class FormChannelController extends Controller
 
         $validated = $request->validate([
             'submission_channel' => ['required', 'in:whatsapp,email'],
-            'form_type' => ['required', 'in:partnership,order'],
+            'form_type' => ['required', 'in:partnership,order,contact'],
         ]);
 
         $channel = $validated['submission_channel'];
@@ -43,9 +43,11 @@ class FormChannelController extends Controller
             ]);
         }
 
-        $payload = $formType === 'order'
-            ? $this->validateOrderPayload($request)
-            : $this->validatePartnershipPayload($request);
+        $payload = match ($formType) {
+            'order' => $this->validateOrderPayload($request),
+            'contact' => $this->validateContactPayload($request),
+            default => $this->validatePartnershipPayload($request),
+        };
 
         $openUrl = FormChannelService::openUrl($channel, $setting, $formType, $payload);
 
@@ -138,6 +140,52 @@ class FormChannelController extends Controller
             'product_slug' => ['nullable', 'string', 'max:255'],
             'product_reference' => ['nullable', 'string', 'max:255'],
         ]);
+
+        return $validated;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validateContactPayload(Request $request): array
+    {
+        $allowed = array_keys(FormChannelService::contactInterestLabels());
+
+        $validated = $request->validate([
+            'names' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:64'],
+            'email' => ['required', 'email', 'max:255'],
+            'organization' => ['nullable', 'string', 'max:255'],
+            'interests' => ['nullable', 'array'],
+            'interests.*' => ['string', 'in:' . implode(',', $allowed)],
+            'message' => ['required', 'string', 'min:10', 'max:20000'],
+            'product_reference' => ['nullable', 'string', 'max:255'],
+            'website' => ['nullable', 'max:0'],
+        ]);
+
+        $phoneDigits = preg_replace('/\D+/', '', (string) $validated['phone']);
+        if (strlen($phoneDigits) < 10) {
+            throw ValidationException::withMessages([
+                'phone' => 'Enter a valid phone number with at least 10 digits.',
+            ]);
+        }
+
+        if (FormChannelService::normalizeEmail($validated['email']) === null) {
+            throw ValidationException::withMessages([
+                'email' => 'Enter a valid email address.',
+            ]);
+        }
+
+        foreach (['names', 'organization', 'message'] as $field) {
+            $value = (string) ($validated[$field] ?? '');
+            if (FormChannelService::containsSpamLinks($value)) {
+                throw ValidationException::withMessages([
+                    $field => 'Please remove links from this field.',
+                ]);
+            }
+        }
+
+        $validated['interests'] = FormChannelService::formatContactInterests((array) $request->input('interests', []));
 
         return $validated;
     }

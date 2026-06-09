@@ -16,7 +16,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header mb-4">
                     <h1>Partnership inquiries</h1>
-                    <p class="text-muted mb-0">“Get involved” and contact forms — recorded only after the visitor sent via WhatsApp or email.</p>
+                    <p class="text-muted mb-0">Contact form submissions — recorded only after the visitor sent via WhatsApp or email.</p>
                 </div>
 
                 <div class="row g-3 mb-4">

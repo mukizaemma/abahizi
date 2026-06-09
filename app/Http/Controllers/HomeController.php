@@ -26,8 +26,6 @@ use App\Models\Testimony;
 use App\Models\Volunteer;
 use App\Mail\ReplyMessage;
 use App\Models\Background;
-use App\Models\OrderRequest;
-use App\Models\PartnershipInquiry;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Service;
@@ -43,6 +41,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Controllers\Concerns\ValidatesFormChannelSubmission;
+use App\Support\FormChannelService;
 
 class HomeController extends Controller
 {
@@ -123,6 +122,10 @@ class HomeController extends Controller
                 ->get();
         }
 
+        $recentUpdates = Schema::hasTable('news')
+            ? News::query()->whereNotNull('published_at')->latest('published_at')->take(3)->get()
+            : collect();
+
         return view('frontend.home', [
             'background' =>$background,
             'programs' =>$programs,
@@ -135,6 +138,7 @@ class HomeController extends Controller
             'about' =>$about,
             'mission' =>$mission,
             'homeProducts' => $homeProducts,
+            'recentUpdates' => $recentUpdates,
         ]);
     }
 
@@ -290,29 +294,114 @@ public function gallery(){
 }
 
 
-    public function contacts(){
+    public function contacts(Request $request){
         $contact = Setting::firstOrEmpty();
         $programs = Program::latest()->get();
         $about = Background::firstOrEmpty();
-        return view('frontend.contact',['programs'=>$programs,'contact'=>$contact, 'about'=>$about]);
+        $product = null;
+        if ($request->filled('product') && Schema::hasTable('products')) {
+            $product = Product::query()->active()->where('slug', (string) $request->input('product'))->first();
+        }
+
+        return view('frontend.contact', [
+            'programs' => $programs,
+            'contact' => $contact,
+            'about' => $about,
+            'product' => $product,
+        ]);
     }
 
 
     public function sendMessage(Request $request){
+        $availability = FormChannelService::availability(Setting::firstOrEmpty());
+        if (! $availability['channels_ready']) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Submissions are unavailable until both a valid site email and WhatsApp number are configured in admin settings.']);
+        }
 
-        $validatedData = $request->validate([
-            'names' => 'required|max:255',
-            'email' => 'required|max:255',
-            'message' => 'required'
+        $ipKey = 'contact-message:ip:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($ipKey, 5)) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Too many attempts. Please wait a few minutes and try again.']);
+        }
+
+        RateLimiter::hit($ipKey, 10 * 60);
+
+        $channelGate = $this->validateFormChannelGate($request, 'contact');
+
+        $allowedInterests = array_keys(FormChannelService::contactInterestLabels());
+
+        $validated = $request->validate([
+            'names' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:64'],
+            'email' => ['required', 'email', 'max:255'],
+            'organization' => ['nullable', 'string', 'max:255'],
+            'interests' => ['nullable', 'array'],
+            'interests.*' => ['string', 'in:' . implode(',', $allowedInterests)],
+            'message' => ['required', 'string', 'min:10', 'max:20000'],
+            'product_reference' => ['nullable', 'string', 'max:255'],
+            'website' => ['nullable', 'max:0'],
+            'started_at' => ['nullable', 'integer'],
         ]);
-        $blog = Message::firstOrCreate(
-            [
-                'names' => $request->input('names'),
-                'email' => $request->input('email'),
-                'message' => $request->input('message'),
-            ]
-        );
-        return redirect()->back()->with('success', 'Your Message has been well submitted. We will get back to you soon');
+
+        $phoneDigits = preg_replace('/\D+/', '', (string) $validated['phone']);
+        if (strlen($phoneDigits) < 10) {
+            return back()
+                ->withInput()
+                ->withErrors(['phone' => 'Enter a valid phone number with at least 10 digits.']);
+        }
+
+        if (FormChannelService::normalizeEmail($validated['email']) === null) {
+            return back()
+                ->withInput()
+                ->withErrors(['email' => 'Enter a valid email address.']);
+        }
+
+        $startedAt = (int) ($request->input('started_at') ?? 0);
+        if ($startedAt > 0 && (time() - $startedAt) < 3) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Form submitted too quickly. Please review your details and try again.']);
+        }
+
+        foreach (['names', 'organization', 'message'] as $field) {
+            $value = (string) ($validated[$field] ?? '');
+            if (FormChannelService::containsSpamLinks($value)) {
+                return back()
+                    ->withInput()
+                    ->withErrors([$field => 'Please remove links from this field.']);
+            }
+        }
+
+        $interestsText = FormChannelService::formatContactInterests((array) $request->input('interests', []));
+        $storedMessage = trim($validated['message']);
+        $meta = [];
+        if (! empty($validated['organization'])) {
+            $meta[] = 'Organisation: ' . $validated['organization'];
+        }
+        if ($interestsText !== null) {
+            $meta[] = 'Topics: ' . $interestsText;
+        }
+        if (! empty($validated['product_reference'])) {
+            $meta[] = 'Product: ' . $validated['product_reference'];
+        }
+        if ($meta !== []) {
+            $storedMessage = implode("\n", $meta) . "\n\n" . $storedMessage;
+        }
+
+        Message::create([
+            'names' => $validated['names'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'message' => $storedMessage,
+            'submission_channel' => $channelGate['channel'],
+        ]);
+
+        return redirect()
+            ->route('contacts')
+            ->with('success', 'Thank you. We recorded your inquiry after you sent it via ' . FormChannelService::channelLabel($channelGate['channel']) . '. Our team will follow up shortly.');
     }
 
     public function webMessages(){
@@ -560,6 +649,11 @@ public function gallery(){
         return view('frontend.our-mission', compact('about', 'mission'));
     }
 
+    public function whatWeDo(){
+        $about = Background::firstOrEmpty();
+        return view('frontend.what-we-do', compact('about'));
+    }
+
     public function ourApproach(){
         $about = Background::firstOrEmpty();
         return view('frontend.our-approach', compact('about'));
@@ -644,187 +738,11 @@ public function gallery(){
 
     public function requestOrder(Request $request)
     {
-        $about = Background::firstOrEmpty();
-        $setting = Setting::firstOrEmpty();
-        if (Schema::hasColumn('settings', 'accept_order_requests') && !($setting->accept_order_requests ?? true)) {
-            return view('frontend.request-order', compact('about'))->with([
-                'product' => null,
-                'ordersClosed' => true,
-            ]);
-        }
-        $product = null;
-        if ($request->filled('product')) {
-            $product = Product::query()
-                ->active()
-                ->where('slug', (string) $request->input('product'))
-                ->first();
-        }
-
-        return view('frontend.request-order', compact('about', 'product'))->with(['ordersClosed' => false]);
-    }
-
-    public function storeOrderRequest(Request $request)
-    {
-        $setting = Setting::firstOrEmpty();
-        if (Schema::hasColumn('settings', 'accept_order_requests') && !($setting->accept_order_requests ?? true)) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Order requests are temporarily closed. Please contact us for urgent inquiries.']);
-        }
-
-        $ipKey = 'order-request:ip:' . $request->ip();
-        if (RateLimiter::tooManyAttempts($ipKey, 5)) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Too many attempts. Please wait a few minutes and try again.']);
-        }
-
-        RateLimiter::hit($ipKey, 10 * 60);
-
-        $channelGate = $this->validateFormChannelGate($request, 'order');
-
-        $validated = $request->validate([
-            'full_name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:64'],
-            'email' => ['required', 'email', 'max:255'],
-            'product_description' => ['required', 'string', 'max:20000'],
-            'product_slug' => ['nullable', 'string', 'max:255'],
-            'website' => ['nullable', 'max:0'],
-            'started_at' => ['nullable', 'integer'],
+        $params = array_filter([
+            'product' => $request->input('product'),
         ]);
 
-        $startedAt = (int) ($request->input('started_at') ?? 0);
-        if ($startedAt > 0 && (time() - $startedAt) < 3) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Form submitted too quickly. Please review your details and try again.']);
-        }
-
-        $productId = null;
-        $productReference = null;
-        if (! empty($validated['product_slug'])) {
-            $p = Product::query()->active()->where('slug', $validated['product_slug'])->first();
-            if ($p) {
-                $productId = $p->id;
-                $productReference = $p->title;
-            }
-        }
-
-        OrderRequest::create([
-            'full_name' => $validated['full_name'],
-            'phone' => $validated['phone'],
-            'email' => $validated['email'],
-            'product_description' => $validated['product_description'],
-            'product_id' => $productId,
-            'product_reference' => $productReference,
-            'submission_channel' => $channelGate['channel'],
-        ]);
-
-        return redirect()
-            ->route('requestOrder')
-            ->with('success', 'Thank you. We recorded your request after you sent it via ' . ($channelGate['channel'] === 'whatsapp' ? 'WhatsApp' : 'email') . '. Our team will follow up shortly.');
-    }
-
-    public function getInvolved()
-    {
-        $about = Background::firstOrEmpty();
-
-        return view('frontend.get-involved', compact('about'));
-    }
-
-    public function storePartnershipInquiry(Request $request)
-    {
-        $ipKey = 'partner-inquiry:ip:' . $request->ip();
-        if (RateLimiter::tooManyAttempts($ipKey, 5)) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Too many attempts. Please wait a few minutes and try again.']);
-        }
-
-        RateLimiter::hit($ipKey, 10 * 60);
-
-        $channelGate = $this->validateFormChannelGate($request, 'partnership');
-
-        $allowed = [
-            'training',
-            'equipment',
-            'fundraising',
-            'volunteering',
-            'sales_ambassador',
-            'wholesale',
-            'corporate',
-            'other',
-        ];
-
-        $validated = $request->validate([
-            'organization' => ['nullable', 'string', 'max:255'],
-            'full_name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:64'],
-            'email' => ['required', 'email', 'max:255'],
-            'interests' => ['nullable', 'array'],
-            'interests.*' => ['string', 'in:' . implode(',', $allowed)],
-            'message' => ['nullable', 'string', 'max:20000'],
-            'website' => ['nullable', 'max:0'], // honeypot: must stay empty
-            'started_at' => ['nullable', 'integer'],
-        ]);
-
-        $startedAt = (int) ($request->input('started_at') ?? 0);
-        if ($startedAt > 0 && (time() - $startedAt) < 3) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Form submitted too quickly. Please review your details and try again.']);
-        }
-
-        $spamPattern = '/https?:\/\/|www\./i';
-        foreach (['organization', 'full_name', 'message'] as $field) {
-            $value = (string) ($validated[$field] ?? '');
-            if ($value !== '' && preg_match($spamPattern, $value)) {
-                return back()
-                    ->withInput()
-                    ->withErrors([$field => 'Please remove links from this field.']);
-            }
-        }
-
-        if (empty($request->input('interests')) && ! $request->filled('message')) {
-            return back()
-                ->withInput()
-                ->withErrors(['interests' => 'Select at least one area of interest or write a message.']);
-        }
-
-        $labels = [
-            'training' => 'Skills development & training',
-            'equipment' => 'Equipment or materials',
-            'fundraising' => 'Fundraising or sponsorship',
-            'volunteering' => 'Volunteering',
-            'sales_ambassador' => 'Sales & ambassador programmes',
-            'wholesale' => 'Wholesale / bulk orders',
-            'corporate' => 'Corporate or institutional partnership',
-            'other' => 'Other',
-        ];
-
-        $raw = (array) $request->input('interests', []);
-        $picked = array_values(array_intersect($allowed, $raw));
-        $summaryParts = [];
-        foreach ($picked as $key) {
-            $summaryParts[] = $labels[$key] ?? $key;
-        }
-        $interestsText = $summaryParts !== [] ? implode(', ', $summaryParts) : null;
-
-        PartnershipInquiry::create([
-            'organization' => $validated['organization'] ?? null,
-            'full_name' => $validated['full_name'],
-            'phone' => $validated['phone'],
-            'email' => $validated['email'],
-            'interests' => $interestsText,
-            'message' => $validated['message'] ?? null,
-            'submission_channel' => $channelGate['channel'],
-        ]);
-
-        $redirectRoute = $request->input('form_source') === 'contact' ? 'contacts' : 'getInvolved';
-
-        return redirect()
-            ->route($redirectRoute)
-            ->with('success', 'Thank you. We recorded your inquiry after you sent it via ' . ($channelGate['channel'] === 'whatsapp' ? 'WhatsApp' : 'email') . '. Our team will respond shortly.');
+        return redirect()->route('contacts', $params);
     }
 
     public function impactReportsIndex()

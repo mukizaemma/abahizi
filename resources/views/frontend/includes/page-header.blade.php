@@ -1,6 +1,14 @@
 @php
     $headerTitle = $title ?? '';
     $headerCaption = $caption ?? ($setting->page_header_caption ?? null);
+    $headerClasses = 'tp-breadcrumb__area p-relative fix';
+    $headerClasses .= !empty($compact) ? ' tp-breadcrumb-height--compact' : ' tp-breadcrumb-height';
+    if (!empty($imageTop)) {
+        $headerClasses .= ' tp-breadcrumb__area--image-top';
+    }
+    if (!empty($hideShapes)) {
+        $headerClasses .= ' tp-breadcrumb__area--no-shapes';
+    }
 
     $headerImageUrl = null;
     if (!empty($image)) {
@@ -16,14 +24,16 @@
     }
 @endphp
 
-<div class="tp-breadcrumb__area p-relative fix {{ !empty($compact) ? 'tp-breadcrumb-height--compact' : 'tp-breadcrumb-height' }}"
+<div class="{{ $headerClasses }}"
     @if($headerImageUrl) data-background="{{ $headerImageUrl }}" @endif>
+    @empty($hideShapes)
     <div class="tp-breadcrumb__shape-1 z-index-5">
         <img src="{{ asset('assets/img/breadcrumb/breadcrumb-shape-1.png') }}" alt="">
     </div>
     <div class="tp-breadcrumb__shape-2 z-index-5">
         <img src="{{ asset('assets/img/breadcrumb/breadcrumb-shape-2.png') }}" alt="">
     </div>
+    @endempty
     <div class="container">
         <div class="row">
             <div class="col-12">

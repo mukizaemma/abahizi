@@ -19,6 +19,7 @@ Route::get('/locale/{locale}', [App\Http\Controllers\LocaleController::class, 's
 Route::get('/',[App\Http\Controllers\HomeController::class,'index'])->name('home');
 Route::get('/about-us',[App\Http\Controllers\HomeController::class,'backgroundDetails'])->name('backgroundDetails');
 Route::get('/about/mission',[App\Http\Controllers\HomeController::class,'ourMission'])->name('ourMission');
+Route::get('/about/what-we-do',[App\Http\Controllers\HomeController::class,'whatWeDo'])->name('whatWeDo');
 Route::get('/about/approach',[App\Http\Controllers\HomeController::class,'ourApproach'])->name('ourApproach');
 Route::get('/about/model',[App\Http\Controllers\HomeController::class,'ourModel'])->name('ourModel');
 Route::get('/about/factory',[App\Http\Controllers\HomeController::class,'ourFactory'])->name('ourFactory');
@@ -42,9 +43,13 @@ Route::get('/Messages',[App\Http\Controllers\HomeController::class,'messages'])-
 Route::get('/Gallery',[App\Http\Controllers\HomeController::class,'gallery'])->name('gallery');
 Route::get('/contacts',[App\Http\Controllers\HomeController::class,'contacts'])->name('contacts');
 Route::get('/request-order',[App\Http\Controllers\HomeController::class,'requestOrder'])->name('requestOrder');
-Route::post('/request-order',[App\Http\Controllers\HomeController::class,'storeOrderRequest'])->name('storeOrderRequest');
-Route::get('/get-involved',[App\Http\Controllers\HomeController::class,'getInvolved'])->name('getInvolved');
-Route::post('/get-involved',[App\Http\Controllers\HomeController::class,'storePartnershipInquiry'])->name('storePartnershipInquiry');
+Route::post('/request-order',[App\Http\Controllers\HomeController::class,'requestOrder'])->name('storeOrderRequest');
+Route::get('/get-involved', function () {
+    return redirect()->route('contacts', [], 301);
+})->name('getInvolved');
+Route::post('/get-involved', function () {
+    return redirect()->route('contacts')->with('info', 'Please use the contact form to submit your inquiry.');
+})->name('storePartnershipInquiry');
 Route::post('/form-channel/intent',[App\Http\Controllers\FormChannelController::class,'intent'])->name('formChannel.intent');
 Route::get('/handover',[App\Http\Controllers\HomeController::class,'handoverPage'])->name('handoverPage');
 Route::get('/testimonials',[App\Http\Controllers\HomeController::class,'testimonials'])->name('testimonials');

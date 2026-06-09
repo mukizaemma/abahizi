@@ -93,10 +93,11 @@ class FormChannelService
      */
     public static function buildSubject(string $formType, array $payload): string
     {
-        $name = trim((string) ($payload['full_name'] ?? 'Visitor'));
+        $name = trim((string) ($payload['full_name'] ?? $payload['names'] ?? 'Visitor'));
 
         return match ($formType) {
             'order' => 'Product order request — ' . $name,
+            'contact' => 'Contact inquiry — ' . $name,
             default => 'Partnership inquiry — ' . $name,
         };
     }
@@ -122,6 +123,34 @@ class FormChannelService
             $lines[] = '';
             $lines[] = 'Request details:';
             $lines[] = trim((string) ($payload['product_description'] ?? ''));
+
+            return implode("\n", $lines);
+        }
+
+        if ($formType === 'contact') {
+            $lines = [
+                'General inquiry (Abahizi Rwanda website)',
+                '',
+                'Name: ' . trim((string) ($payload['names'] ?? $payload['full_name'] ?? '')),
+                'Phone: ' . trim((string) ($payload['phone'] ?? '')),
+                'Email: ' . trim((string) ($payload['email'] ?? '')),
+            ];
+
+            if (! empty($payload['organization'])) {
+                $lines[] = 'Organisation: ' . trim((string) $payload['organization']);
+            }
+
+            if (! empty($payload['interests'])) {
+                $lines[] = 'Topics: ' . trim((string) $payload['interests']);
+            }
+
+            if (! empty($payload['product_reference'])) {
+                $lines[] = 'Regarding product: ' . trim((string) $payload['product_reference']);
+            }
+
+            $lines[] = '';
+            $lines[] = 'Message:';
+            $lines[] = trim((string) ($payload['message'] ?? ''));
 
             return implode("\n", $lines);
         }
@@ -159,5 +188,44 @@ class FormChannelService
             self::CHANNEL_EMAIL => 'Email',
             default => '—',
         };
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function contactInterestLabels(): array
+    {
+        return [
+            'manufacturing' => 'Custom bag manufacturing / bulk orders',
+            'partnership' => 'Partnership or collaboration',
+            'training' => 'Skills development & training',
+            'equipment' => 'Equipment or materials',
+            'fundraising' => 'Fundraising or sponsorship',
+            'volunteering' => 'Volunteering',
+            'wholesale' => 'Wholesale / bulk orders',
+            'corporate' => 'Corporate or institutional partnership',
+            'other' => 'Other',
+        ];
+    }
+
+    /**
+     * @param  array<int, string>  $raw
+     */
+    public static function formatContactInterests(array $raw): ?string
+    {
+        $labels = self::contactInterestLabels();
+        $allowed = array_keys($labels);
+        $picked = array_values(array_intersect($allowed, $raw));
+        $parts = [];
+        foreach ($picked as $key) {
+            $parts[] = $labels[$key] ?? $key;
+        }
+
+        return $parts !== [] ? implode(', ', $parts) : null;
+    }
+
+    public static function containsSpamLinks(string $value): bool
+    {
+        return $value !== '' && (bool) preg_match('/https?:\/\/|www\./i', $value);
     }
 }

@@ -22,11 +22,6 @@
                         <li>{{ $item }}</li>
                     @endforeach
                 </ul>
-                @if($navProgramOurImpact ?? null)
-                    <a href="{{ route('programShow', ['slug' => $navProgramOurImpact->slug]) }}" class="tp-btn mt-3">
-                        Explore programs <span aria-hidden="true">→</span>
-                    </a>
-                @endif
             </div>
             <div class="col-lg-7">
                 <div class="lux-community__map-card">

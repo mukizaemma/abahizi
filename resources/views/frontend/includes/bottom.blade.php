@@ -30,16 +30,14 @@
                     {{ $impactQuote }}
                     <span class="site-impact-quote__mark site-impact-quote__mark--end" aria-hidden="true">”</span>
                 </blockquote>
-                @if(!empty($navProgramOurImpact))
-                    <div class="site-impact-quote__actions">
-                        <a
-                            class="tp-btn site-impact-quote__btn"
-                            href="{{ route('programShow', ['slug' => $navProgramOurImpact->slug]) }}"
-                        >
-                            Our Impacts <span aria-hidden="true">→</span>
-                        </a>
-                    </div>
-                @endif
+                <div class="site-impact-quote__actions d-flex flex-wrap justify-content-center gap-3">
+                    <a class="tp-btn site-impact-quote__btn" href="{{ route('contacts') }}">
+                        {{ __('site.hero.cta_primary') }} <span aria-hidden="true">→</span>
+                    </a>
+                    <a class="tp-btn site-impact-quote__btn site-impact-quote__btn--ghost" href="{{ route('impactPage') }}">
+                        {{ __('site.nav.impact') }} <span aria-hidden="true">→</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

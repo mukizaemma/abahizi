@@ -276,6 +276,15 @@ body {
     }
 }
 
+.tp-breadcrumb__area--image-top {
+    background-position: center top;
+}
+
+.tp-breadcrumb__area--no-shapes .tp-breadcrumb__shape-1,
+.tp-breadcrumb__area--no-shapes .tp-breadcrumb__shape-2 {
+    display: none;
+}
+
 .tp-footer__area {
     background-color: #2c2c2c;
 }
@@ -446,6 +455,10 @@ body {
     line-height: 1.12;
     color: var(--brand-secondary, #2c2c2c);
     max-width: 14ch;
+}
+
+.home-programs-split__actions {
+    margin-top: 1.25rem;
 }
 
 .home-programs-split__lead {
