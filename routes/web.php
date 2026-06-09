@@ -252,6 +252,12 @@ Route::middleware(['auth', 'admin.role'
     Route::get('/order-requests', [App\Http\Controllers\InquiryAdminController::class, 'orderRequests'])->name('orderRequests.index');
     Route::get('/partnership-inquiries', [App\Http\Controllers\InquiryAdminController::class, 'partnershipInquiries'])->name('partnershipInquiries.index');
 
+    Route::get('/admin/users', [App\Http\Controllers\UserAdminController::class, 'index'])->name('admin.users.index');
+    Route::post('/admin/users', [App\Http\Controllers\UserAdminController::class, 'store'])->name('admin.users.store');
+    Route::get('/admin/users/{user}/edit', [App\Http\Controllers\UserAdminController::class, 'edit'])->name('admin.users.edit');
+    Route::post('/admin/users/{user}', [App\Http\Controllers\UserAdminController::class, 'update'])->name('admin.users.update');
+    Route::get('/admin/users/{user}/delete', [App\Http\Controllers\UserAdminController::class, 'destroy'])->name('admin.users.destroy');
+
 });
 
 

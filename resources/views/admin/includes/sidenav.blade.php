@@ -113,6 +113,13 @@
 
             <p class="admin-nav-section-title mb-0 mt-3">Site</p>
             <x-admin.nav-link
+                :href="route('admin.users.index')"
+                icon="fa-user-shield"
+                :active="request()->routeIs(['admin.users.*'])"
+            >
+                Users
+            </x-admin.nav-link>
+            <x-admin.nav-link
                 :href="route('settings')"
                 icon="fa-cogs"
                 :active="request()->routeIs(['settings', 'saveSetting'])"

@@ -18,6 +18,64 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    public const ROLE_SUPER_ADMIN = 1;
+
+    public const ROLE_ADMIN = 2;
+
+    public const ROLE_EDITOR = 3;
+
+    /**
+     * @return list<int>
+     */
+    public static function adminPanelRoleIds(): array
+    {
+        return [
+            self::ROLE_SUPER_ADMIN,
+            self::ROLE_ADMIN,
+            self::ROLE_EDITOR,
+        ];
+    }
+
+    /**
+     * Roles that can be assigned when creating or editing users in the admin panel.
+     *
+     * @return array<int, string>
+     */
+    public static function assignableRoleOptions(): array
+    {
+        return [
+            self::ROLE_ADMIN => 'Administrator',
+            self::ROLE_EDITOR => 'Editor',
+        ];
+    }
+
+    public function roleLabel(): string
+    {
+        if ($this->isSuperAdmin()) {
+            return 'Super admin';
+        }
+
+        return self::assignableRoleOptions()[(int) $this->role] ?? 'User';
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return (int) ($this->role ?? 0) === self::ROLE_SUPER_ADMIN;
+    }
+
+    public function hasAdminPanelAccess(): bool
+    {
+        return in_array((int) ($this->role ?? 0), self::adminPanelRoleIds(), true);
+    }
+
+    public function scopeVisibleToAdmins($query)
+    {
+        return $query->whereNotIn('role', [
+            (string) self::ROLE_SUPER_ADMIN,
+            self::ROLE_SUPER_ADMIN,
+        ]);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,6 +85,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'phone',
+        'address',
     ];
 
     /**

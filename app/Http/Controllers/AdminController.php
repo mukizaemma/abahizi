@@ -40,7 +40,7 @@ class AdminController extends Controller
 
         $user = Auth::user();
 
-        if (isset($user->role) && (int) $user->role !== 1) {
+        if (! $user->hasAdminPanelAccess()) {
             Auth::guard('web')->logout();
 
             throw ValidationException::withMessages([

@@ -50,8 +50,7 @@ class HomeController extends Controller
 {
     use ValidatesFormChannelSubmission;
     public function redirects(){
-        $role = Auth::user()->role;
-        if($role ==1){
+        if(Auth::user()->hasAdminPanelAccess()){
             $slides = Slide::latest()->get();
             $messages = Message::all();
             // $members = Member::latest()->get();
