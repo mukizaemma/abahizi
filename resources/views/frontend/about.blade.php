@@ -61,28 +61,16 @@
 </section>
 
 <!-- Team section -->
-<section class="about-page-team pt-10 pb-90 grey-bg">
+<section class="about-page-team lux-section grey-bg" aria-labelledby="about-team-heading">
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="tp-team-2__section-title pb-40 text-center">
-                    <h4 class="tp-section-title">Our Team</h4>
-                </div>
-            </div>
+        <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
+            <h2 id="about-team-heading" class="lux-section-head__title">Our Team</h2>
+            <p class="team-page__lead text-muted mx-auto mb-0">Leadership and staff committed to quality manufacturing and community impact.</p>
         </div>
-        <div class="row g-4">
-            @forelse($staff as $member)
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <article class="tp-team-2__item text-center h-100">
-                        <div class="tp-team-2__thumb">
-                            <img src="{{ asset('storage/images/staff/' . $member->image) }}" alt="{{ $member->names }}">
-                        </div>
-                        <div class="tp-team-2__content">
-                            <div class="tp-team-2__author-info">
-                                <h4 class="tp-team-2__author-name">{{ $member->names }}</h4>
-                                <span>{{ $member->position }}</span>
-                            </div>
-                        </div>
+        <div class="row g-4 g-lg-5 justify-content-center">
+            @forelse($staff as $i => $member)
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                    @include('frontend.includes.team-member-card', ['member' => $member, 'compact' => true, 'memberIndex' => $i])
                 </div>
             @empty
                 <div class="col-12 text-center">
@@ -90,6 +78,11 @@
                 </div>
             @endforelse
         </div>
+        @if(($staff ?? collect())->isNotEmpty())
+            <div class="text-center mt-4 mt-lg-5">
+                <a href="{{ route('team') }}" class="tp-btn tp-btn--outline-dark">Meet the full team <span aria-hidden="true">→</span></a>
+            </div>
+        @endif
     </div>
 </section>
 
