@@ -154,12 +154,19 @@ class HomeController extends Controller
         $testimonials = DB::table('testimonies')->paginate(3);
         return view('frontend.about',['about'=>$about,'mission'=>$mission,'testimonials' =>$testimonials,'programs'=>$programs, 'partners'=>$partners, 'staff'=>$staff]);
     }
-    public function team(){
-        $programs = Program::latest()->get();
-        $team = Team::query()->where('display', 'Yes')->where('category', 'Administration')->oldest()->get();
-        $advisors = Team::query()->where('display', 'Yes')->where('category', 'Advisors')->oldest()->get();
+    public function team()
+    {
         $about = Background::firstOrEmpty();
-        return view('frontend.team',['team'=>$team,'programs'=>$programs,'about'=>$about,'advisors'=>$advisors]);
+        $teamMembers = Team::query()
+            ->where('display', 'Yes')
+            ->orderBy('position')
+            ->orderBy('names')
+            ->get();
+
+        return view('frontend.team', [
+            'about' => $about,
+            'teamMembers' => $teamMembers,
+        ]);
     }
     public function testimonials(){
         $programs = Program::latest()->get();

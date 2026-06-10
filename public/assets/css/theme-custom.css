@@ -2909,3 +2909,107 @@ body {
         0 2px 20px rgba(0, 0, 0, 0.45);
 }
 
+/* Team page */
+.team-page__lead {
+    max-width: 40rem;
+    font-size: 1.05rem;
+    line-height: 1.65;
+}
+
+.team-page__empty {
+    padding: 3rem 1rem;
+}
+
+.team-page-card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.team-page-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.09);
+}
+
+.team-page-card__media {
+    aspect-ratio: 270 / 312;
+    overflow: hidden;
+    background: #f3f0ea;
+}
+
+.team-page-card__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.team-page-card__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 2.5rem;
+    color: #bbb;
+}
+
+.team-page-card__body {
+    padding: 1.25rem 1.35rem 1.5rem;
+}
+
+.team-page-card__name {
+    font-family: var(--lux-serif, Georgia, serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: var(--brand-secondary, #2c2c2c);
+}
+
+.team-page-card__role {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 0.75rem;
+}
+
+.team-page-card__bio,
+.team-page-card__bio-full {
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+.team-page-card__details summary {
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--brand-secondary, #2c2c2c);
+}
+
+.team-page-card__contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+}
+
+.team-page-card__contact a {
+    color: #444;
+    text-decoration: none;
+}
+
+.team-page-card__contact a:hover {
+    color: var(--brand-secondary, #2c2c2c);
+}
+
+.team-page-card__contact i {
+    width: 1.1rem;
+    margin-right: 0.35rem;
+    color: var(--brand-primary, #fad200);
+    filter: brightness(0.75);
+}
+
