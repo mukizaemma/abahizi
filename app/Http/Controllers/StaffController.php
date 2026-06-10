@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Team;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -11,7 +12,7 @@ class StaffController extends Controller
 {
     public function index()
     {
-        $team = Team::query()->latest()->get();
+        $team = Team::query()->orderedForDisplay()->get();
 
         return view('admin.team', ['team' => $team]);
     }
@@ -29,12 +30,15 @@ class StaffController extends Controller
             'bio' => ['nullable', 'string'],
             'display' => ['nullable', 'in:Yes,No'],
             'category' => ['nullable', 'string', 'max:100'],
+            'sort_order' => ['nullable', 'integer', 'min:1'],
+            'created_at' => ['nullable', 'date'],
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
 
         $fileName = $this->storeStaffImage($request->file('image'));
+        $sortOrder = $validated['sort_order'] ?? $this->nextSortOrder();
 
-        Team::create([
+        $member = Team::create([
             'names' => $validated['names'],
             'position' => $validated['position'],
             'phone' => $validated['phone'] ?? null,
@@ -45,9 +49,15 @@ class StaffController extends Controller
             'bio' => $validated['bio'] ?? null,
             'category' => $validated['category'] ?? null,
             'display' => $validated['display'] ?? 'Yes',
+            'sort_order' => $sortOrder,
             'slug' => $this->uniqueSlug($validated['names']),
             'image' => $fileName,
         ]);
+
+        if (! empty($validated['created_at'])) {
+            $member->created_at = Carbon::parse($validated['created_at']);
+            $member->save();
+        }
 
         return redirect()->route('staff')->with('success', 'Team member added successfully.');
     }
@@ -74,6 +84,8 @@ class StaffController extends Controller
             'bio' => ['nullable', 'string'],
             'display' => ['nullable', 'in:Yes,No'],
             'category' => ['nullable', 'string', 'max:100'],
+            'sort_order' => ['nullable', 'integer', 'min:1'],
+            'created_at' => ['nullable', 'date'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
 
@@ -87,6 +99,14 @@ class StaffController extends Controller
         $data->bio = $validated['bio'] ?? null;
         $data->category = $validated['category'] ?? null;
         $data->display = $validated['display'] ?? $data->display ?? 'Yes';
+
+        if (array_key_exists('sort_order', $validated) && $validated['sort_order'] !== null) {
+            $data->sort_order = (int) $validated['sort_order'];
+        }
+
+        if (! empty($validated['created_at'])) {
+            $data->created_at = Carbon::parse($validated['created_at']);
+        }
 
         if ($data->slug === null || $data->slug === '') {
             $data->slug = $this->uniqueSlug($validated['names'], $data->id);
@@ -102,6 +122,20 @@ class StaffController extends Controller
         return redirect()->route('staff')->with('success', 'Team member updated successfully.');
     }
 
+    public function moveUp($id)
+    {
+        $this->moveMember((int) $id, -1);
+
+        return redirect()->route('staff')->with('success', 'Team order updated.');
+    }
+
+    public function moveDown($id)
+    {
+        $this->moveMember((int) $id, 1);
+
+        return redirect()->route('staff')->with('success', 'Team order updated.');
+    }
+
     public function destroy($id)
     {
         $data = Team::findOrFail($id);
@@ -109,6 +143,45 @@ class StaffController extends Controller
         $data->delete();
 
         return redirect()->route('staff')->with('success', 'Team member removed successfully.');
+    }
+
+    private function moveMember(int $id, int $direction): void
+    {
+        $ordered = Team::query()->orderedForDisplay()->get();
+        $index = $ordered->search(fn (Team $member) => (int) $member->id === $id);
+
+        if ($index === false) {
+            return;
+        }
+
+        $swapIndex = $index + $direction;
+        if ($swapIndex < 0 || $swapIndex >= $ordered->count()) {
+            return;
+        }
+
+        $current = $ordered[$index];
+        $neighbor = $ordered[$swapIndex];
+
+        $currentOrder = (int) $current->sort_order;
+        $neighborOrder = (int) $neighbor->sort_order;
+
+        if ($currentOrder === $neighborOrder) {
+            $currentOrder = $index + 1;
+            $neighborOrder = $swapIndex + 1;
+        }
+
+        $current->sort_order = $neighborOrder;
+        $neighbor->sort_order = $currentOrder;
+
+        $current->save();
+        $neighbor->save();
+    }
+
+    private function nextSortOrder(): int
+    {
+        $max = (int) Team::query()->max('sort_order');
+
+        return $max > 0 ? $max + 1 : 1;
     }
 
     private function storeStaffImage($file): string

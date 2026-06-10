@@ -29,7 +29,16 @@ class Team extends Model
         'email',
         'display',
         'status',
+        'sort_order',
     ];
+
+    public function scopeOrderedForDisplay($query)
+    {
+        return $query
+            ->orderBy('sort_order')
+            ->orderBy('created_at')
+            ->orderBy('id');
+    }
 
     public function imageUrl(): string
     {

@@ -44,7 +44,7 @@
             <x-admin.nav-link
                 :href="route('staff')"
                 icon="fa-users"
-                :active="request()->routeIs(['staff', 'editStaff', 'saveStaff', 'updateStaff', 'destroyStaff'])"
+                :active="request()->routeIs(['staff', 'editStaff', 'saveStaff', 'updateStaff', 'destroyStaff', 'staff.moveUp', 'staff.moveDown'])"
             >
                 Team
             </x-admin.nav-link>

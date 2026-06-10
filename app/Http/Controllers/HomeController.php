@@ -104,7 +104,7 @@ class HomeController extends Controller
             ->take(3)
             ->get();
         $partners = Partner::latest()->get();
-        $staff = Team::query()->where('display', 'Yes')->latest()->get();
+        $staff = Team::query()->where('display', 'Yes')->orderedForDisplay()->get();
 
         $today = Carbon::today()->toDateString();
 
@@ -148,7 +148,7 @@ class HomeController extends Controller
 
         $programs = Program::latest()->get();
         $partners = Partner::oldest()->get();
-        $staff = Team::query()->where('display', 'Yes')->oldest()->get();
+        $staff = Team::query()->where('display', 'Yes')->orderedForDisplay()->get();
         $about = Background::firstOrEmpty();
         $mission = About::firstOrEmpty();
         $testimonials = DB::table('testimonies')->paginate(3);
@@ -159,8 +159,7 @@ class HomeController extends Controller
         $about = Background::firstOrEmpty();
         $teamMembers = Team::query()
             ->where('display', 'Yes')
-            ->orderBy('position')
-            ->orderBy('names')
+            ->orderedForDisplay()
             ->get();
 
         return view('frontend.team', [

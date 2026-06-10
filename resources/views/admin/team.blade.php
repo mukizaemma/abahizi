@@ -17,7 +17,7 @@
                 <div class="admin-page-header d-flex flex-wrap align-items-start justify-content-between gap-3">
                     <div>
                         <h1>Team</h1>
-                        <p class="text-muted mb-0">Add and manage staff profiles shown on the About page and team section.</p>
+                        <p class="text-muted mb-0">Add and manage staff profiles. Lower order numbers appear first on the site (oldest / first added by default).</p>
                     </div>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStaffModal">
                         <i class="fa fa-plus me-1"></i> Add team member
@@ -46,11 +46,11 @@
                             <table class="table table-hover align-middle mb-0">
                                 <thead>
                                     <tr>
+                                        <th>Order</th>
                                         <th>Photo</th>
                                         <th>Name</th>
                                         <th>Position</th>
-                                        <th>Phone</th>
-                                        <th>Email</th>
+                                        <th>Added</th>
                                         <th>Visible</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
@@ -58,6 +58,19 @@
                                 <tbody>
                                     @forelse($team as $member)
                                         <tr>
+                                            <td class="text-nowrap">
+                                                <span class="badge bg-light text-dark border me-1">{{ $member->sort_order ?? ($loopIndex + 1) }}</span>
+                                                <div class="btn-group btn-group-sm align-middle">
+                                                    <form action="{{ route('staff.moveUp', $member->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-outline-secondary btn-sm" title="Move up" @disabled($loop->first) aria-label="Move up">↑</button>
+                                                    </form>
+                                                    <form action="{{ route('staff.moveDown', $member->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-outline-secondary btn-sm" title="Move down" @disabled($loop->last) aria-label="Move down">↓</button>
+                                                    </form>
+                                                </div>
+                                            </td>
                                             <td>
                                                 @if(!empty($member->image))
                                                     <img src="{{ asset('storage/images/staff/' . $member->image) }}" alt="{{ $member->names }}" class="rounded border" width="72" height="84" style="object-fit: cover;">
@@ -67,14 +80,7 @@
                                             </td>
                                             <td class="fw-semibold">{{ $member->names }}</td>
                                             <td>{{ $member->position }}</td>
-                                            <td>{{ $member->phone ?: '—' }}</td>
-                                            <td>
-                                                @if(!empty($member->email))
-                                                    <a href="mailto:{{ $member->email }}">{{ $member->email }}</a>
-                                                @else
-                                                    —
-                                                @endif
-                                            </td>
+                                            <td class="text-muted small text-nowrap">{{ $member->created_at?->format('M j, Y') ?? '—' }}</td>
                                             <td>
                                                 @if(($member->display ?? 'No') === 'Yes')
                                                     <span class="badge bg-success">Yes</span>
@@ -149,12 +155,22 @@
                             <label class="form-label" for="staff_linkedin">LinkedIn URL</label>
                             <input type="url" class="form-control" id="staff_linkedin" name="linkedin" value="{{ old('linkedin') }}" placeholder="https://linkedin.com/in/…">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label" for="staff_display">Show on website</label>
                             <select class="form-select" id="staff_display" name="display">
                                 <option value="Yes" @selected(old('display', 'Yes') === 'Yes')>Yes — visible on About / Team</option>
                                 <option value="No" @selected(old('display') === 'No')>No — hidden</option>
                             </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="staff_sort_order">Display order</label>
+                            <input type="number" min="1" class="form-control" id="staff_sort_order" name="sort_order" value="{{ old('sort_order') }}" placeholder="Auto (add to end)">
+                            <small class="text-muted">Lower numbers appear first. Leave blank to append last.</small>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="staff_created_at">Date added</label>
+                            <input type="datetime-local" class="form-control" id="staff_created_at" name="created_at" value="{{ old('created_at') }}">
+                            <small class="text-muted">Optional. Defaults to now.</small>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" for="staff_image">Profile photo <span class="text-danger">*</span></label>

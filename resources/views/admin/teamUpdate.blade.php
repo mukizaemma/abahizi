@@ -68,12 +68,22 @@
                                     <label class="form-label" for="edit_linkedin">LinkedIn URL</label>
                                     <input type="url" class="form-control" id="edit_linkedin" name="linkedin" value="{{ old('linkedin', $data->linkedin) }}">
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="form-label" for="edit_display">Show on website</label>
                                     <select class="form-select" id="edit_display" name="display">
                                         <option value="Yes" @selected(old('display', $data->display ?? 'Yes') === 'Yes')>Yes — visible on About / Team</option>
                                         <option value="No" @selected(old('display', $data->display ?? 'Yes') === 'No')>No — hidden</option>
                                     </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label" for="edit_sort_order">Display order</label>
+                                    <input type="number" min="1" class="form-control" id="edit_sort_order" name="sort_order" value="{{ old('sort_order', $data->sort_order) }}">
+                                    <small class="text-muted">Lower numbers appear first on About and Team pages.</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label" for="edit_created_at">Date added</label>
+                                    <input type="datetime-local" class="form-control" id="edit_created_at" name="created_at" value="{{ old('created_at', $data->created_at?->format('Y-m-d\TH:i')) }}">
+                                    <small class="text-muted">Used when sorting members with the same display order.</small>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label d-block">Current photo</label>

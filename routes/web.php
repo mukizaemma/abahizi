@@ -171,6 +171,8 @@ Route::middleware(['auth', 'admin.role'
     Route::post('/saveStaff', [App\Http\Controllers\StaffController::class, 'store'])->name('saveStaff');
     Route::get('/editStaff/{id}', [App\Http\Controllers\StaffController::class, 'edit'])->name('editStaff');
     Route::post('/updateStaff/{id}', [App\Http\Controllers\StaffController::class, 'update'])->name('updateStaff');
+    Route::post('/staff/{id}/move-up', [App\Http\Controllers\StaffController::class, 'moveUp'])->name('staff.moveUp');
+    Route::post('/staff/{id}/move-down', [App\Http\Controllers\StaffController::class, 'moveDown'])->name('staff.moveDown');
     Route::get('/destroyStaff/{id}', [App\Http\Controllers\StaffController::class, 'destroy'])->name('destroyStaff');
 
     // Testimonies
