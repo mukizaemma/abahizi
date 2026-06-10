@@ -184,7 +184,7 @@
                         $el.data('summernote-initialized', false);
                     }
                     $el.summernote({
-                        height: 220,
+                        height: isModalEditor ? 140 : 220,
                         placeholder: 'Write content here...',
                         toolbar: [
                             ['style', ['style']],

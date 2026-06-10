@@ -110,15 +110,15 @@
     </div>
 </div>
 
-<div class="modal fade" id="addStaffModal" tabindex="-1" aria-labelledby="addStaffModalLabel" aria-hidden="true">
+<div class="modal fade admin-form-modal" id="addStaffModal" tabindex="-1" aria-labelledby="addStaffModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addStaffModalLabel">Add team member</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="{{ route('saveStaff') }}" method="POST" enctype="multipart/form-data">
+            <form class="admin-form-modal__form" action="{{ route('saveStaff') }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStaffModalLabel">Add team member</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
                 <div class="modal-body">
                     <div class="row g-3">
                         <div class="col-md-8">
@@ -163,7 +163,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label" for="staff_bio">Biography</label>
-                            <textarea id="staff_bio" rows="6" class="form-control" name="bio" data-editor="rich" data-editor-modal="true">{{ old('bio') }}</textarea>
+                            <textarea id="staff_bio" rows="4" class="form-control" name="bio" data-editor="rich" data-editor-modal="true">{{ old('bio') }}</textarea>
                         </div>
                     </div>
                 </div>

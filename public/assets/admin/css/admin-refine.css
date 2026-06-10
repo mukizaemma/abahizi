@@ -230,3 +230,47 @@ a:hover {
     background: linear-gradient(90deg, var(--admin-accent), var(--brand-secondary, #2c2c2c));
     height: 3px;
 }
+
+/* Tall admin modals — keep header/footer visible, scroll body only */
+.admin-form-modal.modal {
+    align-items: flex-start;
+    overflow-y: auto;
+}
+
+.admin-form-modal .modal-dialog {
+    margin: 0.75rem auto;
+    max-height: calc(100dvh - 1.5rem);
+    height: auto;
+}
+
+.admin-form-modal .modal-content {
+    max-height: calc(100dvh - 1.5rem);
+    overflow: hidden;
+}
+
+.admin-form-modal .admin-form-modal__form {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 1.5rem);
+    min-height: 0;
+}
+
+.admin-form-modal .modal-header,
+.admin-form-modal .modal-footer {
+    flex-shrink: 0;
+}
+
+.admin-form-modal .modal-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-form-modal .note-editor {
+    margin-bottom: 0;
+}
+
+.admin-form-modal .note-editable {
+    min-height: 120px !important;
+}
