@@ -175,8 +175,13 @@
                     if ($el.hasClass('swal2-textarea') || $el.closest('.swal2-container').length) {
                         return;
                     }
+                    const isModalEditor = $el.attr('data-editor-modal') === 'true';
                     if ($el.data('summernote-initialized') === true) {
-                        return;
+                        if (!isModalEditor) {
+                            return;
+                        }
+                        $el.summernote('destroy');
+                        $el.data('summernote-initialized', false);
                     }
                     $el.summernote({
                         height: 220,
@@ -226,6 +231,7 @@
             document.addEventListener('turbo:load', initAdminSummernote);
             document.addEventListener('turbo:load', initAdminModalCloseControls);
             document.addEventListener('shown.bs.tab', initAdminSummernote);
+            document.addEventListener('shown.bs.modal', initAdminSummernote);
         </script>
 
         @yield('scripts')

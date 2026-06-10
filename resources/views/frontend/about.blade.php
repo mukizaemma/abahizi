@@ -75,7 +75,7 @@
                 <div class="col-xl-4 col-lg-4 col-md-6">
                     <article class="tp-team-2__item text-center h-100">
                         <div class="tp-team-2__thumb">
-                            <img src="{{ asset('storage/images/staff') . $member->image }}" alt="{{ $member->names }}">
+                            <img src="{{ asset('storage/images/staff/' . $member->image) }}" alt="{{ $member->names }}">
                         </div>
                         <div class="tp-team-2__content">
                             <div class="tp-team-2__author-info">

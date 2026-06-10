@@ -379,8 +379,10 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
 .lux-ticker__label {
     font-size: 0.9rem;
     line-height: 1.4;
-    opacity: 0.88;
     margin: 0;
+    color: #fff;
+    font-weight: 500;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
 }
 
 /* Section heads */
@@ -1811,27 +1813,29 @@ img[loading="lazy"] {
     color: #555;
 }
 
-/* Home process — parallax band with border-only step cards */
+/* Home process — full-viewport parallax with border-only step cards */
 .home-process--parallax {
     position: relative;
     overflow: hidden;
     isolation: isolate;
     background-color: #0a0e12;
+    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 .home-process__parallax {
     position: absolute;
     left: 0;
     right: 0;
-    top: -18%;
-    bottom: -18%;
+    top: -12%;
+    bottom: -12%;
     z-index: 0;
     background-image: var(--home-process-parallax-image);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     will-change: transform;
-    transform: translate3d(0, 0, 0) scale(1.08);
+    transform: translate3d(0, 0, 0) scale(1.12);
 }
 
 .home-process--parallax .home-process__parallax {
@@ -1841,6 +1845,10 @@ img[loading="lazy"] {
 .home-process__content {
     position: relative;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
     padding: clamp(3.5rem, 8vh, 6rem) 0;
 }
 
@@ -1860,6 +1868,7 @@ img[loading="lazy"] {
 .home-process__content > .container {
     position: relative;
     z-index: 1;
+    width: 100%;
 }
 
 .home-process__eyebrow {
@@ -1943,8 +1952,9 @@ img[loading="lazy"] {
 @media (max-width: 767.98px) {
     .home-process--parallax .home-process__parallax {
         background-attachment: scroll;
-        top: -10%;
-        bottom: -10%;
+        top: -8%;
+        bottom: -8%;
+        transform: translate3d(0, 0, 0) scale(1.08);
     }
 }
 

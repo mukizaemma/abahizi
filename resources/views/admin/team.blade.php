@@ -1,189 +1,192 @@
 @extends('layouts.adminbase')
 
-@section('title', 'Home Page')
+@section('title', 'Team')
 
 @section('sidebar')
-
     @parent
-
 @endsection
 
 @section('content')
-
 <div id="layoutSidenav">
     <div id="layoutSidenav_nav">
         @include('admin.includes.sidenav')
     </div>
     <div id="layoutSidenav_content">
         <main>
-            <div class="container-fluid px-4">
-                {{-- <h1 class="mt-4">Dashboard</h1> --}}
-                <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">Our Team</li>
-                </ol>
-                <div class="row">
-                    @if(session()->has('success'))
-                    <div class="arlert alert-success">
-                        <button class="close" type="button" data-dismiss="alert">X</button>
-                        {{ session()->get('success') }}
+            <div class="container-fluid px-4 py-4">
+                <div class="admin-page-header d-flex flex-wrap align-items-start justify-content-between gap-3">
+                    <div>
+                        <h1>Team</h1>
+                        <p class="text-muted mb-0">Add and manage staff profiles shown on the About page and team section.</p>
                     </div>
-
-                    @endif
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+                        <i class="fa fa-plus me-1"></i> Add team member
+                    </button>
                 </div>
 
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <button class="btn btn-primary float-right" data-bs-toggle="modal"
-                            data-bs-target="#myModal"><i class="fa fa-plus"></i> Add Team</button>
-
+                @if(session()->has('success'))
+                    <div class="alert alert-success">{{ session()->get('success') }}</div>
+                @endif
+                @if(session()->has('error'))
+                    <div class="alert alert-danger">{{ session()->get('error') }}</div>
+                @endif
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0 ps-3">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                    <div class="card-body">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Image</th>
-                                    <th>Names</th>
-                                    <th>Position</th>
-                                    <th>Phone</th>
-                                    <th>Email</th>
-                                    <th>Biography</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
+                @endif
 
-                            <tbody>
-                                @foreach($team as $rs)
-                                <tr>
-
-                                    <td><img src="{{asset('storage/images/staff').$rs->image}}" alt="" width="150px"></td>
-                                    <td>{{$rs->names}}</td>
-                                    <td>{{$rs->position}}</td>
-                                    <td>{{$rs->phone}}</td>
-                                    <td>{{$rs->facebook}}</td>
-                                    <td>{!!$rs->bio!!}</td>
-
-                                    <td> <div class="btn-btn-group ">
-                                        <a type="button" href="{{ route('editStaff', $rs->id) }}"
-                                            class="btn btn-primary text-black">Edit</a>
-                                        <a type="button" href="{{ route('destroyStaff', $rs->id) }}"
-                                            class="btn btn-danger text-black" onclick="return confirm('Are you sure to delete this Staff from the Database?')">Delete</a>
-                                    </div>
-                                </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                        <!-- The Modal for adding new Event -->
-                        <div class="modal fade" id="myModal">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-
-                                    <!-- Modal Header -->
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Adding New Staff Member</h4>
-                                        <button type="button" class="btn-close text-black"
-                                            data-bs-dismiss="modal">X</button>
-                                    </div>
-
-                                    <!-- Modal body -->
-                                    <div class="modal-body">
-                                        <form class="form" action="{{ route('saveStaff') }}" method="POST"
-                                            enctype="multipart/form-data">
-                                            @csrf
-                                            <div class="form-body">
-
-                                                <div class="row mb-4">
-                                                    <div class="col-lg-8 col-sm-12">
-                                                            <label for="names">Staff Names</label>
-                                                            <input type="text" class="form-control"
-                                                            placeholder="Event Title" name="names"  required="">
-                                                    </div>
-                                                    <div class="col-lg-4 col-sm-12">
-                                                        <label for="position">Position</label>
-                                                        <input type="text" class="form-control"
-                                                        placeholder="Staff Position" name="position"  required="">
-                                                    </div>
-                                                    <!-- <div class="col-lg-3 col-sm-12">
-                                                        <label for="projectinput1">Category</label>
-                                                        <select name="category" id="" class="form-control">
-                                                            <option value="Administration" selected="Administration">Administration Team</option>
-                                                            <option value="Operations">Operations Team</option>
-                                                            <option value="Advisors">Advisors Team</option>
-                                                    </select> -->
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive admin-table-wrap">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Photo</th>
+                                        <th>Name</th>
+                                        <th>Position</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Visible</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($team as $member)
+                                        <tr>
+                                            <td>
+                                                @if(!empty($member->image))
+                                                    <img src="{{ asset('storage/images/staff/' . $member->image) }}" alt="{{ $member->names }}" class="rounded border" width="72" height="84" style="object-fit: cover;">
+                                                @else
+                                                    <span class="text-muted small">No photo</span>
+                                                @endif
+                                            </td>
+                                            <td class="fw-semibold">{{ $member->names }}</td>
+                                            <td>{{ $member->position }}</td>
+                                            <td>{{ $member->phone ?: '—' }}</td>
+                                            <td>
+                                                @if(!empty($member->email))
+                                                    <a href="mailto:{{ $member->email }}">{{ $member->email }}</a>
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(($member->display ?? 'No') === 'Yes')
+                                                    <span class="badge bg-success">Yes</span>
+                                                @else
+                                                    <span class="badge bg-secondary">No</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="btn-group btn-group-sm">
+                                                    <a href="{{ route('editStaff', $member->id) }}" class="btn btn-outline-primary">Edit</a>
+                                                    <a href="{{ route('destroyStaff', $member->id) }}" class="btn btn-outline-danger" onclick="return confirm('Delete this team member?')">Delete</a>
                                                 </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7" class="border-0">
+                                                <div class="admin-empty-state">
+                                                    <i class="fas fa-users d-block"></i>
+                                                    <p class="mb-0">No team members yet. Add your first staff profile.</p>
                                                 </div>
-
-                                                <div class="row mb-4">
-                                                    <div class="col-lg-6 col-sm-12">
-                                                            <label for="facebook">Phone</label>
-                                                            <input type="text" class="form-control"
-                                                            placeholder="Facebook" name="phone">
-                                                    </div>
-                                                    <div class="col-lg-6 col-sm-12">
-                                                        <label for="instagram">Email</label>
-                                                        <input type="text" class="form-control"
-                                                        placeholder="Instagram" name="facebook">
-                                                    </div>
-                                                    <!-- <div class="col-lg-3 col-sm-12">
-                                                        <label for="position">Instagram Page Url</label>
-                                                        <input type="text" class="form-control"
-                                                        placeholder="Staff Position" name="instagram">
-                                                    </div>
-                                                    <div class="col-lg-3 col-sm-12">
-                                                        <label for="twitter">Twitter Page Url</label>
-                                                        <input type="text" class="form-control"
-                                                        placeholder="Twitter" name="twitter">
-                                                    </div> -->
-                                                </div>
-
-                                                <div class="row">
-
-                                                    <div class="col-lg-4 col-sm-12">
-                                                            <label>Select File <br><span style="color: red">(This image should be resized to 270X312 pixels)</span></label>
-                                                            <label id="projectinput7" class="file center-block">
-                                                                <input type="file" id="image" name="image"
-                                                                    required="">
-                                                                <span class="file-custom"></span>
-                                                            </label>
-                                                    </div>
-
-                                                    <div class="col-lg-8 col-sm-12">
-                                                        <label>Biography</label>
-                                                        <textarea id="bio" rows="5" class="form-control" name="bio" data-editor="rich" placeholder="Staff BIO"></textarea>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="form-actions mt-5">
-                                                <button type="submit" class="btn btn-primary text-black">
-                                                    <i class="fa fa-save"></i> Add New Staff
-                                                </button>
-
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <!-- Modal footer -->
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger text-black"
-                                            data-bs-dismiss="modal">Close</button>
-                                    </div>
-
-                                </div>
-                            </div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
-
+                    </div>
+                </div>
             </div>
         </main>
         @include('admin.includes.footer')
     </div>
 </div>
 
-@section('scripts')
-
-<script src="{{asset('assets')}}/js/summernote.js"></script>
-
+<div class="modal fade" id="addStaffModal" tabindex="-1" aria-labelledby="addStaffModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addStaffModalLabel">Add team member</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('saveStaff') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label" for="staff_names">Full name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="staff_names" name="names" value="{{ old('names') }}" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="staff_position">Position <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="staff_position" name="position" value="{{ old('position') }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="staff_phone">Phone</label>
+                            <input type="text" class="form-control" id="staff_phone" name="phone" value="{{ old('phone') }}" placeholder="+250 …">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="staff_email">Email</label>
+                            <input type="email" class="form-control" id="staff_email" name="email" value="{{ old('email') }}" placeholder="name@example.com">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="staff_facebook">Facebook URL</label>
+                            <input type="url" class="form-control" id="staff_facebook" name="facebook" value="{{ old('facebook') }}" placeholder="https://facebook.com/…">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="staff_instagram">Instagram URL</label>
+                            <input type="url" class="form-control" id="staff_instagram" name="instagram" value="{{ old('instagram') }}" placeholder="https://instagram.com/…">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label" for="staff_linkedin">LinkedIn URL</label>
+                            <input type="url" class="form-control" id="staff_linkedin" name="linkedin" value="{{ old('linkedin') }}" placeholder="https://linkedin.com/in/…">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="staff_display">Show on website</label>
+                            <select class="form-select" id="staff_display" name="display">
+                                <option value="Yes" @selected(old('display', 'Yes') === 'Yes')>Yes — visible on About / Team</option>
+                                <option value="No" @selected(old('display') === 'No')>No — hidden</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="staff_image">Profile photo <span class="text-danger">*</span></label>
+                            <input type="file" class="form-control" id="staff_image" name="image" accept="image/*" required>
+                            <small class="text-muted">Recommended portrait size: 270×312 px (JPEG or PNG).</small>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="staff_bio">Biography</label>
+                            <textarea id="staff_bio" rows="6" class="form-control" name="bio" data-editor="rich" data-editor-modal="true">{{ old('bio') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save me-1"></i> Save team member
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var modal = document.getElementById('addStaffModal');
+        if (!modal) return;
+        @if ($errors->any())
+            bootstrap.Modal.getOrCreateInstance(modal).show();
+        @endif
+    });
+</script>
+@endpush

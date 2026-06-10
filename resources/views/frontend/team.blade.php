@@ -23,7 +23,7 @@
                                     <div class="tab-pane fade show active" id="nav-one" role="tabpanel"
                                         aria-labelledby="nav-one-tab">
                                         <div class="tp-shop-details__tab-big-img">
-                                            <img src="{{asset('storage/images/staff').$rs->image}}" alt="">
+                                            <img src="{{ asset('storage/images/staff/' . $rs->image) }}" alt="{{ $rs->names }}">
                                         </div>
                                     </div>
 
@@ -67,7 +67,7 @@
                         <div class="tp-team-2__wrapper">
                             <div class="tp-team-2__item text-center">
                                 <div class="tp-team-2__thumb">
-                                    <img src="{{asset('storage/images/staff').$adv->image}}" alt="">
+                                    <img src="{{ asset('storage/images/staff/' . $adv->image) }}" alt="{{ $adv->names }}">
                                 </div>
                                 <div class="tp-team-2__content">
                                     <div class="tp-team-2__author-info">
