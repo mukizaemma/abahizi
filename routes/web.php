@@ -135,8 +135,9 @@ Route::middleware(['auth', 'admin.role'
     Route::post('/addProgramImage', [App\Http\Controllers\ProgramController::class, 'addProgramImage'])->name('addProgramImage');
     Route::post('/deleteProgramImage/{id}', [App\Http\Controllers\ProgramController::class, 'deleteProgramImage'])->name('deleteProgramImage');
 
-    // CHildren
-    Route::get('/get-projects', [App\Http\Controllers\ProjectsController::class, 'index'])->name('getProjects');
+    // Community impact initiatives (Impact → Community page)
+    Route::get('/admin/community-impact', [App\Http\Controllers\ProjectsController::class, 'index'])->name('communityImpact.admin.index');
+    Route::redirect('/get-projects', '/admin/community-impact')->name('getProjects');
     Route::post('/saveProject', [App\Http\Controllers\ProjectsController::class, 'store'])->name('saveProject');
     Route::get('/editProject/{id}', [App\Http\Controllers\ProjectsController::class, 'edit'])->name('editProject');
     Route::post('/updateProject/{id}', [App\Http\Controllers\ProjectsController::class, 'update'])->name('updateProject');

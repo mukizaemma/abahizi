@@ -1,6 +1,6 @@
 @extends('layouts.adminbase')
 
-@section('title', 'Edit Initiative')
+@section('title', 'Edit Community Initiative')
 
 @section('sidebar')
     @parent
@@ -16,10 +16,10 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
                     <div>
-                        <h1>Edit Initiative</h1>
-                        <p class="text-muted mb-0">Update title, one clear description, cover image, and gallery images.</p>
+                        <h1>Edit community initiative</h1>
+                        <p class="text-muted mb-0">Update title, description, status, cover image, and gallery images for Impact → Community.</p>
                     </div>
-                    <a href="{{ route('getProjects') }}" class="btn btn-outline-primary">Back to Initiatives</a>
+                    <a href="{{ route('communityImpact.admin.index') }}" class="btn btn-outline-primary">Back to community impact</a>
                 </div>
 
                 <div class="card mb-4">
@@ -32,15 +32,25 @@
                                     <input type="text" class="form-control" name="title" value="{{ $data->title }}" required>
                                 </div>
                                 <div class="col-lg-6">
-                                    <label class="form-label">Program</label>
-                                    <select name="program_id" class="form-select" required>
-                                        @foreach($programs as $program)
-                                            <option value="{{ $program->id }}" {{ (int)$data->program_id === (int)$program->id ? 'selected' : '' }}>
-                                                {{ $program->title }}
-                                            </option>
-                                        @endforeach
+                                    <label class="form-label">Status</label>
+                                    <select name="status" class="form-select">
+                                        <option value="Active" {{ ($data->status ?? 'Active') === 'Active' ? 'selected' : '' }}>Active — visible on Impact → Community</option>
+                                        <option value="Inactive" {{ ($data->status ?? 'Active') === 'Inactive' ? 'selected' : '' }}>Inactive — hidden from public page</option>
                                     </select>
                                 </div>
+                                @if(($programs ?? collect())->isNotEmpty())
+                                    <div class="col-12">
+                                        <label class="form-label">Program <span class="text-muted small">(optional)</span></label>
+                                        <select name="program_id" class="form-select">
+                                            <option value="">None</option>
+                                            @foreach($programs as $program)
+                                                <option value="{{ $program->id }}" {{ (int)$data->program_id === (int)$program->id ? 'selected' : '' }}>
+                                                    {{ $program->title }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                @endif
                                 <div class="col-12">
                                     <label class="form-label">Initiative details / description</label>
                                     <textarea rows="7" class="form-control" name="description" data-no-editor="true" required>{!! $data->description !!}</textarea>
@@ -61,7 +71,7 @@
                                 </div>
                             </div>
                             <div class="mt-4">
-                                <button type="submit" class="btn btn-primary px-4">Save Initiative Changes</button>
+                                <button type="submit" class="btn btn-primary px-4">Save changes</button>
                             </div>
                         </form>
                     </div>
@@ -69,7 +79,7 @@
 
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        <span>Initiative Gallery ({{ $totalImages }})</span>
+                        <span>Gallery images ({{ $totalImages }})</span>
                         <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#projectImageModal">
                             <i class="fa fa-plus me-1"></i> Add Images
                         </button>
@@ -107,7 +117,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Upload Initiative Gallery Images</h5>
+                <h5 class="modal-title">Upload gallery images</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">

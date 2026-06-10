@@ -110,6 +110,13 @@
             >
                 Impact reports
             </x-admin.nav-link>
+            <x-admin.nav-link
+                :href="route('communityImpact.admin.index')"
+                icon="fa-hands-holding-heart"
+                :active="request()->routeIs(['communityImpact.admin.index', 'getProjects', 'editProject', 'saveProject', 'updateProject', 'destroyProject', 'addProjectImage', 'deleteProjectImage'])"
+            >
+                Community impact
+            </x-admin.nav-link>
 
             <p class="admin-nav-section-title mb-0 mt-3">Site</p>
             <x-admin.nav-link

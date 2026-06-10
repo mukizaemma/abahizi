@@ -206,14 +206,22 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
     object-position: center top;
 }
 .lux-hero--minimal .lux-hero__overlay {
-    background: linear-gradient(
-        0deg,
-        rgba(8, 10, 14, 0.9) 0%,
-        rgba(8, 10, 14, 0.62) 22%,
-        rgba(8, 10, 14, 0.28) 48%,
-        rgba(8, 10, 14, 0.08) 72%,
-        rgba(8, 10, 14, 0) 100%
-    );
+    /* Center scrim for headline legibility; light edge vignette keeps photo visible */
+    background:
+        radial-gradient(
+            ellipse 88% 58% at 50% 48%,
+            rgba(10, 12, 16, 0.5) 0%,
+            rgba(10, 12, 16, 0.34) 38%,
+            rgba(10, 12, 16, 0.14) 62%,
+            transparent 82%
+        ),
+        linear-gradient(
+            180deg,
+            rgba(8, 10, 14, 0.22) 0%,
+            transparent 28%,
+            transparent 72%,
+            rgba(8, 10, 14, 0.4) 100%
+        );
 }
 .lux-hero__content--minimal {
     max-width: 56rem;
@@ -236,7 +244,9 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
     margin: 0 auto 2rem;
     max-width: 54rem;
     color: #fff;
-    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+    text-shadow:
+        0 2px 28px rgba(0, 0, 0, 0.5),
+        0 1px 4px rgba(0, 0, 0, 0.35);
 }
 .lux-hero__title--solo {
     transition: opacity 0.45s ease, transform 0.45s ease;

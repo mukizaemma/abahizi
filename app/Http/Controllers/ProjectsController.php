@@ -7,6 +7,7 @@ use App\Models\Program;
 use App\Models\Projectimage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -23,15 +24,17 @@ class ProjectsController extends Controller
     {
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'program_id' => ['required', 'exists:programs,id'],
+            'program_id' => ['nullable', 'exists:programs,id'],
             'description' => ['required', 'string'],
+            'status' => ['nullable', 'in:Active,Inactive'],
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:3072'],
         ]);
 
         $activity = new Activity();
         $activity->title = $request->input('title');
         $activity->description = $request->input('description');
-        $activity->program_id = $request->input('program_id');
+        $activity->program_id = $request->input('program_id') ?: null;
+        $activity->status = $request->input('status', 'Active');
         $activity->slug = $this->uniqueSlug($request->input('title'));
         if (Schema::hasColumn('activities', 'added_by')) {
             $activity->added_by = Auth::id() ?? Auth::guard('admin')->id();
@@ -42,7 +45,7 @@ class ProjectsController extends Controller
         }
 
         $activity->save();
-        return redirect()->route('getProjects')->with('success', 'Project created successfully.');
+        return redirect()->route('communityImpact.admin.index')->with('success', 'Community initiative created successfully.');
     }
 
     public function show($id)
@@ -64,15 +67,17 @@ class ProjectsController extends Controller
     {
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'program_id' => ['required', 'exists:programs,id'],
+            'program_id' => ['nullable', 'exists:programs,id'],
             'description' => ['required', 'string'],
+            'status' => ['nullable', 'in:Active,Inactive'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:3072'],
         ]);
 
         $data = Activity::findOrFail($id);
         $data->title = $request->input('title');
         $data->description = $request->input('description');
-        $data->program_id = $request->input('program_id');
+        $data->program_id = $request->input('program_id') ?: null;
+        $data->status = $request->input('status', $data->status ?? 'Active');
         if ($data->slug !== Str::slug($request->input('title'))) {
             $data->slug = $this->uniqueSlug($request->input('title'), $data->id);
         }
@@ -108,7 +113,7 @@ class ProjectsController extends Controller
             $img->delete();
         }
         $data->delete();
-        return redirect()->route('getProjects')->with('success', 'Project has been deleted');
+        return redirect()->route('communityImpact.admin.index')->with('success', 'Community initiative has been deleted.');
     }
 
     public function addProjectImage(Request $request)
