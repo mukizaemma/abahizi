@@ -30,9 +30,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/luxury-demo.css') }}">
 
     @php
-        $primary = $setting->primary_color ?? '#c9a962';
-        $secondary = $setting->secondary_color ?? '#1f1f1f';
-        $neutral = $setting->neutral_color ?? '#b0b0b0';
+        $primary = $setting->primary_color ?? '#fad200';
+        $secondary = $setting->secondary_color ?? '#000000';
+        $neutral = $setting->neutral_color ?? '#9a9a9a';
         $fontFamily = $setting->font_family ?? 'DM Sans';
         $googleFontParam = str_replace(' ', '+', $fontFamily);
     @endphp

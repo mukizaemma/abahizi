@@ -6,11 +6,11 @@
 :root {
     --lux-serif: "Cormorant Garamond", "Georgia", serif;
     --lux-sans: "DM Sans", system-ui, -apple-system, sans-serif;
-    --lux-earth: #5c4a3a;
-    --lux-earth-deep: #3d2f24;
-    --lux-cream: #faf8f5;
-    --lux-gold: var(--brand-primary, #c9a962);
-    --lux-charcoal: var(--brand-secondary, #1f1f1f);
+    --lux-earth: var(--brand-secondary, #000000);
+    --lux-earth-deep: var(--brand-secondary, #000000);
+    --lux-cream: #fafafa;
+    --lux-gold: var(--brand-primary, #fad200);
+    --lux-charcoal: var(--brand-secondary, #000000);
 }
 
 /* Button label vertical centering (fix baseline drift) */
@@ -906,7 +906,7 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
     object-fit: cover;
 }
 .lux-journey__placeholder {
-    background: linear-gradient(135deg, #e8e0d5, #d4c4b0);
+    background: linear-gradient(135deg, #f0f0f0, #e4e4e4);
 }
 .lux-journey__content {
     padding: 1.5rem 1.5rem 1.75rem;
@@ -981,7 +981,7 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
     justify-content: center;
     height: 100%;
     min-height: 280px;
-    background: linear-gradient(145deg, #ebe4da, #d9cfc0);
+    background: linear-gradient(145deg, #f0f0f0, #e4e4e4);
     text-align: center;
     padding: 2rem;
 }
@@ -1032,7 +1032,7 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
 }
 .impact-hub-card__media {
     overflow: hidden;
-    background: #ece8e3;
+    background: #f0f0f0;
 }
 .impact-hub-card__media img {
     width: 100%;
@@ -1259,7 +1259,7 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
     justify-content: center;
     padding: 1rem;
     text-align: center;
-    background: #ece8e3;
+    background: #f0f0f0;
     color: #666;
     font-size: 0.9rem;
 }
@@ -1759,7 +1759,7 @@ img[loading="lazy"] {
     display: block;
     overflow: hidden;
     border-radius: 14px;
-    background: #ece8e3;
+    background: #f0f0f0;
     min-height: 200px;
 }
 .home-craft-showcase__cell img {
@@ -2208,7 +2208,7 @@ img[loading="lazy"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ece8e3;
+    background: #f0f0f0;
     color: #777;
     font-size: 0.9rem;
 }
@@ -2470,7 +2470,7 @@ p, li, .lux-card__desc, .home-values-strip__desc {
     border: 1px solid rgba(0, 0, 0, 0.07);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background: #ece8e3;
+    background: #f0f0f0;
 }
 .factory-gallery-card:hover {
     transform: translateY(-3px);
@@ -2556,4 +2556,91 @@ p, li, .lux-card__desc, .home-values-strip__desc {
     .factory-impact__milestones {
         grid-template-columns: 1fr;
     }
+}
+
+/* ===== Logo brand alignment (yellow + black) ===== */
+:root {
+    --tp-common-orange: var(--brand-primary, #fad200);
+    --tp-heading-primary: var(--brand-secondary, #000);
+    --tp-theme-1: var(--brand-secondary, #000);
+    --tp-theme-2: var(--brand-primary, #fad200);
+    --tp-theme-3: var(--brand-primary, #fad200);
+}
+
+.tp-section-title,
+.lux-section-head__title,
+.page-header__title {
+    color: var(--brand-secondary, #000);
+}
+
+.text-theme,
+.tp-shop-details__price span.text-theme,
+.tp-team-2__author-info span {
+    color: var(--brand-primary, #fad200) !important;
+}
+
+.tp-team-2__author-name:hover {
+    color: var(--brand-primary, #fad200) !important;
+}
+
+.scroll-top {
+    background: var(--brand-primary, #fad200) !important;
+    color: var(--brand-secondary, #000) !important;
+}
+
+.scroll-top:hover {
+    background: var(--brand-secondary, #000) !important;
+    color: var(--brand-primary, #fad200) !important;
+}
+
+.tp-header-3__main-menu nav > ul > li > a:hover,
+.tp-header-3__main-menu nav > ul > li.current-menu-item > a,
+.tp-header-3__main-menu nav > ul > li.active > a {
+    color: var(--brand-primary, #fad200);
+}
+
+.mean-container a.meanmenu-reveal,
+.mean-container .mean-nav ul li a:hover {
+    color: var(--brand-primary, #fad200) !important;
+}
+
+.mean-container .mean-nav {
+    background: var(--brand-secondary, #000);
+}
+
+.grey-bg {
+    background-color: #f5f5f5 !important;
+}
+
+.lux-ticker,
+.lux-page-header {
+    background-color: var(--brand-secondary, #000);
+}
+
+.lux-page-header__overlay {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.82) 100%);
+}
+
+/* Replace warm/beige image placeholders with neutral grey */
+.lux-journey__placeholder,
+.lux-card__media--placeholder,
+.home-craft-showcase__cell--placeholder {
+    background: linear-gradient(145deg, #f0f0f0, #e0e0e0) !important;
+}
+
+/* Links — brand black, gold on hover */
+.postbox__text a:not(.tp-btn),
+.tp-shop-details__text a:not(.tp-btn) {
+    color: var(--brand-secondary, #000);
+}
+
+.postbox__text a:not(.tp-btn):hover,
+.tp-shop-details__text a:not(.tp-btn):hover {
+    color: var(--brand-primary, #fad200);
+}
+
+/* Selection highlight */
+::selection {
+    background: var(--brand-primary, #fad200);
+    color: var(--brand-secondary, #000);
 }

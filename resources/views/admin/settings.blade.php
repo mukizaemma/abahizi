@@ -129,11 +129,11 @@
                                         </div>
                                         <div class="col-lg-4">
                                             <label class="form-label">Secondary color</label>
-                                            <input type="color" class="form-control form-control-color w-100" name="secondary_color" value="{{ $data->secondary_color ?? '#2c2c2c' }}">
+                                            <input type="color" class="form-control form-control-color w-100" name="secondary_color" value="{{ $data->secondary_color ?? '#000000' }}">
                                         </div>
                                         <div class="col-lg-4">
                                             <label class="form-label">Neutral color</label>
-                                            <input type="color" class="form-control form-control-color w-100" name="neutral_color" value="{{ $data->neutral_color ?? '#b0b0b0' }}">
+                                            <input type="color" class="form-control form-control-color w-100" name="neutral_color" value="{{ $data->neutral_color ?? '#9a9a9a' }}">
                                         </div>
                                         <div class="col-lg-6">
                                             <label class="form-label">Font family</label>

@@ -1,7 +1,17 @@
 :root {
     --brand-primary: #fad200;
-    --brand-secondary: #2c2c2c;
-    --brand-neutral: #b0b0b0;
+    --brand-secondary: #000000;
+    --brand-neutral: #9a9a9a;
+
+    /* Remap legacy template tokens to logo palette */
+    --tp-common-orange: var(--brand-primary);
+    --tp-heading-primary: var(--brand-secondary);
+    --tp-theme-1: var(--brand-secondary);
+    --tp-theme-2: var(--brand-primary);
+    --tp-theme-3: var(--brand-primary);
+    --tp-border-1: rgba(0, 0, 0, 0.14);
+    --tp-text-body: #4a4a4a;
+    --tp-grey-2: #888888;
 }
 
 [data-theme-primary][data-theme-secondary][data-theme-neutral] {
@@ -11,17 +21,17 @@
 }
 
 body {
-    color: #2c2c2c;
+    color: var(--brand-secondary, #000);
 }
 
 .tp-btn,
 .tp-btn.theme-2-bg {
     background-color: var(--brand-primary) !important;
-    color: #2c2c2c !important;
+    color: var(--brand-secondary, #000) !important;
 }
 
 .tp-btn::after {
-    background-color: #2c2c2c !important;
+    background-color: var(--brand-secondary, #000) !important;
 }
 
 /* Consistent hover: dark fill with light (white / brand) label on all primary buttons */
@@ -52,7 +62,7 @@ body {
 }
 
 .tp-header-3__main-menu nav > ul > li > a {
-    color: #2c2c2c;
+    color: var(--brand-secondary, #000);
 }
 
 .tp-header-3__main-menu nav > ul {
@@ -319,7 +329,7 @@ body {
 
 .about-core-values-parallax--no-bg {
     background-image: none;
-    background: linear-gradient(135deg, #2c2c2c 0%, #3d3d3d 50%, #2c2c2c 100%);
+    background: linear-gradient(135deg, #000000 0%, #141414 50%, #000000 100%);
 }
 
 .about-core-values-parallax__overlay {
@@ -742,7 +752,7 @@ body {
 }
 
 .gallery-featured__thumb-btn.is-active {
-    border-color: #2563eb;
+    border-color: var(--brand-primary, #fad200);
     box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
 }
 
@@ -1734,7 +1744,7 @@ body {
 
 /* Site footer */
 .site-footer {
-    background: linear-gradient(165deg, #1e2433 0%, #12151c 55%, #0d0f14 100%);
+    background: linear-gradient(165deg, #0a0a0a 0%, #000000 55%, #000000 100%);
     color: rgba(255, 255, 255, 0.88);
     border-top: 3px solid var(--brand-primary, #fad200);
 }
@@ -2848,7 +2858,7 @@ body {
 
 .impact-stats-hero--no-bg {
     background-image: none;
-    background: linear-gradient(135deg, #243028 0%, #1a221c 45%, #2c3a30 100%);
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
 }
 
 .impact-stats-hero__overlay {

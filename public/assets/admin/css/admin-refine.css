@@ -274,3 +274,51 @@ a:hover {
 .admin-form-modal .note-editable {
     min-height: 120px !important;
 }
+
+/* Bootstrap + SB Admin — logo palette on actions */
+.btn-primary {
+    background-color: var(--brand-primary, #fad200) !important;
+    border-color: var(--brand-primary, #fad200) !important;
+    color: var(--brand-secondary, #000) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #e6c200 !important;
+    border-color: #e6c200 !important;
+    color: var(--brand-secondary, #000) !important;
+}
+
+.btn-outline-primary {
+    color: var(--brand-secondary, #000) !important;
+    border-color: var(--brand-secondary, #000) !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+    background-color: var(--brand-secondary, #000) !important;
+    border-color: var(--brand-secondary, #000) !important;
+    color: var(--brand-primary, #fad200) !important;
+}
+
+a:not(.btn):not(.nav-link):not(.dropdown-item) {
+    color: var(--brand-secondary, #000);
+}
+
+a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
+    color: var(--brand-primary, #fad200);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--brand-primary, #fad200);
+    box-shadow: 0 0 0 0.2rem rgba(250, 210, 0, 0.25);
+}
+
+.page-link.active,
+.active > .page-link {
+    background-color: var(--brand-primary, #fad200);
+    border-color: var(--brand-primary, #fad200);
+    color: var(--brand-secondary, #000);
+}

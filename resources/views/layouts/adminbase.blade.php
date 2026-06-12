@@ -4,8 +4,8 @@
         @php
             $themeSetting = $setting ?? \App\Models\Setting::firstOrEmpty();
             $primary = $themeSetting->primary_color ?? '#fad200';
-            $secondary = $themeSetting->secondary_color ?? '#2c2c2c';
-            $neutral = $themeSetting->neutral_color ?? '#b0b0b0';
+            $secondary = $themeSetting->secondary_color ?? '#000000';
+            $neutral = $themeSetting->neutral_color ?? '#9a9a9a';
             $fontFamily = $themeSetting->font_family ?? 'Poppins';
             $googleFontParam = str_replace(' ', '+', $fontFamily);
         @endphp

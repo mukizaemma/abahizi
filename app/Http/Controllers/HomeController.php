@@ -527,7 +527,7 @@ public function gallery(){
             $data->primary_color = $request->input('primary_color') ?: '#fad200';
         }
         if (Schema::hasColumn('settings', 'secondary_color')) {
-            $data->secondary_color = $request->input('secondary_color') ?: '#2c2c2c';
+            $data->secondary_color = $request->input('secondary_color') ?: '#000000';
         }
         if (Schema::hasColumn('settings', 'neutral_color')) {
             $data->neutral_color = $request->input('neutral_color') ?: '#b0b0b0';
