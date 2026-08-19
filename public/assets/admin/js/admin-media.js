@@ -207,6 +207,12 @@
 
         input.classList.add('media-field__input');
 
+        var sibling = wrap.nextElementSibling;
+        if (sibling && sibling.tagName === 'IMG') {
+            sibling.classList.add('media-field__current');
+            wrap.appendChild(sibling);
+        }
+
         actions.querySelector('[data-media-upload]').addEventListener('click', function () {
             input.click();
         });

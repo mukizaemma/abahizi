@@ -152,7 +152,7 @@
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">About story, stats, section photos</p>
                                     <p class="ho-guide-item__menu">About &amp; story</p>
-                                    <p>Update the story and numbers. Use <em>Section backgrounds</em> for large photos, including the homepage impact band.</p>
+                                    <p>Update the story and numbers. Use <em>Section backgrounds</em> for large photos, including the homepage impact band and the “Quality you can scale” photo.</p>
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Factory page sections</p>

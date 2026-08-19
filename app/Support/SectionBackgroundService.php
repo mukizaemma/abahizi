@@ -33,9 +33,9 @@ class SectionBackgroundService
                 'fallbacks' => ['image2', 'image1', 'image'],
                 'default' => 'assets/img/slider/slider-bg-3-2.jpg',
             ],
-            'home_partners_image' => [
-                'label' => 'Home — Trusted by photo',
-                'help' => 'Photo beside partner names on the homepage. Use a factory, production, or team photo from Masoro — not a size placeholder.',
+            'home_why_partner_background' => [
+                'label' => 'Home — Why brands photo',
+                'help' => 'Photo beside “Quality you can scale” on the homepage. Use factory floor, sampling, or finishing work from Masoro.',
                 'fallbacks' => ['factory_services_image'],
                 'default' => null,
             ],
@@ -113,8 +113,49 @@ class SectionBackgroundService
     }
 
     /**
-     * Homepage “Trusted by” feature photo: dedicated CMS image, then real factory/slide photos.
-     * Bundled 1920×875 placeholders are never used.
+     * Homepage “Why brands” photo: dedicated CMS image, then real factory/slide photos.
+     */
+    public static function whyFeatureImage(?Background $about = null): ?string
+    {
+        $about ??= Background::firstOrEmpty();
+
+        $candidates = [];
+
+        $dedicated = static::storedFilename($about, 'home_why_partner_background');
+        if ($dedicated) {
+            $candidates[] = static::urlFromFilename($dedicated);
+        }
+
+        $factoryPage = trim((string) ($about->factory_services_image ?? ''));
+        if ($factoryPage !== '') {
+            $candidates[] = static::urlFromFilename($factoryPage);
+        }
+
+        if (Schema::hasTable('factory_gallery_images')) {
+            $gallery = FactoryGalleryImage::query()->orderBy('sort_order')->orderBy('id')->first();
+            if ($gallery) {
+                $candidates[] = $gallery->url();
+            }
+        }
+
+        if (Schema::hasTable('slides')) {
+            $slide = Slide::query()->whereNotNull('image')->where('image', '!=', '')->latest()->first();
+            if ($slide) {
+                $candidates[] = Slide::publicImageUrl($slide->image);
+            }
+        }
+
+        foreach ($candidates as $url) {
+            if (! static::isPlaceholderUrl($url)) {
+                return $url;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Homepage partners photo if that block is shown again.
      */
     public static function partnersFeatureImage(?Background $about = null): ?string
     {

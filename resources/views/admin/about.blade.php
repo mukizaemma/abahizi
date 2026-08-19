@@ -254,7 +254,7 @@
                                                 <p class="text-muted small mb-2">{{ $definition['help'] }}</p>
                                                 <input type="file" class="form-control" name="{{ $field }}" accept="image/*">
                                                 @if($previewUrl)
-                                                    <img src="{{ $previewUrl }}" width="220" class="mt-2 rounded border p-1 bg-white" alt="{{ $definition['label'] }} preview">
+                                                    <img src="{{ $previewUrl }}" class="admin-preview-img mt-2 rounded border p-1 bg-white" alt="{{ $definition['label'] }} preview">
                                                 @endif
                                             </div>
                                         @endforeach
