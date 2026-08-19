@@ -672,8 +672,8 @@ public function gallery(){
 
     public function webMessages(){
 
-        $messages = Message::all();
-        return view('admin.dashboard', ['messages'=>$messages]);
+        $messages = Message::latest()->get();
+        return view('admin.dashboard', ['messages' => $messages]);
     }
 
     public function messageReply($id){
@@ -1294,16 +1294,29 @@ public function gallery(){
         $validated = $request->validate([
             'names' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'intent' => ['required', 'string', 'in:' . implode(',', array_keys(HandoverFeedback::intentOptions()))],
-            'message' => ['required', 'string', 'min:10', 'max:20000'],
+            'intent' => ['required', 'string', 'in:' . implode(',', array_keys(HandoverFeedback::decisionOptions()))],
+            'rating' => ['required', 'integer', 'min:1', 'max:5'],
+            'rating_site' => ['required', 'integer', 'min:1', 'max:5'],
+            'rating_admin' => ['required', 'integer', 'min:1', 'max:5'],
+            'message' => ['nullable', 'string', 'max:20000'],
         ]);
+
+        $notes = trim((string) ($validated['message'] ?? ''));
+        if (in_array($validated['intent'], ['changes', 'end'], true) && strlen($notes) < 10) {
+            return back()
+                ->withInput()
+                ->withErrors(['message' => 'Please add a short note (at least 10 characters) so we know what to change or discuss.']);
+        }
 
         HandoverFeedback::create([
             'names' => $validated['names'],
             'email' => $validated['email'],
             'topic' => '',
             'intent' => $validated['intent'],
-            'message' => trim($validated['message']),
+            'rating' => (int) $validated['rating'],
+            'rating_site' => (int) $validated['rating_site'],
+            'rating_admin' => (int) $validated['rating_admin'],
+            'message' => $notes,
             'ip' => $request->ip(),
         ]);
 
@@ -1312,7 +1325,7 @@ public function gallery(){
         return redirect()
             ->route('handoverPage')
             ->withFragment('feedback')
-            ->with('success', 'Thank you. Your feedback has been recorded. We will review it before the site goes live.');
+            ->with('success', 'Thank you. We have recorded your decision and ratings.');
     }
 
 

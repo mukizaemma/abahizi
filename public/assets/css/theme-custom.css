@@ -2146,7 +2146,7 @@ body {
 }
 
 .ho-form {
-    max-width: 38rem;
+    max-width: 44rem;
     position: relative;
 }
 
@@ -2230,19 +2230,25 @@ body {
     text-transform: none;
 }
 
+.ho-field__hint--block {
+    display: block;
+    margin: 0 0 0.75rem;
+}
+
 .ho-choices {
     display: grid;
-    gap: 0.5rem;
+    gap: 0.55rem;
 }
 
 .ho-choice {
     display: flex;
-    align-items: center;
-    gap: 0.65rem;
+    align-items: flex-start;
+    gap: 0.7rem;
     border: 1px solid rgba(0, 0, 0, 0.16);
-    padding: 0.7rem 0.85rem;
+    padding: 0.85rem 0.95rem;
     cursor: pointer;
     font-weight: 600;
+    line-height: 1.45;
     margin: 0;
 }
 
@@ -2254,7 +2260,85 @@ body {
 .ho-choice input {
     width: 1.05rem;
     height: 1.05rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
     accent-color: #000;
+}
+
+.ho-choice span {
+    flex: 1;
+}
+
+.ho-rating-block {
+    margin: 0 0 1.1rem;
+}
+
+.ho-rating-block:last-of-type {
+    margin-bottom: 0;
+}
+
+.ho-rating-q {
+    margin: 0 0 0.45rem;
+    font-size: 0.95rem;
+    font-weight: 650;
+    line-height: 1.4;
+    color: #111;
+}
+
+.ho-rating-q em {
+    font-style: normal;
+}
+
+.ho-rating {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.ho-rating__opt {
+    flex: 1;
+    margin: 0;
+    cursor: pointer;
+}
+
+.ho-rating__opt input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+}
+
+.ho-rating__opt span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    min-height: 2.75rem;
+    font-weight: 700;
+    background: #fff;
+}
+
+.ho-rating__opt:hover span {
+    border-color: #000;
+}
+
+.ho-rating__opt:has(:checked) span {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.ho-rating__opt:has(:focus-visible) span {
+    outline: 2px solid var(--brand-primary, #fad200);
+    outline-offset: 2px;
+}
+
+.ho-rating__scale {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.35rem 0 0;
+    font-size: 0.75rem;
+    color: #666;
 }
 
 @media (max-width: 991.98px) {

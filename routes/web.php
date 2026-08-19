@@ -96,9 +96,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', 'admin.role'
 ])->group(function () {
-    Route::get('admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('admin/dashboard', [App\Http\Controllers\HomeController::class, 'webMessages'])->name('dashboard');
 
     // Route::get('branches', [App\Http\Controllers\BranchController::class, 'index'])->name('branch.index');
 

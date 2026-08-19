@@ -26,12 +26,22 @@
                                 <dd><a href="mailto:{{ $feedback->email }}">{{ $feedback->email }}</a></dd>
                             </div>
                             <div>
-                                <dt>Overall view</dt>
+                                <dt>Next step</dt>
                                 <dd>{{ $feedback->intentLabel() }}</dd>
                             </div>
+                            @foreach(\App\Models\HandoverFeedback::ratingQuestions() as $field => $question)
+                                <div>
+                                    <dt>{{ $question }}</dt>
+                                    <dd>{{ $feedback->ratingLabel($feedback->{$field}) }}</dd>
+                                </div>
+                            @endforeach
                         </dl>
                         <h2 class="h6 text-uppercase text-muted">Notes</h2>
-                        <div class="admin-feedback-body">{{ $feedback->message }}</div>
+                        @if(filled($feedback->message))
+                            <div class="admin-feedback-body">{{ $feedback->message }}</div>
+                        @else
+                            <p class="text-muted mb-0">No notes were added.</p>
+                        @endif
                     </div>
                     <div class="card-footer d-flex flex-wrap gap-2">
                         <a class="btn btn-primary" href="mailto:{{ $feedback->email }}?subject={{ rawurlencode('Re: website handover feedback') }}">Reply by email</a>

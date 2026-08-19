@@ -268,7 +268,7 @@
 
                     <section class="ho-panel" role="tabpanel" id="panel-feedback" aria-labelledby="tab-feedback" data-ho-panel="feedback" hidden>
                         <h2>Send feedback</h2>
-                        <p class="ho-intro">Tell us what to keep or change before the site goes live. We read every note before go-live.</p>
+                        <p class="ho-intro">Choose the next step, then rate the same review questions from 1 (poor) to 5 (excellent). That gives a clear way forward before go-live.</p>
 
                         @if(session('success'))
                             <div class="ho-alert ho-alert--ok">{{ session('success') }}</div>
@@ -279,7 +279,7 @@
                             </div>
                         @endif
 
-                        <form class="ho-form" action="{{ route('handoverFeedback') }}" method="POST">
+                        <form class="ho-form" action="{{ route('handoverFeedback') }}" method="POST" id="ho-feedback-form">
                             @csrf
                             <div class="site-hp-field" aria-hidden="true">
                                 <label for="ho_hp_url">Company URL</label>
@@ -303,30 +303,45 @@
                             </fieldset>
 
                             <fieldset class="ho-fieldset">
-                                <legend>2. Your overall view</legend>
-                                <div class="ho-choices" role="radiogroup" aria-label="Your overall view">
-                                    <label class="ho-choice">
-                                        <input type="radio" name="intent" value="approve" required @checked(old('intent') === 'approve')>
-                                        <span>This looks good</span>
-                                    </label>
-                                    <label class="ho-choice">
-                                        <input type="radio" name="intent" value="change" @checked(old('intent') === 'change')>
-                                        <span>Please change this</span>
-                                    </label>
-                                    <label class="ho-choice">
-                                        <input type="radio" name="intent" value="question" @checked(old('intent') === 'question')>
-                                        <span>I have a question</span>
-                                    </label>
+                                <legend>2. What should we do next?</legend>
+                                <p class="ho-field__hint ho-field__hint--block">Select one decision. This is how we know the way forward.</p>
+                                <div class="ho-choices" role="radiogroup" aria-label="What should we do next?">
+                                    @foreach(\App\Models\HandoverFeedback::decisionOptions() as $value => $label)
+                                        <label class="ho-choice">
+                                            <input type="radio" name="intent" value="{{ $value }}" required @checked(old('intent') === $value)>
+                                            <span>{{ $label }}</span>
+                                        </label>
+                                    @endforeach
                                 </div>
                                 @error('intent')<span class="ho-field__error">{{ $message }}</span>@enderror
                             </fieldset>
 
                             <fieldset class="ho-fieldset">
-                                <legend>3. Your notes</legend>
+                                <legend>3. Rate this review</legend>
+                                <p class="ho-field__hint ho-field__hint--block">1 = Poor &nbsp;·&nbsp; 3 = Good &nbsp;·&nbsp; 5 = Excellent</p>
+                                @foreach(\App\Models\HandoverFeedback::ratingQuestions() as $name => $question)
+                                    <div class="ho-rating-block">
+                                        <p class="ho-rating-q" id="label-{{ $name }}">{{ $question }} <em>*</em></p>
+                                        <div class="ho-rating" role="radiogroup" aria-labelledby="label-{{ $name }}">
+                                            @foreach(\App\Models\HandoverFeedback::ratingScale() as $score => $scoreLabel)
+                                                <label class="ho-rating__opt">
+                                                    <input type="radio" name="{{ $name }}" value="{{ $score }}" required @checked((string) old($name) === (string) $score)>
+                                                    <span title="{{ $scoreLabel }}">{{ $score }}</span>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                        <p class="ho-rating__scale" aria-hidden="true"><span>Poor</span><span>Excellent</span></p>
+                                        @error($name)<span class="ho-field__error">{{ $message }}</span>@enderror
+                                    </div>
+                                @endforeach
+                            </fieldset>
+
+                            <fieldset class="ho-fieldset">
+                                <legend>4. Notes</legend>
                                 <label class="ho-field">
-                                    <span>What should we know? <em>*</em></span>
-                                    <textarea name="message" rows="5" required minlength="10" maxlength="20000" placeholder="Example: The homepage heading should mention Masoro. Or: I could not find where to add a team member.">{{ old('message') }}</textarea>
-                                    <span class="ho-field__hint">At least 10 characters. Be as specific as you can.</span>
+                                    <span>Anything we should know?</span>
+                                    <textarea name="message" id="ho-feedback-notes" rows="5" maxlength="20000" placeholder="Example: Keep the homepage as it is. Or: Please change the factory heading, and here is what it should say.">{{ old('message') }}</textarea>
+                                    <span class="ho-field__hint" id="ho-notes-hint">Optional if you chose to keep as is or to go live. Required if you requested changes or wish to discuss ending the partnership.</span>
                                     @error('message')<span class="ho-field__error">{{ $message }}</span>@enderror
                                 </label>
                             </fieldset>
@@ -474,6 +489,32 @@
                 }
             });
         });
+
+        var form = document.getElementById('ho-feedback-form');
+        var notes = document.getElementById('ho-feedback-notes');
+        var notesHint = document.getElementById('ho-notes-hint');
+        function syncNotesRequired() {
+            if (!form || !notes) return;
+            var checked = form.querySelector('input[name="intent"]:checked');
+            var needs = checked && (checked.value === 'changes' || checked.value === 'end');
+            notes.required = !!needs;
+            if (needs) {
+                notes.setAttribute('minlength', '10');
+            } else {
+                notes.removeAttribute('minlength');
+            }
+            if (notesHint) {
+                notesHint.textContent = needs
+                    ? 'Please add a short note (at least 10 characters) so we know what to change or discuss.'
+                    : 'Optional if you chose to keep as is or to go live. Required if you requested changes or wish to discuss ending the partnership.';
+            }
+        }
+        if (form) {
+            form.querySelectorAll('input[name="intent"]').forEach(function (input) {
+                input.addEventListener('change', syncNotesRequired);
+            });
+            syncNotesRequired();
+        }
     })();
 </script>
 

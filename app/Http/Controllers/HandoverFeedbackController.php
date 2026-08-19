@@ -12,8 +12,15 @@ class HandoverFeedbackController extends Controller
     {
         $rows = HandoverFeedback::query()->latest()->paginate(30);
         $unreadCount = HandoverFeedback::query()->unread()->count();
+        $averages = HandoverFeedback::query()
+            ->selectRaw('AVG(rating) as rating, AVG(rating_site) as rating_site, AVG(rating_admin) as rating_admin')
+            ->first();
+        $decisionCounts = HandoverFeedback::query()
+            ->selectRaw('intent, COUNT(*) as total')
+            ->groupBy('intent')
+            ->pluck('total', 'intent');
 
-        return view('admin.handover-feedback.index', compact('rows', 'unreadCount'));
+        return view('admin.handover-feedback.index', compact('rows', 'unreadCount', 'averages', 'decisionCounts'));
     }
 
     public function show(HandoverFeedback $feedback): View
