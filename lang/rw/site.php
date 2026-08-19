@@ -287,6 +287,7 @@ return [
         'watch_story' => 'Reba Inkuru Yacu',
         'products_title' => 'Ibicuruzwa Byacu',
         'products_lead' => 'Byubatswe ku bakiriya baha agaciro uburyo bikozweho.',
+        'products_view_more' => 'Reba byinshi',
         'product_1_title' => 'Imifuka yihariye',
         'product_1_info' => 'Imifuka yubatswe ku buryo bwihariye bw\'umukiriya.',
         'product_2_title' => 'Imifuka minini',

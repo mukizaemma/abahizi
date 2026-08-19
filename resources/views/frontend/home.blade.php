@@ -10,7 +10,6 @@
     @include('frontend.includes.landing.process')
     @include('frontend.includes.landing.ownership')
     @include('frontend.includes.landing.impact')
-    @include('frontend.includes.landing.partners')
     @include('frontend.includes.landing.contact')
 
 @endsection

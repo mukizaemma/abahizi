@@ -479,8 +479,14 @@
 
 .lh-products__grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
+}
+
+.lh-products__more {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
 }
 
 .lh-product-card {
@@ -1595,10 +1601,6 @@ body.lh-modal-open {
 
 /* Responsive */
 @media (max-width: 1199.98px) {
-    .lh-products__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
     .lh-impact__parallax {
         top: -28%;
         bottom: -28%;

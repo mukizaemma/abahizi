@@ -42,7 +42,7 @@
                 }
             }
 
-            if ($firstSrc && $gridItems->count() < 8) {
+            if ($firstSrc && $gridItems->count() < 3) {
                 $gridItems->push([
                     'src' => $firstSrc,
                     'title' => $title,
@@ -57,7 +57,6 @@
             [__('site.landing.product_1_title'), asset('assets/img/product/product-1-1.jpg')],
             [__('site.landing.product_2_title'), asset('assets/img/product/product-1-2.jpg')],
             [__('site.landing.product_3_title'), asset('assets/img/product/product-1-3.jpg')],
-            [__('site.landing.product_4_title'), asset('assets/img/product/product-1-4.jpg')],
         ];
         foreach ($fallbacks as [$title, $src]) {
             $index = $addLightboxImage($src, $title);
@@ -68,9 +67,6 @@
             ]);
         }
     }
-
-    $showCatalogCta = (bool) ($setting->show_products_page ?? true)
-        && (bool) ($setting->show_products_publicly ?? false);
 @endphp
 
 <section class="lh-products" id="lh-products" aria-labelledby="lh-products-title">
@@ -79,9 +75,6 @@
             <div>
                 <h2 id="lh-products-title" class="lh-products__title">{{ __('site.landing.products_lead') }}</h2>
             </div>
-            @if($showCatalogCta)
-                <a href="{{ route('ourProducts') }}" class="lh-btn lh-btn--ghost-dark">{{ __('site.landing.cta_products') }}</a>
-            @endif
         </div>
 
         <div class="lh-products__grid" data-count="{{ $gridItems->count() }}">
@@ -104,6 +97,10 @@
                     </span>
                 </button>
             @endforeach
+        </div>
+
+        <div class="lh-products__more lh-reveal">
+            <a href="{{ route('ourProducts') }}" class="lh-btn lh-btn--ghost-dark">{{ __('site.landing.products_view_more') }}</a>
         </div>
     </div>
 </section>

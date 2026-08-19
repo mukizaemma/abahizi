@@ -287,6 +287,7 @@ return [
         'watch_story' => 'Watch Our Story',
         'products_title' => 'Our Products',
         'products_lead' => 'Built for partners who care how things are made.',
+        'products_view_more' => 'View more',
         'product_1_title' => 'Custom Handbags',
         'product_1_info' => 'Totes, crossbody bags, and branded pieces built to your specifications.',
         'product_2_title' => 'Totes',

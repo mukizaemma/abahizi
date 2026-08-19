@@ -59,7 +59,7 @@
                         <div class="ho-grid ho-grid--3">
                             <article class="ho-card">
                                 <h3>New homepage</h3>
-                                <p>A full-height photo with a large heading and two buttons at the bottom. Impact stats, partners, and contact are editable from the admin.</p>
+                                <p>A full-height photo with a large heading and two buttons at the bottom. Impact stats, products, and contact are editable from the admin.</p>
                             </article>
                             <article class="ho-card">
                                 <h3>Factory &amp; products</h3>
@@ -152,7 +152,7 @@
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">About story, stats, section photos</p>
                                     <p class="ho-guide-item__menu">About &amp; story</p>
-                                    <p>Update the story and numbers. Use <em>Section backgrounds</em> for large photos, including the homepage impact band and the Trusted by photo.</p>
+                                    <p>Update the story and numbers. Use <em>Section backgrounds</em> for large photos, including the homepage impact band.</p>
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Factory page sections</p>
@@ -162,7 +162,7 @@
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Partner names, logos, and homepage photo</p>
                                     <p class="ho-guide-item__menu">Partners</p>
-                                    <p>Add each organisation and a logo. The large photo next to them on the homepage is set on the same page (Homepage photo), or under About &amp; story → Section backgrounds. Use a factory or production photo from Masoro.</p>
+                                    <p>Add each organisation and a logo. These names can be used when you want a partners list on the site later.</p>
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Handbags and categories</p>
