@@ -483,6 +483,17 @@
     gap: 1rem;
 }
 
+.lh-products__grid[data-count="1"] {
+    grid-template-columns: minmax(0, 22rem);
+    justify-content: center;
+}
+
+.lh-products__grid[data-count="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 44rem;
+    margin-inline: auto;
+}
+
 .lh-products__more {
     display: flex;
     justify-content: center;

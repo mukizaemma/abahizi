@@ -66,7 +66,7 @@
                     <x-admin.nav-link
                         :href="route('catalogProducts.index')"
                         icon="fa-box"
-                        :active="request()->routeIs(['catalogProducts.index', 'catalogProducts.create', 'catalogProducts.store', 'catalogProducts.edit', 'catalogProducts.update', 'catalogProducts.destroy', 'catalogProducts.deleteImage'])"
+                        :active="request()->routeIs(['catalogProducts.index', 'catalogProducts.create', 'catalogProducts.store', 'catalogProducts.edit', 'catalogProducts.update', 'catalogProducts.destroy', 'catalogProducts.deleteImage', 'catalogProducts.homepageCards'])"
                     >
                         Products catalog
                     </x-admin.nav-link>

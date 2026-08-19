@@ -172,8 +172,8 @@
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Custom Handbags, Totes, Pouches (homepage cards)</p>
-                                    <p class="ho-guide-item__menu">Products</p>
-                                    <p>Those three homepage cards are the first 3 published products that have a photo. Add or replace the cover image on each product. Grey boxes that say 370 × 300 mean a real photo has not been uploaded yet. Portrait photos about 900×1200 work well. Turn the public catalog on or off in Site settings.</p>
+                                    <p class="ho-guide-item__menu">Products → Homepage cards</p>
+                                    <p>At the top of the Products page, upload three photos and optional titles. These appear on the homepage even when you have nothing to sell in the catalog. Real catalog products are listed below that and stay on the Products page. Portrait photos about 900×1200 work well.</p>
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Impact numbers</p>
@@ -204,7 +204,7 @@
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Built for partners who care how things are made</p>
                                     <p class="ho-guide-item__menu">Products</p>
-                                    <p>The three cards (for example Custom Handbags, Totes, Pouches) are products, not a background image. Open <strong>Products</strong>, edit each item, and upload a cover photo. Products marked <strong>On homepage</strong> are the three currently shown. Use a portrait photo, about 900×1200.</p>
+                                    <p>The three cards (for example Custom Handbags, Totes, Pouches) are <strong>Homepage cards</strong> at the top of the Products page — not catalog items. Upload a photo for each card. You do not need products for sale. Use a portrait photo, about 900×1200. Grey 370 × 300 boxes mean those card photos have not been set yet.</p>
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Craft with purpose. (photo on the right)</p>

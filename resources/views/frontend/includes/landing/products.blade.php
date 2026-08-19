@@ -18,7 +18,18 @@
         return $index;
     };
 
-    if (isset($homeProducts) && $homeProducts->isNotEmpty()) {
+    $showcaseCards = \App\Support\HomeProductShowcase::cards($about ?? null);
+
+    foreach ($showcaseCards as $card) {
+        $index = $addLightboxImage($card['src'], $card['title']);
+        $gridItems->push([
+            'src' => $card['src'],
+            'title' => $card['title'],
+            'index' => $index,
+        ]);
+    }
+
+    if ($gridItems->isEmpty() && isset($homeProducts) && $homeProducts->isNotEmpty()) {
         foreach ($homeProducts as $product) {
             $title = trim((string) $product->title);
             $paths = collect();

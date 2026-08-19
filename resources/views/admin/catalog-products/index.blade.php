@@ -17,7 +17,7 @@
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
                     <div>
                         <h1>Products (Abahizi Manufacturing)</h1>
-                        <p class="text-muted mb-0">The first 3 published products that have a photo appear on the homepage under <strong>Built for partners who care how things are made.</strong> Use a portrait photo (about 900×1200). Grey “370 × 300” boxes mean those products still need a real photo.</p>
+                        <p class="text-muted mb-0">The catalog is for items you sell or quote. The three homepage cards below can show photos even when there is nothing in the catalog.</p>
                     </div>
                     <div class="d-flex gap-2 flex-wrap">
                         <a href="{{ route('productCategories.index') }}" class="btn btn-outline-secondary">Categories</a>
@@ -28,6 +28,38 @@
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="h5 mb-1">Homepage cards</h2>
+                        <p class="text-muted mb-4">These three photos appear on the homepage under <strong>Built for partners who care how things are made.</strong> You do not need a product in the catalog. Portrait photos about 900×1200 work well.</p>
+                        <form action="{{ route('catalogProducts.homepageCards') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row g-4">
+                                @foreach($homepageSlots as $slot)
+                                    <div class="col-md-4">
+                                        <div class="admin-image-card h-100">
+                                            <label class="form-label fw-semibold">Card {{ $slot['slot'] }}</label>
+                                            <input type="text" class="form-control mb-2" name="{{ $slot['title_field'] }}" value="{{ old($slot['title_field'], $slot['title']) }}" placeholder="{{ $slot['placeholder'] }}" maxlength="80">
+                                            <input type="file" class="form-control" name="{{ $slot['image_field'] }}" accept="image/*">
+                                            @if($slot['src'])
+                                                <img src="{{ $slot['src'] }}" class="admin-preview-img mt-2" alt="Homepage card {{ $slot['slot'] }}">
+                                                <div class="form-check mt-2">
+                                                    <input type="checkbox" class="form-check-input" name="clear_{{ $slot['image_field'] }}" value="1" id="clear_card_{{ $slot['slot'] }}">
+                                                    <label class="form-check-label small" for="clear_card_{{ $slot['slot'] }}">Remove this photo</label>
+                                                </div>
+                                            @endif
+                                            @error($slot['image_field'])
+                                                <div class="text-danger small mt-1">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-3"><i class="fa fa-save me-1"></i> Save homepage cards</button>
+                        </form>
+                    </div>
+                </div>
 
                 <div class="card">
                     <div class="card-body p-0">
@@ -55,9 +87,6 @@
                                             </td>
                                             <td>
                                                 <div class="fw-semibold">{{ $p->title }}</div>
-                                                @if($homepageProductIds->contains($p->id))
-                                                    <span class="badge bg-dark mt-1">On homepage</span>
-                                                @endif
                                             </td>
                                             <td>{{ $p->category->name ?? '—' }}</td>
                                             <td>RWF {{ number_format((float) $p->price, 0) }}</td>

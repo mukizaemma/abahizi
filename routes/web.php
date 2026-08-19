@@ -240,6 +240,7 @@ Route::middleware(['auth', 'admin.role'
     Route::get('/product-categories/{id}/delete', [App\Http\Controllers\ProductCategoryController::class, 'destroy'])->name('productCategories.destroy');
 
     Route::get('/catalog-products', [App\Http\Controllers\CatalogProductController::class, 'index'])->name('catalogProducts.index');
+    Route::post('/catalog-products/homepage-cards', [App\Http\Controllers\CatalogProductController::class, 'saveHomepageCards'])->name('catalogProducts.homepageCards');
     Route::get('/catalog-products/create', [App\Http\Controllers\CatalogProductController::class, 'create'])->name('catalogProducts.create');
     Route::post('/catalog-products', [App\Http\Controllers\CatalogProductController::class, 'store'])->name('catalogProducts.store');
     Route::get('/catalog-products/{id}/edit', [App\Http\Controllers\CatalogProductController::class, 'edit'])->name('catalogProducts.edit');

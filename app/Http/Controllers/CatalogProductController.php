@@ -14,9 +14,33 @@ class CatalogProductController extends Controller
     public function index()
     {
         $products = Product::query()->with(['category', 'images'])->latest()->paginate(25);
-        $homepageProductIds = Product::homepagePreviewIds();
+        $homepageSlots = \App\Support\HomeProductShowcase::adminSlots();
 
-        return view('admin.catalog-products.index', compact('products', 'homepageProductIds'));
+        return view('admin.catalog-products.index', compact('products', 'homepageSlots'));
+    }
+
+    public function saveHomepageCards(Request $request)
+    {
+        $rules = [];
+        foreach ([1, 2, 3] as $slot) {
+            $rules[\App\Support\HomeProductShowcase::titleField($slot)] = ['nullable', 'string', 'max:80'];
+            $rules[\App\Support\HomeProductShowcase::imageField($slot)] = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'];
+        }
+
+        $request->validate($rules);
+
+        $about = \App\Models\Background::first();
+        if ($about === null) {
+            $about = new \App\Models\Background();
+            $about->description = 'Our Background';
+            $about->save();
+        }
+
+        \App\Support\HomeProductShowcase::save($request, $about);
+
+        return redirect()
+            ->route('catalogProducts.index')
+            ->with('success', 'Homepage product cards saved. Refresh the public homepage to see them.');
     }
 
     public function create()

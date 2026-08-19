@@ -249,7 +249,7 @@
                                 <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="return_tab" value="section-backgrounds">
-                                    <p class="text-muted mb-4">Each photo is named after the heading visitors see on the site. Upload, save, then refresh the homepage. Product cards (Custom Handbags, Totes, Pouches) are edited under <a href="{{ route('catalogProducts.index') }}">Products</a>, not here.</p>
+                                    <p class="text-muted mb-4">Each photo is named after the heading visitors see on the site. Upload, save, then refresh the homepage. The three product cards (Custom Handbags, Totes, Pouches) are edited at the top of <a href="{{ route('catalogProducts.index') }}">Products</a> — you do not need a catalog item to show them.</p>
                                     @foreach(SectionBackgroundService::groupedDefinitions() as $group => $fields)
                                         <h2 class="h6 text-uppercase text-muted mt-2 mb-3">{{ $group }}</h2>
                                         <div class="row g-4 mb-4">

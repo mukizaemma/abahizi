@@ -75,7 +75,7 @@
                                 <div class="mb-2"><img src="{{ asset('storage/' . $product->image) }}" alt="" height="80" class="rounded border"></div>
                             @endif
                             <input type="file" name="image" class="form-control" accept="image/*">
-                            <p class="text-muted small mb-0 mt-1">Portrait photo, about 900×1200. This cover is what visitors see on the homepage if this product is one of the first 3 with a photo.</p>
+                            <p class="text-muted small mb-0 mt-1">This is the catalog photo. Homepage cards are set separately on the <a href="{{ route('catalogProducts.index') }}">Products list</a>.</p>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Add gallery images</label>

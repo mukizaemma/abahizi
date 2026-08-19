@@ -72,7 +72,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Cover image</label>
                             <input type="file" name="image" class="form-control" accept="image/*">
-                            <p class="text-muted small mb-0 mt-1">Portrait photo, about 900×1200. The first 3 published products with a photo appear on the homepage product cards.</p>
+                            <p class="text-muted small mb-0 mt-1">Optional. Homepage cards are set on the <a href="{{ route('catalogProducts.index') }}">Products list</a> and do not require a catalog item.</p>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Gallery images (optional)</label>
