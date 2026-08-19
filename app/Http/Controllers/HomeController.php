@@ -135,8 +135,8 @@ class HomeController extends Controller
             $homeProducts = Product::query()
                 ->active()
                 ->with(['category', 'images'])
+                ->orderBy('sort_order')
                 ->latest()
-                ->take(12)
                 ->get();
         }
 

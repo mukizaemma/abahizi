@@ -240,7 +240,12 @@ public function saveBackg(Request $request)
 
     $data->save();
 
-    return redirect()->back()->with('success', 'Background has been updated successfully');
+    $redirect = redirect()->back()->with('success', 'Background has been updated successfully');
+    if ($request->input('return_tab') === 'section-backgrounds') {
+        return $redirect->withFragment('section-backgrounds');
+    }
+
+    return $redirect;
 }
 
 

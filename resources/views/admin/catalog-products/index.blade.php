@@ -17,7 +17,7 @@
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
                     <div>
                         <h1>Products (Abahizi Manufacturing)</h1>
-                        <p class="text-muted mb-0">Made in Rwanda — manage catalog, pricing, and galleries (orders via “Request order” form).</p>
+                        <p class="text-muted mb-0">The first 3 published products that have a photo appear on the homepage under <strong>Built for partners who care how things are made.</strong> Use a portrait photo (about 900×1200). Grey “370 × 300” boxes mean those products still need a real photo.</p>
                     </div>
                     <div class="d-flex gap-2 flex-wrap">
                         <a href="{{ route('productCategories.index') }}" class="btn btn-outline-secondary">Categories</a>
@@ -35,6 +35,7 @@
                             <table class="table table-hover align-middle mb-0">
                                 <thead>
                                     <tr>
+                                        <th style="width: 4.5rem;">Photo</th>
                                         <th>Product</th>
                                         <th>Category</th>
                                         <th>Price</th>
@@ -45,7 +46,19 @@
                                 <tbody>
                                     @forelse($products as $p)
                                         <tr>
-                                            <td class="fw-semibold">{{ $p->title }}</td>
+                                            <td>
+                                                @if($p->adminThumbUrl())
+                                                    <img src="{{ $p->adminThumbUrl() }}" alt="" width="56" height="72" class="rounded border" style="object-fit: cover;">
+                                                @else
+                                                    <span class="text-muted small">No photo</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <div class="fw-semibold">{{ $p->title }}</div>
+                                                @if($homepageProductIds->contains($p->id))
+                                                    <span class="badge bg-dark mt-1">On homepage</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $p->category->name ?? '—' }}</td>
                                             <td>RWF {{ number_format((float) $p->price, 0) }}</td>
                                             <td>
@@ -66,7 +79,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center text-muted py-5">No products yet.</td>
+                                            <td colspan="6" class="text-center text-muted py-5">No products yet.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

@@ -13,9 +13,10 @@ class CatalogProductController extends Controller
 {
     public function index()
     {
-        $products = Product::query()->with('category')->latest()->paginate(25);
+        $products = Product::query()->with(['category', 'images'])->latest()->paginate(25);
+        $homepageProductIds = Product::homepagePreviewIds();
 
-        return view('admin.catalog-products.index', compact('products'));
+        return view('admin.catalog-products.index', compact('products', 'homepageProductIds'));
     }
 
     public function create()

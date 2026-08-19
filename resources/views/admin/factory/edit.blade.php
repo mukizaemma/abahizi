@@ -44,7 +44,7 @@
                                 <div class="mb-4">
                                     <label class="form-label">Page photo</label>
                                     <input type="file" class="form-control" name="factory_services_image" accept="image/*">
-                                    <small class="text-muted d-block mt-1">Used as the factory page header and the intro image.</small>
+                                    <small class="text-muted d-block mt-1">Used on the Our Factory page header. The homepage “Craft with purpose” photo is a different field: <a href="{{ route('about') }}#section-backgrounds">About &amp; story → Homepage &amp; section photos</a>.</small>
                                     @if(!empty($background->factory_services_image))
                                         <img src="{{ asset('storage/images/' . $background->factory_services_image) }}" width="180" class="mt-2 rounded border p-1 bg-white" alt="">
                                     @endif

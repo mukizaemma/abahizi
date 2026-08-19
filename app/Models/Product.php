@@ -59,6 +59,51 @@ class Product extends Model
         return $query->where('is_active', true);
     }
 
+    public function hasDisplayImage(): bool
+    {
+        if (filled($this->image)) {
+            return true;
+        }
+
+        if ($this->relationLoaded('images')) {
+            return $this->images->contains(fn ($image) => filled($image->image));
+        }
+
+        return $this->images()->whereNotNull('image')->where('image', '!=', '')->exists();
+    }
+
+    public function adminThumbUrl(): ?string
+    {
+        $path = $this->image;
+        if (! filled($path) && $this->relationLoaded('images')) {
+            $path = optional($this->images->first(fn ($image) => filled($image->image)))->image;
+        }
+
+        if (! filled($path)) {
+            return null;
+        }
+
+        return asset('storage/' . ltrim($path, '/'));
+    }
+
+    /**
+     * First three published products with a photo — these appear on the homepage grid.
+     *
+     * @return \Illuminate\Support\Collection<int, int>
+     */
+    public static function homepagePreviewIds()
+    {
+        return static::query()
+            ->active()
+            ->with('images')
+            ->orderBy('sort_order')
+            ->latest()
+            ->get()
+            ->filter(fn (self $product) => $product->hasDisplayImage())
+            ->take(3)
+            ->pluck('id');
+    }
+
     /**
      * Cover image URL segment for storage disk public (e.g. images/products/..).
      */

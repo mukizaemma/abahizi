@@ -22,7 +22,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
                     <h1>About</h1>
-                    <p class="text-muted mb-0">Manage mission, values, project background, and impact metrics.</p>
+                    <p class="text-muted mb-0">Mission, story, impact numbers, and the photos that appear on the homepage.</p>
                 </div>
 
                 @if(session()->has('success'))
@@ -48,7 +48,7 @@
                                 <button class="nav-link" id="impact-tab" data-bs-toggle="tab" data-bs-target="#impact-pane" type="button" role="tab">Impact</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="section-backgrounds-tab" data-bs-toggle="tab" data-bs-target="#section-backgrounds-pane" type="button" role="tab">Section backgrounds</button>
+                                <button class="nav-link" id="section-backgrounds-tab" data-bs-toggle="tab" data-bs-target="#section-backgrounds-pane" type="button" role="tab">Homepage &amp; section photos</button>
                             </li>
                         </ul>
 
@@ -150,7 +150,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <p class="text-muted small mb-0">Parallax and full-width section backgrounds are managed under the <strong>Section backgrounds</strong> tab. Page-specific breadcrumb heroes are under <a href="{{ route('settings') }}#page-headers">Settings → Page headers</a>.</p>
+                                            <p class="text-muted small mb-0">Parallax and homepage section photos are managed under the <strong>Homepage &amp; section photos</strong> tab (including “Craft with purpose” and “Quality you can scale”). Page-specific breadcrumb heroes are under <a href="{{ route('settings') }}#page-headers">Settings → Page headers</a>.</p>
                                         </div>
                                         <div class="col-12">
                                             <input type="hidden" name="donations" value="{{ $background->donations }}">
@@ -248,30 +248,32 @@
                             <div class="tab-pane fade" id="section-backgrounds-pane" role="tabpanel" aria-labelledby="section-backgrounds-tab">
                                 <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    <p class="text-muted mb-4">Upload a dedicated image for each full-width or parallax section. If a section has no image, the site uses the listed fallbacks automatically.</p>
-                                    <div class="row g-4">
-                                        @foreach(SectionBackgroundService::definitions() as $field => $definition)
-                                            @php
-                                                $storedFile = SectionBackgroundService::storedFilename($background, $field);
-                                                $previewUrl = $storedFile
-                                                    ? SectionBackgroundService::urlFromFilename($storedFile)
-                                                    : SectionBackgroundService::resolve($field, $background);
-                                            @endphp
-                                            <div class="col-md-6 col-xl-4">
-                                                <div class="admin-image-card">
-                                                    <label class="form-label fw-semibold">{{ $definition['label'] }}</label>
-                                                    <p class="text-muted small mb-2">{{ $definition['help'] }}</p>
-                                                    <input type="file" class="form-control" name="{{ $field }}" accept="image/*">
-                                                    @if($previewUrl)
-                                                        <img src="{{ $previewUrl }}" class="admin-preview-img" alt="{{ $definition['label'] }} preview">
-                                                    @endif
+                                    <input type="hidden" name="return_tab" value="section-backgrounds">
+                                    <p class="text-muted mb-4">Each photo is named after the heading visitors see on the site. Upload, save, then refresh the homepage. Product cards (Custom Handbags, Totes, Pouches) are edited under <a href="{{ route('catalogProducts.index') }}">Products</a>, not here.</p>
+                                    @foreach(SectionBackgroundService::groupedDefinitions() as $group => $fields)
+                                        <h2 class="h6 text-uppercase text-muted mt-2 mb-3">{{ $group }}</h2>
+                                        <div class="row g-4 mb-4">
+                                            @foreach($fields as $field => $definition)
+                                                @php
+                                                    $storedFile = SectionBackgroundService::storedFilename($background, $field);
+                                                    $previewUrl = $storedFile
+                                                        ? SectionBackgroundService::urlFromFilename($storedFile)
+                                                        : SectionBackgroundService::resolve($field, $background);
+                                                @endphp
+                                                <div class="col-md-6">
+                                                    <div class="admin-image-card">
+                                                        <label class="form-label fw-semibold">{{ $definition['label'] }}</label>
+                                                        <p class="text-muted small mb-2">{{ $definition['help'] }}</p>
+                                                        <input type="file" class="form-control" name="{{ $field }}" accept="image/*">
+                                                        @if($previewUrl)
+                                                            <img src="{{ $previewUrl }}" class="admin-preview-img" alt="{{ $definition['label'] }} preview">
+                                                        @endif
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save section backgrounds</button>
+                                            @endforeach
                                         </div>
-                                    </div>
+                                    @endforeach
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save homepage &amp; section photos</button>
                                 </form>
                             </div>
                         </div>
@@ -283,4 +285,19 @@
     </div>
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+    (function () {
+        var hash = (window.location.hash || '').replace('#', '');
+        if (hash !== 'section-backgrounds' && hash !== 'homepage-photos') {
+            return;
+        }
+        var tab = document.getElementById('section-backgrounds-tab');
+        if (tab && window.bootstrap && bootstrap.Tab) {
+            bootstrap.Tab.getOrCreateInstance(tab).show();
+        }
+    })();
+</script>
 @endsection

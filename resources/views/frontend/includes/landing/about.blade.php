@@ -17,12 +17,8 @@
         $aboutBody = \Illuminate\Support\Str::limit($aboutBody, 420, '…');
     }
 
-    $aboutImage = null;
-    if (! empty($about->factory_services_image ?? null)) {
-        $aboutImage = asset('storage/images/' . ltrim($about->factory_services_image, '/'));
-    } elseif (isset($homeGallery) && $homeGallery->isNotEmpty() && ! empty($homeGallery->first()->image)) {
-        $aboutImage = asset('storage/images/gallery/' . $homeGallery->first()->image);
-    } else {
+    $aboutImage = \App\Support\SectionBackgroundService::craftFeatureImage($about ?? null);
+    if ($aboutImage === null) {
         $aboutImage = asset('assets/img/slider/slider-bg-3-2.jpg');
     }
 

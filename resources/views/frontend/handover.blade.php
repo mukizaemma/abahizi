@@ -122,6 +122,7 @@
                         <div class="ho-subtabs" role="tablist" aria-label="User guide topics">
                             <button type="button" class="ho-subtabs__btn is-active" data-ho-sub="start">First steps</button>
                             <button type="button" class="ho-subtabs__btn" data-ho-sub="content">Change content</button>
+                            <button type="button" class="ho-subtabs__btn" data-ho-sub="homephotos">Homepage photos</button>
                             <button type="button" class="ho-subtabs__btn" data-ho-sub="news">Publish news</button>
                             <button type="button" class="ho-subtabs__btn" data-ho-sub="photos">Photos</button>
                         </div>
@@ -150,9 +151,14 @@
                                     <p>Set the heading and choose sliding images, one banner, or a video. The public homepage shows the heading and two buttons over the photo. A subheading in the admin is optional and is not shown on the homepage.</p>
                                 </article>
                                 <article class="ho-guide-item">
-                                    <p class="ho-guide-item__need">About story, stats, section photos</p>
+                                    <p class="ho-guide-item__need">“Craft with purpose” and “Quality you can scale” photos</p>
+                                    <p class="ho-guide-item__menu">About &amp; story → Homepage &amp; section photos</p>
+                                    <p>Open that tab. Each field is named after the heading on the homepage. Upload the photo, save, then refresh the public homepage.</p>
+                                </article>
+                                <article class="ho-guide-item">
+                                    <p class="ho-guide-item__need">About story and stats</p>
                                     <p class="ho-guide-item__menu">About &amp; story</p>
-                                    <p>Update the story and numbers. Use <em>Section backgrounds</em> for large photos, including the homepage impact band and the “Quality you can scale” photo.</p>
+                                    <p>Update the story and numbers. Large homepage photos are on the <em>Homepage &amp; section photos</em> tab, not under Project background.</p>
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Factory page sections</p>
@@ -165,9 +171,9 @@
                                     <p>Add each organisation and a logo. These names can be used when you want a partners list on the site later.</p>
                                 </article>
                                 <article class="ho-guide-item">
-                                    <p class="ho-guide-item__need">Handbags and categories</p>
+                                    <p class="ho-guide-item__need">Custom Handbags, Totes, Pouches (homepage cards)</p>
                                     <p class="ho-guide-item__menu">Products</p>
-                                    <p>Add or edit products. Turn the public catalog on or off in Site settings.</p>
+                                    <p>Those three homepage cards are the first 3 published products that have a photo. Add or replace the cover image on each product. Grey boxes that say 370 × 300 mean a real photo has not been uploaded yet. Portrait photos about 900×1200 work well. Turn the public catalog on or off in Site settings.</p>
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Impact numbers</p>
@@ -190,6 +196,38 @@
                                     <p>Phone, email, and address appear under Visit us in the footer. The footer also lists Factory, Products, Impact, Empowerment, Reports, and Updates.</p>
                                 </article>
                             </div>
+                        </div>
+
+                        <div class="ho-subpanel" data-ho-subpanel="homephotos" hidden>
+                            <p class="ho-intro">Match the heading you see on the homepage with the admin page below. After you save, refresh the public site.</p>
+                            <div class="ho-guide-list">
+                                <article class="ho-guide-item">
+                                    <p class="ho-guide-item__need">Built for partners who care how things are made</p>
+                                    <p class="ho-guide-item__menu">Products</p>
+                                    <p>The three cards (for example Custom Handbags, Totes, Pouches) are products, not a background image. Open <strong>Products</strong>, edit each item, and upload a cover photo. Products marked <strong>On homepage</strong> are the three currently shown. Use a portrait photo, about 900×1200.</p>
+                                </article>
+                                <article class="ho-guide-item">
+                                    <p class="ho-guide-item__need">Craft with purpose. (photo on the right)</p>
+                                    <p class="ho-guide-item__menu">About &amp; story → Homepage &amp; section photos</p>
+                                    <p>Upload under <strong>Homepage: “Craft with purpose” photo</strong>. Landscape, about 1200×960. This is separate from the Our Factory page photo.</p>
+                                </article>
+                                <article class="ho-guide-item">
+                                    <p class="ho-guide-item__need">Quality you can scale. Impact you can measure. (photo on the left)</p>
+                                    <p class="ho-guide-item__menu">About &amp; story → Homepage &amp; section photos</p>
+                                    <p>Upload under <strong>Homepage: “Quality you can scale” photo</strong>. A taller portrait crop works well, about 900×1200.</p>
+                                </article>
+                                <article class="ho-guide-item">
+                                    <p class="ho-guide-item__need">Impact numbers band</p>
+                                    <p class="ho-guide-item__menu">About &amp; story → Homepage &amp; section photos</p>
+                                    <p>Upload under <strong>Homepage: Impact band photo</strong>. Use a wide photo, 1920×875 or larger. The numbers themselves are edited under <strong>Our impact</strong>.</p>
+                                </article>
+                                <article class="ho-guide-item">
+                                    <p class="ho-guide-item__need">Top homepage heading photo</p>
+                                    <p class="ho-guide-item__menu">Homepage hero</p>
+                                    <p>The full-screen photo behind the main heading is set here, not under About.</p>
+                                </article>
+                            </div>
+                            <p class="ho-callout">If two homepage blocks still show the same workshop photo, give each field its own file on the Homepage &amp; section photos tab.</p>
                         </div>
 
                         <div class="ho-subpanel" data-ho-subpanel="news" hidden>
@@ -218,7 +256,7 @@
                                     <p>See every file, where it is used, replace a photo everywhere, or delete unused files.</p>
                                 </article>
                             </div>
-                            <p class="ho-callout">Landscape photos around 1920×1080 work well for heroes. Square photos work well for team and products.</p>
+                            <p class="ho-callout">Landscape photos around 1920×1080 work well for heroes. Portrait photos around 900×1200 work well for homepage product cards and the “Quality you can scale” photo.</p>
                         </div>
                     </section>
 

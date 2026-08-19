@@ -10,54 +10,82 @@ use Illuminate\Support\Facades\Schema;
 class SectionBackgroundService
 {
     /**
-     * @return array<string, array{label: string, help: string, fallbacks: array<int, string>, default: ?string}>
+     * @return array<string, array{label: string, help: string, group: string, fallbacks: array<int, string>, default: ?string}>
      */
     public static function definitions(): array
     {
         return [
-            'core_values_background' => [
-                'label' => 'Core values parallax',
-                'help' => 'About page and homepage mission/vision band.',
-                'fallbacks' => ['image2', 'image1', 'image'],
+            'home_craft_image' => [
+                'label' => 'Homepage: “Craft with purpose” photo',
+                'help' => 'The photo to the right of that heading (before the product cards). Landscape, about 1200×960 (5:4). This is not the factory page photo.',
+                'group' => 'Homepage photos',
+                'fallbacks' => ['factory_services_image'],
                 'default' => null,
             ],
-            'home_process_background' => [
-                'label' => 'Home — How we work',
-                'help' => 'Parallax background behind the “From brief to delivery” steps on the homepage.',
-                'fallbacks' => ['image1', 'image2', 'image'],
-                'default' => 'assets/img/breadcrumb/breadcrumb-bg-1.jpg',
+            'home_why_partner_background' => [
+                'label' => 'Homepage: “Quality you can scale” photo',
+                'help' => 'The photo to the left of the three numbered cards (01, 02, 03). Portrait crop works well, about 900×1200.',
+                'group' => 'Homepage photos',
+                'fallbacks' => ['factory_services_image'],
+                'default' => null,
             ],
             'impact_cta_background' => [
-                'label' => 'Home — Impact section',
-                'help' => 'Parallax photo behind homepage impact stats, stories, and CTAs. Recommended 1920×875 or larger; the image is cropped to fill the band on every screen size.',
+                'label' => 'Homepage: Impact band photo',
+                'help' => 'Full-width photo behind the impact numbers. Use 1920×875 or larger.',
+                'group' => 'Homepage photos',
                 'fallbacks' => ['image2', 'image1', 'image'],
                 'default' => 'assets/img/slider/slider-bg-3-2.jpg',
             ],
-            'home_why_partner_background' => [
-                'label' => 'Home — Why brands photo',
-                'help' => 'Photo beside “Quality you can scale” on the homepage. Use factory floor, sampling, or finishing work from Masoro.',
-                'fallbacks' => ['factory_services_image'],
+            'home_process_background' => [
+                'label' => 'Homepage: How we work',
+                'help' => 'Background behind the “From brief to delivery” steps, if that band is shown.',
+                'group' => 'Homepage photos',
+                'fallbacks' => ['image1', 'image2', 'image'],
+                'default' => 'assets/img/breadcrumb/breadcrumb-bg-1.jpg',
+            ],
+            'core_values_background' => [
+                'label' => 'About page: core values',
+                'help' => 'Parallax band on the About page (and the mission/vision band if used).',
+                'group' => 'Other pages',
+                'fallbacks' => ['image2', 'image1', 'image'],
                 'default' => null,
             ],
             'factory_capabilities_background' => [
                 'label' => 'Factory capabilities banner',
-                'help' => 'Parallax banner with capacity cards — homepage, factory page, impact pages, and other footers.',
+                'help' => 'Parallax banner with capacity cards on factory and impact pages.',
+                'group' => 'Other pages',
                 'fallbacks' => ['image2', 'image', 'image1'],
                 'default' => 'assets/img/cta/cta-bg-3.jpg',
             ],
             'product_story_background' => [
-                'label' => 'Product story section',
-                'help' => 'Parallax background on the products page story block.',
+                'label' => 'Products page: story photo',
+                'help' => 'Background on the products page story block.',
+                'group' => 'Other pages',
                 'fallbacks' => ['core_values_background', 'image2', 'image1', 'image'],
                 'default' => null,
             ],
             'programs_dual_cta_background' => [
                 'label' => 'Mission & vision dual CTA',
                 'help' => 'Background for the mission/vision cards band.',
+                'group' => 'Other pages',
                 'fallbacks' => ['core_values_background', 'image2', 'image', 'image1'],
                 'default' => null,
             ],
         ];
+    }
+
+    /**
+     * @return array<string, array<string, array{label: string, help: string, group: string, fallbacks: array<int, string>, default: ?string}>>
+     */
+    public static function groupedDefinitions(): array
+    {
+        $groups = [];
+        foreach (static::definitions() as $field => $definition) {
+            $group = $definition['group'] ?? 'Other pages';
+            $groups[$group][$field] = $definition;
+        }
+
+        return $groups;
     }
 
     public static function editableKeys(): array
@@ -113,7 +141,42 @@ class SectionBackgroundService
     }
 
     /**
-     * Homepage “Why brands” photo: dedicated CMS image, then real factory/slide photos.
+     * Homepage “Craft with purpose” photo.
+     */
+    public static function craftFeatureImage(?Background $about = null): ?string
+    {
+        $about ??= Background::firstOrEmpty();
+
+        $candidates = [];
+
+        $dedicated = static::storedFilename($about, 'home_craft_image');
+        if ($dedicated) {
+            $candidates[] = static::urlFromFilename($dedicated);
+        }
+
+        $factoryPage = trim((string) ($about->factory_services_image ?? ''));
+        if ($factoryPage !== '') {
+            $candidates[] = static::urlFromFilename($factoryPage);
+        }
+
+        if (Schema::hasTable('factory_gallery_images')) {
+            $gallery = FactoryGalleryImage::query()->orderBy('sort_order')->orderBy('id')->first();
+            if ($gallery) {
+                $candidates[] = $gallery->url();
+            }
+        }
+
+        foreach ($candidates as $url) {
+            if (! static::isPlaceholderUrl($url)) {
+                return $url;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Homepage “Quality you can scale” photo: dedicated CMS image, then real factory/slide photos.
      */
     public static function whyFeatureImage(?Background $about = null): ?string
     {
