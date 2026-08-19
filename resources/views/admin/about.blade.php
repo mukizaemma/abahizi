@@ -113,33 +113,41 @@
                                             <label class="form-label">Our Model content</label>
                                             <textarea rows="8" class="form-control" name="model_content" data-editor="rich">{!! $background->model_content !!}</textarea>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <label class="form-label">Our Model image (diagram/photo)</label>
-                                            <input type="file" class="form-control" name="model_image">
-                                            @if(!empty($background->model_image))
-                                                <img src="{{ asset('storage/images/' . $background->model_image) }}" width="220" class="mt-2 rounded border p-1 bg-white">
-                                            @endif
+                                        <div class="col-md-6">
+                                            <div class="admin-image-card">
+                                                <label class="form-label">Our Model image (diagram/photo)</label>
+                                                <input type="file" class="form-control" name="model_image" accept="image/*">
+                                                @if(!empty($background->model_image))
+                                                    <img src="{{ asset('storage/images/' . $background->model_image) }}" class="admin-preview-img" alt="Our Model image">
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="col-lg-4">
-                                            <label class="form-label">About cover image</label>
-                                            <input type="file" class="form-control" name="image">
-                                            @if(!empty($background->image))
-                                                <img src="{{ asset('storage/images/' . $background->image) }}" width="120" class="mt-2 rounded border p-1 bg-white">
-                                            @endif
+                                        <div class="col-md-6">
+                                            <div class="admin-image-card">
+                                                <label class="form-label">About cover image</label>
+                                                <input type="file" class="form-control" name="image" accept="image/*">
+                                                @if(!empty($background->image))
+                                                    <img src="{{ asset('storage/images/' . $background->image) }}" class="admin-preview-img" alt="About cover">
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="col-lg-4">
-                                            <label class="form-label">Home background image</label>
-                                            <input type="file" class="form-control" name="image1">
-                                            @if(!empty($background->image1))
-                                                <img src="{{ asset('storage/images/' . $background->image1) }}" width="120" class="mt-2 rounded border p-1 bg-white">
-                                            @endif
+                                        <div class="col-md-6">
+                                            <div class="admin-image-card">
+                                                <label class="form-label">Home background image</label>
+                                                <input type="file" class="form-control" name="image1" accept="image/*">
+                                                @if(!empty($background->image1))
+                                                    <img src="{{ asset('storage/images/' . $background->image1) }}" class="admin-preview-img" alt="Home background">
+                                                @endif
+                                            </div>
                                         </div>
-                                        <div class="col-lg-4">
-                                            <label class="form-label">Pages header image</label>
-                                            <input type="file" class="form-control" name="image2">
-                                            @if(!empty($background->image2))
-                                                <img src="{{ asset('storage/images/' . $background->image2) }}" width="120" class="mt-2 rounded border p-1 bg-white">
-                                            @endif
+                                        <div class="col-md-6">
+                                            <div class="admin-image-card">
+                                                <label class="form-label">Pages header image</label>
+                                                <input type="file" class="form-control" name="image2" accept="image/*">
+                                                @if(!empty($background->image2))
+                                                    <img src="{{ asset('storage/images/' . $background->image2) }}" class="admin-preview-img" alt="Pages header">
+                                                @endif
+                                            </div>
                                         </div>
                                         <div class="col-12">
                                             <p class="text-muted small mb-0">Parallax and full-width section backgrounds are managed under the <strong>Section backgrounds</strong> tab. Page-specific breadcrumb heroes are under <a href="{{ route('settings') }}#page-headers">Settings → Page headers</a>.</p>
@@ -250,12 +258,14 @@
                                                     : SectionBackgroundService::resolve($field, $background);
                                             @endphp
                                             <div class="col-md-6 col-xl-4">
-                                                <label class="form-label fw-semibold">{{ $definition['label'] }}</label>
-                                                <p class="text-muted small mb-2">{{ $definition['help'] }}</p>
-                                                <input type="file" class="form-control" name="{{ $field }}" accept="image/*">
-                                                @if($previewUrl)
-                                                    <img src="{{ $previewUrl }}" class="admin-preview-img mt-2 rounded border p-1 bg-white" alt="{{ $definition['label'] }} preview">
-                                                @endif
+                                                <div class="admin-image-card">
+                                                    <label class="form-label fw-semibold">{{ $definition['label'] }}</label>
+                                                    <p class="text-muted small mb-2">{{ $definition['help'] }}</p>
+                                                    <input type="file" class="form-control" name="{{ $field }}" accept="image/*">
+                                                    @if($previewUrl)
+                                                        <img src="{{ $previewUrl }}" class="admin-preview-img" alt="{{ $definition['label'] }} preview">
+                                                    @endif
+                                                </div>
                                             </div>
                                         @endforeach
                                         <div class="col-12">

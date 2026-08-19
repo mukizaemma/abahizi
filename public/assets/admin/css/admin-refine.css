@@ -355,23 +355,41 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
 }
 
 .media-field {
+    position: relative;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 0.55rem;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
 }
 
+.media-field input[type="file"],
 .media-field__input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    pointer-events: none;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    clip-path: inset(50%) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 .media-field__actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+}
+
+.media-field__actions .btn {
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .media-field__preview {
@@ -381,16 +399,23 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
 }
 
 .media-field__preview-item {
-    width: 96px;
+    width: 160px;
 }
 
-.media-field__preview-item img {
-    width: 96px;
-    height: 72px;
-    object-fit: cover;
+.media-field__preview-item img,
+.media-field__current,
+.admin-preview-img,
+.admin-image-card img,
+.media-field > img {
+    width: 160px !important;
+    height: 110px !important;
+    max-width: 160px !important;
+    max-height: 110px !important;
+    object-fit: cover !important;
     border-radius: 8px;
     border: 1px solid #e5e5e5;
     display: block;
+    background: #f4f4f4;
 }
 
 .media-field__preview-item span {
@@ -407,6 +432,58 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
     background: #d1e7dd;
     border-radius: 6px;
     padding: 0.45rem 0.65rem;
+}
+
+.admin-image-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    padding: 0.9rem;
+    border: 1px solid #ececec;
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.admin-image-card .form-label {
+    margin-bottom: 0.35rem;
+}
+
+.admin-image-card .text-muted {
+    min-height: 2.6rem;
+}
+
+#section-backgrounds-pane [class*="col-"],
+#project-background-pane [class*="col-"] {
+    min-width: 0;
+}
+
+#mediaPickerModal .media-picker-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+    gap: 0.75rem;
+    max-height: min(62vh, 28rem);
+    overflow: auto;
+}
+
+#mediaPickerModal .media-picker-tile {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+}
+
+#mediaPickerModal .media-picker-tile img {
+    width: 100% !important;
+    height: 110px !important;
+    max-height: 110px !important;
+    object-fit: cover !important;
+    display: block;
 }
 
 .media-picker-grid,
@@ -429,9 +506,10 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
 
 .media-picker-tile img,
 .media-gallery-card__thumb img {
-    width: 100%;
-    height: 110px;
-    object-fit: cover;
+    width: 100% !important;
+    height: 110px !important;
+    max-height: 110px !important;
+    object-fit: cover !important;
     display: block;
 }
 
@@ -464,33 +542,6 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
     object-fit: cover;
     border-radius: 8px;
     border: 1px solid #eee;
-}
-
-.admin-preview-img,
-#section-backgrounds-pane img {
-    max-width: 180px !important;
-    max-height: 120px !important;
-    width: auto !important;
-    height: auto !important;
-    object-fit: cover;
-    display: block;
-}
-
-#section-backgrounds-pane .col-md-6,
-#section-backgrounds-pane .col-xl-4 {
-    min-width: 0;
-}
-
-.media-field__current {
-    max-width: 180px !important;
-    max-height: 120px !important;
-    width: 180px !important;
-    height: 120px !important;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid #e5e5e5;
-    display: block;
-    background: #fff;
 }
 
 .admin-nav-badge {

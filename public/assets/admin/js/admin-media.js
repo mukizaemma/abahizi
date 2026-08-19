@@ -207,10 +207,14 @@
 
         input.classList.add('media-field__input');
 
-        var sibling = wrap.nextElementSibling;
-        if (sibling && sibling.tagName === 'IMG') {
-            sibling.classList.add('media-field__current');
-            wrap.appendChild(sibling);
+        var host = wrap.parentNode;
+        if (host) {
+            Array.prototype.slice.call(host.children).forEach(function (child) {
+                if (child.tagName === 'IMG') {
+                    child.classList.add('media-field__current');
+                    wrap.appendChild(child);
+                }
+            });
         }
 
         actions.querySelector('[data-media-upload]').addEventListener('click', function () {
