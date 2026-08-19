@@ -11,9 +11,13 @@ class PartnersController extends Controller
 {
     public function index()
     {
-
         $data = DB::table('partners')->latest()->get();
-        return view('admin.partners', ['data'=>$data]);
+        $background = \App\Models\Background::firstOrEmpty();
+
+        return view('admin.partners', [
+            'data' => $data,
+            'background' => $background,
+        ]);
     }
 
     /**

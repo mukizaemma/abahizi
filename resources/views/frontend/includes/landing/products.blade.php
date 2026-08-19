@@ -77,7 +77,6 @@
     <div class="container">
         <div class="lh-products__head lh-reveal">
             <div>
-                <p class="lh-eyebrow">{{ __('site.landing.products_title') }}</p>
                 <h2 id="lh-products-title" class="lh-products__title">{{ __('site.landing.products_lead') }}</h2>
             </div>
             @if($showCatalogCta)

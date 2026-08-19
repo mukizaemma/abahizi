@@ -13,7 +13,6 @@
     <section class="updates-widget" aria-labelledby="updates-widget-title">
         <div class="container">
             <header class="updates-widget__intro">
-                <p class="updates-widget__eyebrow">{{ __('site.updates.eyebrow') }}</p>
                 <h2 id="updates-widget-title" class="updates-widget__heading">{{ __('site.updates.heading') }}</h2>
             </header>
 

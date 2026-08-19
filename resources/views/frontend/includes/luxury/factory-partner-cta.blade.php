@@ -38,7 +38,6 @@
 <section class="lux-section factory-partner" id="factory-partner" aria-labelledby="factory-partner-title">
     <div class="container">
         <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
-            <p class="lux-section-head__eyebrow mb-2">{{ __('site.factory.cta_eyebrow') }}</p>
             <h2 id="factory-partner-title" class="lux-section-head__title mb-3">{{ __('site.factory.cta_title') }}</h2>
             <p class="lux-lead mb-0 mx-auto" style="max-width: 40rem;">{{ __('site.factory.cta_lead') }}</p>
         </div>

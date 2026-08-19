@@ -127,25 +127,35 @@
                                         $headingFonts = \App\Support\ThemeService::headingFonts();
                                         $currentBodyFont = $data->font_family ?: \App\Support\ThemeService::DEFAULT_BODY_FONT;
                                         $currentHeadingFont = $data->heading_font ?: \App\Support\ThemeService::DEFAULT_HEADING_FONT;
+                                        $primaryColor = \App\Support\ThemeService::sanitizeHex($data->primary_color ?? null, \App\Support\ThemeService::DEFAULT_PRIMARY);
+                                        $secondaryColor = \App\Support\ThemeService::sanitizeHex($data->secondary_color ?? null, \App\Support\ThemeService::DEFAULT_SECONDARY);
+                                        $neutralColor = \App\Support\ThemeService::sanitizeHex($data->neutral_color ?? null, \App\Support\ThemeService::DEFAULT_NEUTRAL);
                                     @endphp
-                                    <p class="text-muted mb-4">The public site uses the logo palette only: yellow, black, and white. Fonts still apply across the public site and the admin panel.</p>
+                                    <p class="text-muted mb-4">These colours apply across the public site and the admin panel. The logo defaults are yellow <code>#fad200</code>, black <code>#000000</code>, and grey <code>#9a9a9a</code>.</p>
                                     <div class="row g-3 mb-4">
-                                        <div class="col-12">
-                                            <label class="form-label d-block">Logo colors</label>
-                                            <div class="d-flex flex-wrap gap-3 align-items-center">
-                                                <span class="d-inline-flex align-items-center gap-2">
-                                                    <span style="display:inline-block;width:2rem;height:2rem;background:#fad200;border:1px solid #000;"></span>
-                                                    <span>Yellow <code>#fad200</code></span>
-                                                </span>
-                                                <span class="d-inline-flex align-items-center gap-2">
-                                                    <span style="display:inline-block;width:2rem;height:2rem;background:#000;"></span>
-                                                    <span class="text-dark">Black <code>#000000</code></span>
-                                                </span>
-                                                <span class="d-inline-flex align-items-center gap-2">
-                                                    <span style="display:inline-block;width:2rem;height:2rem;background:#fff;border:1px solid #000;"></span>
-                                                    <span>White <code>#ffffff</code></span>
-                                                </span>
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="primary_color">Accent</label>
+                                            <div class="admin-color-field">
+                                                <input type="color" class="form-control form-control-color" id="primary_color" name="primary_color" value="{{ $primaryColor }}" title="Accent colour">
+                                                <input type="text" class="form-control" value="{{ $primaryColor }}" maxlength="7" spellcheck="false" data-color-hex-for="primary_color" aria-label="Accent hex">
                                             </div>
+                                            <div class="form-text">Buttons, highlights, and links.</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="secondary_color">Text / dark</label>
+                                            <div class="admin-color-field">
+                                                <input type="color" class="form-control form-control-color" id="secondary_color" name="secondary_color" value="{{ $secondaryColor }}" title="Text colour">
+                                                <input type="text" class="form-control" value="{{ $secondaryColor }}" maxlength="7" spellcheck="false" data-color-hex-for="secondary_color" aria-label="Text hex">
+                                            </div>
+                                            <div class="form-text">Headings, body text, and the header.</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label" for="neutral_color">Muted</label>
+                                            <div class="admin-color-field">
+                                                <input type="color" class="form-control form-control-color" id="neutral_color" name="neutral_color" value="{{ $neutralColor }}" title="Muted colour">
+                                                <input type="text" class="form-control" value="{{ $neutralColor }}" maxlength="7" spellcheck="false" data-color-hex-for="neutral_color" aria-label="Muted hex">
+                                            </div>
+                                            <div class="form-text">Secondary text and borders.</div>
                                         </div>
                                     </div>
                                     <div class="row g-3">
@@ -286,4 +296,27 @@
     </div>
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+    document.querySelectorAll('[data-color-hex-for]').forEach(function (hexInput) {
+        var picker = document.getElementById(hexInput.getAttribute('data-color-hex-for'));
+        if (!picker) {
+            return;
+        }
+        picker.addEventListener('input', function () {
+            hexInput.value = picker.value;
+        });
+        hexInput.addEventListener('change', function () {
+            var value = hexInput.value.trim();
+            if (/^#([A-Fa-f0-9]{6})$/.test(value)) {
+                picker.value = value.toLowerCase();
+                hexInput.value = picker.value;
+            } else {
+                hexInput.value = picker.value;
+            }
+        });
+    });
+</script>
 @endsection

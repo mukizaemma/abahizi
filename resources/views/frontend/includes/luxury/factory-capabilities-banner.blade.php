@@ -1,37 +1,27 @@
 @php
+    use App\Support\FactoryPageContent;
     use App\Support\SectionBackgroundService;
 
     $ctaAbout = $about ?? \App\Models\Background::firstOrEmpty();
     $bannerBgUrl = SectionBackgroundService::resolve('factory_capabilities_background', $ctaAbout);
 
-    $capabilityCards = [
-        [
-            'title' => 'Capacity',
-            'items' => [
-                '14,000+ units per season (scalable)',
-                'Dedicated CMT lines for handbags & accessories',
-                'Seasonal planning aligned with global brand calendars',
-            ],
-        ],
-        [
-            'title' => 'Technical capabilities',
-            'items' => [
-                'Industrial cutting, skiving, and stitching equipment',
-                'Specialized beading, embroidery, and leather finishing',
-                'Custom hardware application and quality control stations',
-            ],
-        ],
-        [
-            'title' => 'Worker benefits',
-            'items' => [
-                'Full health insurance for employees and families',
-                'Paid maternity leave, sick days, and vacation',
-                'Vocational training, financial literacy, and employee ownership',
-            ],
-        ],
-    ];
+    $defaultCards = __('site.factory.capabilities');
+    $savedCards = FactoryPageContent::offerCards($ctaAbout->factory_services_subitems ?? null);
+    $capabilityCards = [];
+    foreach ($savedCards as $card) {
+        if (! empty($card['items'])) {
+            $capabilityCards[] = [
+                'title' => $card['title'] !== '' ? $card['title'] : __('site.manufacturing.specs_title'),
+                'items' => $card['items'],
+            ];
+        }
+    }
+    if ($capabilityCards === [] && is_array($defaultCards)) {
+        $capabilityCards = $defaultCards;
+    }
 @endphp
 
+@if($capabilityCards !== [])
 <section
     class="factory-capabilities-banner factory-capabilities-banner--parallax"
     aria-labelledby="factory-capabilities-heading"
@@ -68,3 +58,4 @@
         </div>
     </div>
 </section>
+@endif

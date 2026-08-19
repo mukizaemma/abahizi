@@ -22,7 +22,6 @@
     <div class="container">
         <div class="lh-why__head lh-reveal">
             <div>
-                <p class="lh-eyebrow">{{ __('site.landing.why_eyebrow') }}</p>
                 <h2 id="lh-why-title" class="lh-why__title">{{ __('site.landing.why_title') }}</h2>
             </div>
             <p class="lh-why__lead lh-body">{{ __('site.landing.why_lead') }}</p>

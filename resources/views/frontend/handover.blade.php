@@ -59,11 +59,11 @@
                         <div class="ho-grid ho-grid--3">
                             <article class="ho-card">
                                 <h3>New homepage</h3>
-                                <p>Hero (slideshow, one image, or video), product gallery, impact stats, stories, partners, and contact — all editable from the admin.</p>
+                                <p>A full-height photo with a large heading and two buttons at the bottom. Impact stats, partners, and contact are editable from the admin.</p>
                             </article>
                             <article class="ho-card">
                                 <h3>Factory &amp; products</h3>
-                                <p>Factory story, gallery, and partner buttons. A product catalog you can show or hide. Visitors can request an order on the site.</p>
+                                <p>Each factory admin tab is a public section: overview and process, what we offer, community impact, training, and gallery. The product catalog can be shown or hidden.</p>
                             </article>
                             <article class="ho-card">
                                 <h3>Impact &amp; community</h3>
@@ -71,7 +71,7 @@
                             </article>
                             <article class="ho-card">
                                 <h3>Brand look</h3>
-                                <p>The site uses the logo colours only: yellow, black, and white. Fonts can still be changed in Site settings.</p>
+                                <p>The site uses the logo colours: yellow, black, and white. You can change colours and fonts under Site settings → Colors.</p>
                             </article>
                             <article class="ho-card">
                                 <h3>Media library</h3>
@@ -79,9 +79,10 @@
                             </article>
                             <article class="ho-card">
                                 <h3>Request inbox</h3>
-                                <p>Contact, partnership, product, and initiative requests are stored in the admin so you can follow up.</p>
+                                <p>Contact, product, and initiative requests are saved in the admin. Visitors submit with WhatsApp or email in one click.</p>
                             </article>
                         </div>
+                        <p class="ho-callout">This is a web application, not only a brochure site. The public website is what is included now. Internal tools such as leave management, HR, orders, and stock can be added later if you agree them as separate work — they are not part of this project.</p>
                     </section>
 
                     <section class="ho-panel" role="tabpanel" id="panel-access" aria-labelledby="tab-access" data-ho-panel="access" hidden>
@@ -139,24 +140,29 @@
                             <p class="ho-intro">Find what you want to change, open that menu, then save.</p>
                             <div class="ho-guide-list">
                                 <article class="ho-guide-item">
-                                    <p class="ho-guide-item__need">Logo, phones, email, map, fonts</p>
+                                    <p class="ho-guide-item__need">Logo, phones, email, map, colours, fonts</p>
                                     <p class="ho-guide-item__menu">Site settings</p>
-                                    <p>Edit the fields and save. These details appear in the header, footer, and contact page.</p>
+                                    <p>Edit the fields and save. Open the <strong>Colors</strong> tab to change accent, text, and muted colours, plus the fonts. Refresh the public site to see the new look.</p>
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Homepage heading and background</p>
                                     <p class="ho-guide-item__menu">Homepage hero</p>
-                                    <p>Set the heading and subheading. Choose sliding images, one banner, or a video.</p>
+                                    <p>Set the heading and choose sliding images, one banner, or a video. The public homepage shows the heading and two buttons over the photo. A subheading in the admin is optional and is not shown on the homepage.</p>
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">About story, stats, section photos</p>
                                     <p class="ho-guide-item__menu">About &amp; story</p>
-                                    <p>Update the story and numbers. Use <em>Section backgrounds</em> for large photos, including the homepage impact band.</p>
+                                    <p>Update the story and numbers. Use <em>Section backgrounds</em> for large photos, including the homepage impact band and the Trusted by photo.</p>
                                 </article>
                                 <article class="ho-guide-item">
-                                    <p class="ho-guide-item__need">Factory text and gallery</p>
+                                    <p class="ho-guide-item__need">Factory page sections</p>
                                     <p class="ho-guide-item__menu">Our factory</p>
-                                    <p>Edit each factory section and add highlight photos.</p>
+                                    <p>Each tab is a public section: intro and process, what we offer, community impact, training, and gallery photos.</p>
+                                </article>
+                                <article class="ho-guide-item">
+                                    <p class="ho-guide-item__need">Partner names, logos, and homepage photo</p>
+                                    <p class="ho-guide-item__menu">Partners</p>
+                                    <p>Add each organisation and a logo. The large photo next to them on the homepage is set on the same page (Homepage photo), or under About &amp; story → Section backgrounds. Use a factory or production photo from Masoro.</p>
                                 </article>
                                 <article class="ho-guide-item">
                                     <p class="ho-guide-item__need">Handbags and categories</p>
@@ -177,6 +183,11 @@
                                     <p class="ho-guide-item__need">Team and testimonials</p>
                                     <p class="ho-guide-item__menu">Our team / Testimonials</p>
                                     <p>Add, edit, or hide people and quotes.</p>
+                                </article>
+                                <article class="ho-guide-item">
+                                    <p class="ho-guide-item__need">Footer phones, email, and explore links</p>
+                                    <p class="ho-guide-item__menu">Site settings</p>
+                                    <p>Phone, email, and address appear under Visit us in the footer. The footer also lists Factory, Products, Impact, Empowerment, Reports, and Updates.</p>
                                 </article>
                             </div>
                         </div>
@@ -213,23 +224,22 @@
 
                     <section class="ho-panel" role="tabpanel" id="panel-requests" aria-labelledby="tab-requests" data-ho-panel="requests" hidden>
                         <h2>How visitor requests work</h2>
-                        <p class="ho-intro">Visitors choose WhatsApp or email, send the message in that app, then confirm on the website so the request is saved for you.</p>
+                        <p class="ho-intro">Every public form uses the same two buttons: <strong>Submit with WhatsApp</strong> or <strong>Submit via Email</strong>. The request is saved first. A confirmation appears, then WhatsApp or the email app opens so the visitor can send the prepared message.</p>
                         <div class="ho-grid ho-grid--2">
                             <article class="ho-card">
                                 <h3>What the visitor does</h3>
                                 <ol class="ho-steps ho-steps--compact">
                                     <li>Opens Contact, a product order form, or Get involved.</li>
                                     <li>Enters name, phone, email, and message.</li>
-                                    <li>Chooses <strong>WhatsApp</strong> or <strong>Email</strong>.</li>
-                                    <li>Sends the prepared message in the new tab.</li>
-                                    <li>Confirms on the website so it is stored.</li>
+                                    <li>Taps <strong>Submit with WhatsApp</strong> or <strong>Submit via Email</strong>.</li>
+                                    <li>Sees a confirmation on the page.</li>
+                                    <li>Sends the prepared message in WhatsApp or their email app.</li>
                                 </ol>
                             </article>
                             <article class="ho-card">
                                 <h3>Where you find it</h3>
                                 <ol class="ho-steps ho-steps--compact">
                                     <li><strong>Messages</strong> — general contact inquiries. Use Reply to email them.</li>
-                                    <li><strong>Orders</strong> — partnership or production inquiries.</li>
                                     <li><strong>Products → Order requests</strong> — questions about a specific product.</li>
                                     <li>Initiative “get involved” requests stay with that community programme.</li>
                                 </ol>
@@ -247,6 +257,7 @@
                                 <li>Source code can be shared when you need it — for backup, another developer, or your archive.</li>
                                 <li>The developer stays available for future upgrades, training, and fixes. You are not left alone after go-live.</li>
                             </ul>
+                            <p class="ho-callout">This website is a web application that can later support internal management — for example leave management, HR, orders, and stock. Those modules are <strong>not included in this project</strong>. They can be designed and built later if you agree them separately.</p>
                             <p class="ho-support">
                                 Questions during review:<br>
                                 <strong>Phone / WhatsApp:</strong> <a href="tel:+250783807409">0783 807 409</a><br>
@@ -257,7 +268,7 @@
 
                     <section class="ho-panel" role="tabpanel" id="panel-feedback" aria-labelledby="tab-feedback" data-ho-panel="feedback" hidden>
                         <h2>Send feedback</h2>
-                        <p class="ho-intro">Tell us what to keep or change before the site goes live. Super admin reads every note under <strong>Feedback</strong> in the admin menu.</p>
+                        <p class="ho-intro">Tell us what to keep or change before the site goes live. We read every note before go-live.</p>
 
                         @if(session('success'))
                             <div class="ho-alert ho-alert--ok">{{ session('success') }}</div>

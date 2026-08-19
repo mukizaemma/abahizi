@@ -1,40 +1,50 @@
 @php
-    $intro = trim(strip_tags(html_entity_decode($about->factory_description ?? '')));
+    use App\Support\FactoryPageContent;
+
+    $intro = FactoryPageContent::plainLead($about->factory_description ?? '');
     if ($intro === '') {
         $intro = __('site.factory.intro_default');
     }
 
+    $offerLead = FactoryPageContent::plainLead($about->factory_services ?? '');
+
     $highlightUrl = '';
     $highlightAlt = __('site.factory.gallery_alt');
-    $firstGallery = collect($factoryGallery ?? [])->first();
-    if ($firstGallery instanceof \App\Models\FactoryGalleryImage) {
-        $highlightUrl = $firstGallery->url();
-        if (trim((string) ($firstGallery->caption ?? '')) !== '') {
-            $highlightAlt = $firstGallery->caption;
+    if (! empty($about->factory_services_image)) {
+        $highlightUrl = asset('storage/images/' . ltrim((string) $about->factory_services_image, '/'));
+    } else {
+        $firstGallery = collect($factoryGallery ?? [])->first();
+        if ($firstGallery instanceof \App\Models\FactoryGalleryImage) {
+            $highlightUrl = $firstGallery->url();
+            if (trim((string) ($firstGallery->caption ?? '')) !== '') {
+                $highlightAlt = $firstGallery->caption;
+            }
+        } elseif ($firstGallery && ! empty($firstGallery->image)) {
+            $highlightUrl = str_contains((string) $firstGallery->image, '/')
+                ? asset('storage/' . ltrim($firstGallery->image, '/'))
+                : asset('storage/images/gallery/' . $firstGallery->image);
         }
-    } elseif ($firstGallery && ! empty($firstGallery->image)) {
-        $highlightUrl = str_contains((string) $firstGallery->image, '/')
-            ? asset('storage/' . ltrim($firstGallery->image, '/'))
-            : asset('storage/images/gallery/' . $firstGallery->image);
     }
 
-    $whatCards = [
+    $defaultCards = [
         [
-            'icon' => 'fa-industry',
             'title' => __('site.factory.what_cards.cmt_title'),
-            'desc' => __('site.factory.what_cards.cmt_desc'),
+            'text' => __('site.factory.what_cards.cmt_desc'),
+            'items' => [],
         ],
         [
-            'icon' => 'fa-pen-ruler',
             'title' => __('site.factory.what_cards.custom_title'),
-            'desc' => __('site.factory.what_cards.custom_desc'),
+            'text' => __('site.factory.what_cards.custom_desc'),
+            'items' => [],
         ],
         [
-            'icon' => 'fa-gem',
             'title' => __('site.factory.what_cards.craft_title'),
-            'desc' => __('site.factory.what_cards.craft_desc'),
+            'text' => __('site.factory.what_cards.craft_desc'),
+            'items' => [],
         ],
     ];
+    $icons = ['fa-industry', 'fa-pen-ruler', 'fa-gem'];
+    $whatCards = FactoryPageContent::offerCards($about->factory_services_subitems ?? null, $defaultCards);
 @endphp
 
 <section class="lux-section factory-what" aria-labelledby="factory-what-title">
@@ -59,13 +69,26 @@
             @endif
         </div>
 
+        @if($offerLead !== '')
+            <p class="lux-lead text-center mx-auto mb-4" style="max-width: 40rem;">{{ $offerLead }}</p>
+        @endif
+
         <div class="row g-4">
             @foreach($whatCards as $i => $card)
+                @php
+                    $cardTitle = trim((string) ($card['title'] ?? ''));
+                    $cardText = trim((string) ($card['text'] ?? ''));
+                    if ($cardTitle === '' && $cardText === '') {
+                        continue;
+                    }
+                @endphp
                 <div class="col-md-6 col-lg-4 wow tpfadeUp" data-wow-duration=".85s" data-wow-delay="{{ number_format($i * 0.08, 2) }}s">
-                    <article class="lux-card lux-card--lift h-100">
-                        <span class="lux-card__icon" aria-hidden="true"><i class="fas {{ $card['icon'] }}"></i></span>
-                        <h3 class="lux-card__title">{{ $card['title'] }}</h3>
-                        <p class="lux-card__desc mb-0">{{ $card['desc'] }}</p>
+                    <article class="lux-card lux-card--lift h-100 factory-offer-card">
+                        <span class="lux-card__icon" aria-hidden="true"><i class="fas {{ $icons[$i % count($icons)] }}"></i></span>
+                        <h3 class="lux-card__title">{{ $cardTitle }}</h3>
+                        @if($cardText !== '')
+                            <p class="lux-card__desc mb-0">{{ $cardText }}</p>
+                        @endif
                     </article>
                 </div>
             @endforeach

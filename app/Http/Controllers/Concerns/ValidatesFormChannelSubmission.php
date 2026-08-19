@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Concerns;
 use App\Models\Setting;
 use App\Support\FormChannelService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 
 trait ValidatesFormChannelSubmission
@@ -25,8 +24,6 @@ trait ValidatesFormChannelSubmission
 
         $validated = $request->validate([
             'submission_channel' => ['required', 'in:whatsapp,email'],
-            'channel_confirmed' => ['required', 'in:1'],
-            'channel_token' => ['required', 'string', 'size:40'],
         ]);
 
         $channel = $validated['submission_channel'];
@@ -43,43 +40,37 @@ trait ValidatesFormChannelSubmission
             ]);
         }
 
-        $cacheKey = 'form_submit:' . $validated['channel_token'];
-        $gate = Cache::pull($cacheKey);
-
-        if (! is_array($gate)) {
-            throw ValidationException::withMessages([
-                'form' => 'Please open WhatsApp or email, send your message, then confirm below. Your session may have expired.',
-            ]);
-        }
-
-        if (($gate['ip'] ?? null) !== $request->ip()) {
-            throw ValidationException::withMessages([
-                'form' => 'Could not verify your submission. Please try again.',
-            ]);
-        }
-
-        if (($gate['channel'] ?? null) !== $channel) {
-            throw ValidationException::withMessages([
-                'submission_channel' => 'The selected channel does not match your opened app.',
-            ]);
-        }
-
-        if (($gate['form_type'] ?? null) !== $expectedFormType) {
-            throw ValidationException::withMessages([
-                'form' => 'Invalid form session. Please open the app again and confirm.',
-            ]);
-        }
-
-        $openedAt = (int) ($gate['opened_at'] ?? 0);
-        if ($openedAt <= 0 || (time() - $openedAt) < 3) {
-            throw ValidationException::withMessages([
-                'form' => 'Please send your message in WhatsApp or email before confirming.',
-            ]);
-        }
-
         return [
             'channel' => $channel,
             'form_type' => $expectedFormType,
         ];
+    }
+
+    /**
+     * @param  array<string, string>  $errors
+     */
+    protected function channelSubmitFail(Request $request, array $errors)
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => reset($errors) ?: 'Unable to submit your request.',
+                'errors' => collect($errors)->map(fn ($msg) => [$msg])->all(),
+            ], 422);
+        }
+
+        return back()->withInput()->withErrors($errors);
+    }
+
+    protected function channelSubmitOk(Request $request, string $success, ?string $openUrl, string $redirectUrl, string $flashKey = 'success')
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'ok' => true,
+                'message' => $success,
+                'open_url' => $openUrl,
+            ]);
+        }
+
+        return redirect()->to($redirectUrl)->with($flashKey, $success);
     }
 }

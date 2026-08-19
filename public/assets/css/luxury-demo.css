@@ -29,7 +29,8 @@
 .tp-btn i,
 .site-footer__btn i,
 .request-order-cta__btn i,
-.site-form-submit i {
+.site-form-submit i,
+.site-form-channel__btn i {
     line-height: 1 !important;
 }
 
@@ -1420,34 +1421,35 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
 }
 
 .contact-form-zone {
-    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    margin-bottom: 0;
 }
 
 .contact-form-zone__intro {
-    width: 80%;
-    max-width: 52rem;
-    margin: 0 auto clamp(1.75rem, 4vw, 2.5rem);
+    width: 100%;
+    max-width: none;
+    margin: 0 0 1.15rem;
+    text-align: left;
 }
 
 .contact-form-zone__title {
     font-family: var(--lux-font-display, "Cormorant Garamond", Georgia, serif);
-    font-size: clamp(1.85rem, 4vw, 2.5rem);
+    font-size: clamp(1.55rem, 3vw, 2.05rem);
     font-weight: 600;
     color: var(--lux-charcoal, #2c2c2c);
-    margin-bottom: 0.75rem;
-    line-height: 1.15;
+    margin-bottom: 0.45rem;
+    line-height: 1.2;
 }
 
 .contact-form-zone__inner,
 .contact-form-zone__alert {
-    width: 80%;
-    max-width: 56rem;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .contact-form-zone__alert {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
 }
 
 .contact-form-card {
@@ -1455,10 +1457,10 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
     overflow: hidden;
     border-radius: 18px;
     border: 1px solid rgba(0, 0, 0, 0.07);
-    background: linear-gradient(165deg, #ffffff 0%, #faf8f4 55%, #fffdf6 100%);
+    background: #fff;
     box-shadow:
-        0 24px 48px rgba(0, 0, 0, 0.07),
-        0 0 0 1px rgba(250, 210, 0, 0.12);
+        0 18px 40px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(250, 210, 0, 0.14);
 }
 
 .contact-form-card__accent {
@@ -1466,89 +1468,155 @@ h1, h2, h3, h4, .tp-section-title, .lux-section-head__title {
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--brand-primary, #fad200) 0%, #f5c400 45%, rgba(250, 210, 0, 0.35) 100%);
+    height: 5px;
+    background: linear-gradient(90deg, var(--brand-primary, #fad200) 0%, #000 100%);
 }
 
 .contact-form-card__body {
-    padding: clamp(1.5rem, 4vw, 2.75rem) clamp(1.25rem, 4vw, 2.5rem);
+    padding: clamp(1.15rem, 3vw, 1.75rem);
 }
 
-.contact-map-zone {
-    padding-top: clamp(1rem, 3vw, 2rem);
-    padding-bottom: clamp(0.5rem, 2vw, 1rem);
+.contact-intro {
+    margin: 0 0 1.35rem;
+    max-width: 40rem;
 }
 
-.contact-map-zone__head {
-    width: 80%;
-    max-width: 52rem;
-    margin: 0 auto clamp(1.5rem, 3vw, 2rem);
+.contact-intro__kicker {
+    margin: 0 0 0.4rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brand-secondary, #000);
 }
 
-.contact-map-zone__title {
+.contact-intro__title {
     font-family: var(--lux-font-display, "Cormorant Garamond", Georgia, serif);
-    font-size: clamp(1.65rem, 3.5vw, 2.15rem);
+    font-size: clamp(1.85rem, 3.6vw, 2.55rem);
     font-weight: 600;
-    color: var(--lux-charcoal, #2c2c2c);
-    margin-bottom: 0.65rem;
-    line-height: 1.2;
+    color: #000 !important;
+    margin: 0 0 0.5rem;
+    line-height: 1.15;
 }
 
-.contact-map-zone__lead {
-    font-size: 0.95rem;
+.contact-intro__lead,
+.contact-page-lead {
+    margin: 0;
+    color: #4a4a4a;
+    font-size: 1rem;
     line-height: 1.65;
-    max-width: 34rem;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 38rem;
 }
 
-.contact-map-zone__inner {
-    width: 80%;
-    max-width: 56rem;
-    margin: 0 auto;
+.contact-page-shell__stats {
+    margin-bottom: 2rem !important;
 }
 
-.contact-map-wrap--stacked {
-    width: 100%;
-    min-height: 420px;
+.contact-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
+    gap: 1.25rem;
+    align-items: stretch;
+}
+
+.contact-split__form,
+.contact-split__map {
+    min-width: 0;
+}
+
+.contact-map-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 28rem;
     border-radius: 18px;
     overflow: hidden;
-    box-shadow:
-        0 20px 44px rgba(0, 0, 0, 0.1),
-        0 0 0 1px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: #000;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
 }
 
-.contact-map-wrap--stacked .contact-map-wrap__iframe,
-.contact-map-wrap--stacked .contact-map-wrap__frame iframe {
+.contact-map-wrap--beside {
+    flex: 1 1 auto;
+    min-height: 18rem;
+    position: relative;
+}
+
+.contact-map-wrap--beside .contact-map-wrap__iframe,
+.contact-map-wrap--beside .contact-map-wrap__frame,
+.contact-map-wrap--beside .contact-map-wrap__frame iframe {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    min-height: 420px;
-    height: 420px;
+    height: 100%;
     border: 0;
     display: block;
 }
 
+.contact-map-zone {
+    display: none;
+}
+
 .contact-map-caption {
-    margin-top: 1rem;
-    padding: 1rem 1.15rem;
-    border-radius: 14px;
-    background: var(--lux-cream, #faf8f4);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    text-align: center;
+    margin: 0;
+    padding: 0.9rem 1.05rem;
+    background: #000;
+    border: 0;
+    text-align: left;
 }
 
 .contact-map-caption__label {
     display: block;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #6b7280;
     font-weight: 700;
     margin-bottom: 0.2rem;
+    color: var(--brand-primary, #fad200);
 }
 
 .contact-map-caption__value {
     font-weight: 600;
-    color: #2c2c2c;
+    color: #fff;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.contact-form-card .form-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #111;
+}
+
+.contact-form-card .site-form-channel {
+    text-align: left;
+}
+
+.contact-form-card .site-form-channel__actions {
+    max-width: none;
+    margin: 0;
+}
+
+.contact-form-card .site-form-channel__btn {
+    width: 100%;
+    max-width: none;
+    min-height: 3rem;
+}
+
+@media (max-width: 991.98px) {
+    .contact-split {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-map-card {
+        min-height: 18rem;
+    }
+
+    .contact-map-wrap--beside {
+        min-height: 16rem;
+    }
 }
 
 .contact-socials {
@@ -2471,6 +2539,57 @@ p, li, .lux-card__desc, .home-values-strip__desc {
     width: 100%;
     height: clamp(240px, 42vw, 420px);
     object-fit: cover;
+}
+.factory-story__visual {
+    position: relative;
+    margin: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+}
+.factory-story__visual img {
+    display: block;
+    width: 100%;
+    height: clamp(240px, 42vw, 420px);
+    object-fit: cover;
+}
+.factory-story__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+}
+.factory-story__list li {
+    position: relative;
+    padding: 0.95rem 1.1rem 0.95rem 2.35rem;
+    background: var(--lux-cream);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: #333;
+}
+.factory-story__list li::before {
+    content: "";
+    position: absolute;
+    left: 1rem;
+    top: 1.25em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--brand-primary, #fad200);
+}
+.factory-training {
+    background: #fff;
+}
+.factory-offer-card .lux-card__desc {
+    margin-top: 0.15rem;
+}
+@media (min-width: 1200px) {
+    .lux-timeline__track--compact {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
 }
 .factory-impact__journey {
     padding: clamp(1.5rem, 3vw, 2rem);
@@ -3713,4 +3832,20 @@ p, li, .lux-card__desc, .home-values-strip__desc {
     gap: 0.4rem;
     margin: 0;
     font-weight: 600;
+}
+
+.lux-section-head__eyebrow,
+.factory-capabilities-banner__eyebrow,
+.impact-page-cta__eyebrow,
+.home-values-strip__eyebrow,
+.home-process__eyebrow,
+.updates-widget__eyebrow,
+.update-hero__kicker,
+.contact-intro__kicker,
+.about-home-eyebrow,
+.what-we-do-intro__eyebrow,
+.what-we-do-process__eyebrow,
+.programs-dual-cta__eyebrow,
+.site-impact-quote__eyebrow {
+    display: none !important;
 }

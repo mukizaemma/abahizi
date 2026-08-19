@@ -289,8 +289,9 @@ class MediaLibraryService
             ['table' => 'backgrounds', 'column' => 'image1', 'label' => 'Home background', 'edit_route' => 'about'],
             ['table' => 'backgrounds', 'column' => 'image2', 'label' => 'Pages header image', 'edit_route' => 'about'],
             ['table' => 'backgrounds', 'column' => 'impact_cta_background', 'label' => 'Home impact background', 'edit_route' => 'about'],
+            ['table' => 'backgrounds', 'column' => 'home_partners_image', 'label' => 'Home partners photo', 'edit_route' => 'about'],
             ['table' => 'backgrounds', 'column' => 'model_image', 'label' => 'Our Model image', 'edit_route' => 'about'],
-            ['table' => 'backgrounds', 'column' => 'factory_services_image', 'label' => 'Factory services image', 'edit_route' => 'factory.admin.services'],
+            ['table' => 'backgrounds', 'column' => 'factory_services_image', 'label' => 'Factory page photo', 'edit_route' => 'factory.admin.overview'],
             ['table' => 'backgrounds', 'column' => 'factory_community_impact_image', 'label' => 'Factory impact image', 'edit_route' => 'factory.admin.impact'],
             ['table' => 'backgrounds', 'column' => 'factory_training_facilities_image', 'label' => 'Factory training image', 'edit_route' => 'factory.admin.training'],
             ['table' => 'abouts', 'column' => 'backImage', 'label' => 'About back image', 'edit_route' => 'about'],
@@ -335,7 +336,7 @@ class MediaLibraryService
         }
 
         try {
-            if (in_array($route, ['about', 'settings', 'factory.admin.services', 'factory.admin.impact', 'factory.admin.training'], true)) {
+            if (in_array($route, ['about', 'settings', 'factory.admin.overview', 'factory.admin.services', 'factory.admin.impact', 'factory.admin.training'], true)) {
                 return route($route);
             }
 

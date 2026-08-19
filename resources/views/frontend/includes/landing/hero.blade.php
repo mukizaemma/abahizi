@@ -7,11 +7,6 @@
         $headline = __('site.landing.hero_title');
     }
 
-    $subheadline = trim((string) ($setting->hero_subheadline ?? ''));
-    if ($subheadline === '') {
-        $subheadline = __('site.landing.hero_subtitle');
-    }
-
     $heroType = $setting->resolvedHeroMediaType();
     $videoUrl = $setting->heroVideoPublicUrl();
     $posterFromSetting = $setting->heroPosterPublicUrl();
@@ -57,6 +52,12 @@
             $youtubeId = $match[1];
         }
     }
+
+    $headlineLines = preg_split('/,\s+/', $headline, 2) ?: [$headline];
+    $headlineLines = array_values(array_filter(array_map('trim', $headlineLines), fn ($line) => $line !== ''));
+    if ($headlineLines === []) {
+        $headlineLines = [$headline];
+    }
 @endphp
 
 <section class="lh-hero" aria-label="{{ $brandName }}">
@@ -91,9 +92,15 @@
     </div>
 
     <div class="container lh-hero__content lh-reveal is-visible">
-        <span class="lh-hero__brand">{{ $brandName }}</span>
-        <h1 class="lh-hero__title">{{ $headline }}</h1>
-        <p class="lh-hero__subtitle">{{ $subheadline }}</p>
+        <h1 class="lh-hero__title">
+            @if(count($headlineLines) > 1)
+                @foreach($headlineLines as $index => $line)
+                    <span class="lh-hero__title-line">{{ $line }}{{ $index === 0 ? ',' : '' }}</span>
+                @endforeach
+            @else
+                {{ $headline }}
+            @endif
+        </h1>
         <div class="lh-hero__actions">
             <a href="#lh-contact" class="lh-btn lh-btn--primary">{{ __('site.landing.cta_partner') }}</a>
             <a href="#lh-products" class="lh-btn lh-btn--ghost">{{ __('site.landing.cta_products') }}</a>

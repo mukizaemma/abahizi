@@ -531,6 +531,25 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
     font-size: 1rem;
 }
 
+.admin-color-field {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.admin-color-field .form-control-color {
+    width: 3rem;
+    height: 2.6rem;
+    min-height: 2.6rem;
+    padding: 0.2rem;
+    cursor: pointer;
+}
+
+.admin-color-field input[type="text"] {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    text-transform: lowercase;
+}
+
 .admin-brand-name {
     overflow: hidden;
     text-overflow: ellipsis;

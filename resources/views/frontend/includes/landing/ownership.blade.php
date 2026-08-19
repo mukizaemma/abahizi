@@ -22,7 +22,6 @@
                 <img src="{{ $ownershipImage }}" alt="{{ __('site.landing.own_media_alt') }}" loading="lazy" decoding="async">
             </div>
             <div class="lh-reveal">
-                <p class="lh-eyebrow">{{ __('site.landing.own_eyebrow') }}</p>
                 <h2 id="lh-own-title" class="lh-own__title">{{ __('site.landing.own_title') }}</h2>
                 <p class="lh-own__text lh-body">{{ __('site.landing.own_text') }}</p>
                 <ul class="lh-own__list">

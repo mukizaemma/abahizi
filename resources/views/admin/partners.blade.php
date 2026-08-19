@@ -21,6 +21,37 @@
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item active">Partners</li>
                     </ol>
+                    <p class="text-muted">Names and logos appear on the homepage “Trusted by” section. Upload each partner’s logo here. The large photo beside them is set below, or under <a href="{{ route('about') }}">About &amp; story → Section backgrounds</a>.</p>
+
+                    @php
+                        $partnersPhoto = \App\Support\SectionBackgroundService::storedFilename($background, 'home_partners_image');
+                        $partnersPhotoUrl = $partnersPhoto
+                            ? \App\Support\SectionBackgroundService::urlFromFilename($partnersPhoto)
+                            : \App\Support\SectionBackgroundService::partnersFeatureImage($background);
+                    @endphp
+                    <div class="card mb-4">
+                        <div class="card-header fw-semibold">Homepage photo</div>
+                        <div class="card-body">
+                            <form action="{{ route('saveBackg') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <p class="text-muted small mb-3">This is the factory or production photo shown next to partner names. Use a real Masoro workshop image, not a size placeholder.</p>
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="home_partners_image">Replace photo</label>
+                                        <input type="file" class="form-control" id="home_partners_image" name="home_partners_image" accept="image/*">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-save me-1"></i> Save photo
+                                        </button>
+                                    </div>
+                                </div>
+                                @if($partnersPhotoUrl)
+                                    <img src="{{ $partnersPhotoUrl }}" width="280" class="mt-3 rounded border p-1 bg-white" alt="Homepage partners photo">
+                                @endif
+                            </form>
+                        </div>
+                    </div>
                     <div class="row">
                         @if (session()->has('success'))
                             <div class="arlert alert-success">

@@ -3,6 +3,9 @@
 namespace App\Support;
 
 use App\Models\Background;
+use App\Models\FactoryGalleryImage;
+use App\Models\Slide;
+use Illuminate\Support\Facades\Schema;
 
 class SectionBackgroundService
 {
@@ -29,6 +32,12 @@ class SectionBackgroundService
                 'help' => 'Parallax photo behind homepage impact stats, stories, and CTAs. Recommended 1920×875 or larger; the image is cropped to fill the band on every screen size.',
                 'fallbacks' => ['image2', 'image1', 'image'],
                 'default' => 'assets/img/slider/slider-bg-3-2.jpg',
+            ],
+            'home_partners_image' => [
+                'label' => 'Home — Trusted by photo',
+                'help' => 'Photo beside partner names on the homepage. Use a factory, production, or team photo from Masoro — not a size placeholder.',
+                'fallbacks' => ['factory_services_image'],
+                'default' => null,
             ],
             'factory_capabilities_background' => [
                 'label' => 'Factory capabilities banner',
@@ -101,5 +110,60 @@ class SectionBackgroundService
         $filename = trim((string) ($about->{$field} ?? ''));
 
         return $filename !== '' ? $filename : null;
+    }
+
+    /**
+     * Homepage “Trusted by” feature photo: dedicated CMS image, then real factory/slide photos.
+     * Bundled 1920×875 placeholders are never used.
+     */
+    public static function partnersFeatureImage(?Background $about = null): ?string
+    {
+        $about ??= Background::firstOrEmpty();
+
+        $candidates = [];
+
+        $dedicated = static::storedFilename($about, 'home_partners_image');
+        if ($dedicated) {
+            $candidates[] = static::urlFromFilename($dedicated);
+        }
+
+        $factoryPage = trim((string) ($about->factory_services_image ?? ''));
+        if ($factoryPage !== '') {
+            $candidates[] = static::urlFromFilename($factoryPage);
+        }
+
+        if (Schema::hasTable('factory_gallery_images')) {
+            $gallery = FactoryGalleryImage::query()->orderBy('sort_order')->orderBy('id')->first();
+            if ($gallery) {
+                $candidates[] = $gallery->url();
+            }
+        }
+
+        if (Schema::hasTable('slides')) {
+            $slide = Slide::query()->whereNotNull('image')->where('image', '!=', '')->latest()->first();
+            if ($slide) {
+                $candidates[] = Slide::publicImageUrl($slide->image);
+            }
+        }
+
+        foreach ($candidates as $url) {
+            if (! static::isPlaceholderUrl($url)) {
+                return $url;
+            }
+        }
+
+        return null;
+    }
+
+    public static function isPlaceholderUrl(?string $url): bool
+    {
+        $url = strtolower(trim((string) $url));
+        if ($url === '') {
+            return true;
+        }
+
+        return str_contains($url, 'slider-bg-3-')
+            || str_contains($url, 'slider-bg-1')
+            || str_contains($url, 'breadcrumb-bg');
     }
 }

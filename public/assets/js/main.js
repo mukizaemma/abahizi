@@ -6,10 +6,8 @@
 
 	var windowOn = $(window)
 	///////////////////////////////////////////////////
-	// 01. PreLoader Js
-	windowOn.on('load',function () {
-		$('#loading').fadeOut(500);
-	});
+	// 01. PreLoader Js — never wait for every image before showing the page
+	$('#loading').hide();
 
 	///////////////////////////////////////////////////
 	// 02. SubMenu Dropdown Toggle

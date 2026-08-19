@@ -16,7 +16,6 @@
         <div class="modal-content">
             <div class="modal-header border-0 pb-0">
                 <div>
-                    <p class="lux-section-head__eyebrow mb-1">{{ __('site.initiative.cta_eyebrow') }}</p>
                     <h2 id="initiative-involve-title" class="modal-title h3 mb-0">{{ __('site.initiative.cta_title') }}</h2>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -45,12 +44,11 @@
                         method="POST"
                         class="row g-3 site-channel-form initiative-involve__form"
                         data-form-type="initiative"
-                        data-form-autosave="true"
-                        data-msg-submitting="{{ __('site.initiative.swal_submitting') }}"
-                        data-msg-submitted="{{ __('site.initiative.swal_submitted') }}"
-                        data-msg-submitted-text="{{ __('site.initiative.swal_submitted_text') }}"
-                        data-msg-failed="{{ __('site.initiative.swal_failed') }}"
-                        data-msg-failed-text="{{ __('site.initiative.swal_failed_text') }}"
+                        data-msg-submitting="{{ __('site.forms.swal_submitting') }}"
+                        data-msg-submitted="{{ __('site.forms.swal_submitted') }}"
+                        data-msg-submitted-text="{{ __('site.forms.swal_submitted_whatsapp') }}"
+                        data-msg-failed="{{ __('site.forms.swal_failed') }}"
+                        data-msg-failed-text="{{ __('site.forms.swal_failed_text') }}"
                         novalidate
                     >
                         @csrf
@@ -131,8 +129,6 @@
                         @include('frontend.includes.form-channel-submit', [
                             'formType' => 'initiative',
                             'formSource' => 'initiative-' . $activity->slug,
-                            'submitOpenLabel' => __('site.initiative.submit'),
-                            'autosave' => true,
                         ])
                     </form>
                 @endif

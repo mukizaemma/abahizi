@@ -13,7 +13,6 @@
     <div class="container">
         <div class="lh-process__intro lh-reveal">
             <div>
-                <p class="lh-eyebrow">{{ __('site.landing.process_eyebrow') }}</p>
                 <h2 id="lh-process-title" class="lh-process__title">{{ __('site.landing.process_title') }}</h2>
             </div>
             <p class="lh-process__lead lh-body">{{ __('site.landing.process_lead') }}</p>

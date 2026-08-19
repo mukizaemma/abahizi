@@ -423,7 +423,9 @@ class HomeController extends Controller
             }
         }
 
-        $success = __('site.initiative.swal_submitted_text');
+        $success = $channel === FormChannelService::CHANNEL_WHATSAPP
+            ? __('site.forms.swal_submitted_whatsapp')
+            : __('site.forms.swal_submitted_email');
 
         return $this->initiativeInvolveResponse($request, $activity, true, [], $success, $openUrl);
     }
@@ -554,18 +556,19 @@ public function gallery(){
 
 
     public function sendMessage(Request $request){
-        $availability = FormChannelService::availability(Setting::firstOrEmpty());
+        $setting = Setting::firstOrEmpty();
+        $availability = FormChannelService::availability($setting);
         if (! $availability['channels_ready']) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Submissions are unavailable until both a valid site email and WhatsApp number are configured in admin settings.']);
+            return $this->channelSubmitFail($request, [
+                'form' => 'Submissions are unavailable until both a valid site email and WhatsApp number are configured in admin settings.',
+            ]);
         }
 
         $ipKey = 'contact-message:ip:' . $request->ip();
         if (RateLimiter::tooManyAttempts($ipKey, 5)) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Too many attempts. Please wait a few minutes and try again.']);
+            return $this->channelSubmitFail($request, [
+                'form' => 'Too many attempts. Please wait a few minutes and try again.',
+            ]);
         }
 
         RateLimiter::hit($ipKey, 10 * 60);
@@ -589,30 +592,30 @@ public function gallery(){
 
         $phoneDigits = preg_replace('/\D+/', '', (string) $validated['phone']);
         if (strlen($phoneDigits) < 10) {
-            return back()
-                ->withInput()
-                ->withErrors(['phone' => 'Enter a valid phone number with at least 10 digits.']);
+            return $this->channelSubmitFail($request, [
+                'phone' => 'Enter a valid phone number with at least 10 digits.',
+            ]);
         }
 
         if (FormChannelService::normalizeEmail($validated['email']) === null) {
-            return back()
-                ->withInput()
-                ->withErrors(['email' => 'Enter a valid email address.']);
+            return $this->channelSubmitFail($request, [
+                'email' => 'Enter a valid email address.',
+            ]);
         }
 
         $startedAt = (int) ($request->input('started_at') ?? 0);
         if ($startedAt > 0 && (time() - $startedAt) < 3) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Form submitted too quickly. Please review your details and try again.']);
+            return $this->channelSubmitFail($request, [
+                'form' => 'Form submitted too quickly. Please review your details and try again.',
+            ]);
         }
 
         foreach (['names', 'organization', 'message'] as $field) {
             $value = (string) ($validated[$field] ?? '');
             if (FormChannelService::containsSpamLinks($value)) {
-                return back()
-                    ->withInput()
-                    ->withErrors([$field => 'Please remove links from this field.']);
+                return $this->channelSubmitFail($request, [
+                    $field => 'Please remove links from this field.',
+                ]);
             }
         }
 
@@ -632,17 +635,39 @@ public function gallery(){
             $storedMessage = implode("\n", $meta) . "\n\n" . $storedMessage;
         }
 
+        $channel = $channelGate['channel'];
+        $payload = [
+            'names' => $validated['names'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'],
+            'organization' => $validated['organization'] ?? '',
+            'interests' => $interestsText,
+            'product_reference' => $validated['product_reference'] ?? '',
+            'message' => $validated['message'],
+        ];
+
+        $openUrl = FormChannelService::openUrl($channel, $setting, 'contact', $payload);
+        if ($openUrl === null) {
+            return $this->channelSubmitFail($request, [
+                'form' => 'Unable to open the selected contact channel. Please try again later.',
+            ]);
+        }
+
         Message::create([
             'names' => $validated['names'],
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'message' => $storedMessage,
-            'submission_channel' => $channelGate['channel'],
+            'submission_channel' => $channel,
         ]);
 
-        return redirect()
-            ->route('contacts')
-            ->with('success', 'Thank you. We recorded your inquiry after you sent it via ' . FormChannelService::channelLabel($channelGate['channel']) . '. Our team will follow up shortly.');
+        $success = $channel === FormChannelService::CHANNEL_WHATSAPP
+            ? __('site.forms.swal_submitted_whatsapp')
+            : __('site.forms.swal_submitted_email');
+
+        $redirect = $request->headers->get('referer') ?: route('contacts');
+
+        return $this->channelSubmitOk($request, $success, $openUrl, $redirect);
     }
 
     public function webMessages(){
@@ -757,13 +782,13 @@ public function gallery(){
 
         // Theme options (safe if migration hasn't run yet)
         if (Schema::hasColumn('settings', 'primary_color')) {
-            $data->primary_color = ThemeService::DEFAULT_PRIMARY;
+            $data->primary_color = ThemeService::sanitizeHex($request->input('primary_color'), ThemeService::DEFAULT_PRIMARY);
         }
         if (Schema::hasColumn('settings', 'secondary_color')) {
-            $data->secondary_color = ThemeService::DEFAULT_SECONDARY;
+            $data->secondary_color = ThemeService::sanitizeHex($request->input('secondary_color'), ThemeService::DEFAULT_SECONDARY);
         }
         if (Schema::hasColumn('settings', 'neutral_color')) {
-            $data->neutral_color = ThemeService::DEFAULT_NEUTRAL;
+            $data->neutral_color = ThemeService::sanitizeHex($request->input('neutral_color'), ThemeService::DEFAULT_NEUTRAL);
         }
         if (Schema::hasColumn('settings', 'font_family')) {
             $data->font_family = ThemeService::sanitizeFont($request->input('font_family'), ThemeService::DEFAULT_BODY_FONT);
@@ -942,9 +967,8 @@ public function gallery(){
         $factoryGallery = Schema::hasTable('factory_gallery_images')
             ? FactoryGalleryImage::query()->orderBy('sort_order')->orderBy('id')->take(12)->get()
             : Gallery::query()->latest()->take(12)->get();
-        $services = Service::query()->active()->orderBy('sort_order')->orderBy('title')->get();
 
-        return view('frontend.our-factory', compact('about', 'factoryGallery', 'services'));
+        return view('frontend.our-factory', compact('about', 'factoryGallery'));
     }
 
     public function manufacturing()
@@ -1033,23 +1057,23 @@ public function gallery(){
         }
 
         if (! ($setting->accept_order_requests ?? true)) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Product orders are not being accepted at the moment. Please use the contact page.']);
+            return $this->channelSubmitFail($request, [
+                'form' => 'Product orders are not being accepted at the moment. Please use the contact page.',
+            ]);
         }
 
         $availability = FormChannelService::availability($setting);
         if (! $availability['channels_ready']) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Orders are unavailable until both a valid site email and WhatsApp number are configured in admin settings.']);
+            return $this->channelSubmitFail($request, [
+                'form' => 'Orders are unavailable until both a valid site email and WhatsApp number are configured in admin settings.',
+            ]);
         }
 
         $ipKey = 'product-order:ip:' . $request->ip();
         if (RateLimiter::tooManyAttempts($ipKey, 5)) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Too many attempts. Please wait a few minutes and try again.']);
+            return $this->channelSubmitFail($request, [
+                'form' => 'Too many attempts. Please wait a few minutes and try again.',
+            ]);
         }
 
         RateLimiter::hit($ipKey, 10 * 60);
@@ -1071,28 +1095,28 @@ public function gallery(){
 
         $phoneDigits = preg_replace('/\D+/', '', (string) $validated['phone']);
         if (strlen($phoneDigits) < 10) {
-            return back()
-                ->withInput()
-                ->withErrors(['phone' => 'Enter a valid phone number with at least 10 digits.']);
+            return $this->channelSubmitFail($request, [
+                'phone' => 'Enter a valid phone number with at least 10 digits.',
+            ]);
         }
 
         if (FormChannelService::normalizeEmail($validated['email']) === null) {
-            return back()
-                ->withInput()
-                ->withErrors(['email' => 'Enter a valid email address you actively use.']);
+            return $this->channelSubmitFail($request, [
+                'email' => 'Enter a valid email address you actively use.',
+            ]);
         }
 
         $startedAt = (int) ($request->input('started_at') ?? 0);
         if ($startedAt > 0 && (time() - $startedAt) < 3) {
-            return back()
-                ->withInput()
-                ->withErrors(['form' => 'Form submitted too quickly. Please review your details and try again.']);
+            return $this->channelSubmitFail($request, [
+                'form' => 'Form submitted too quickly. Please review your details and try again.',
+            ]);
         }
 
         if (FormChannelService::containsSpamLinks((string) $validated['product_description'])) {
-            return back()
-                ->withInput()
-                ->withErrors(['product_description' => 'Please remove links from your order details.']);
+            return $this->channelSubmitFail($request, [
+                'product_description' => 'Please remove links from your order details.',
+            ]);
         }
 
         $productId = $validated['product_id'] ?? null;
@@ -1113,6 +1137,23 @@ public function gallery(){
             $orderDetails = 'Quantity: ' . (int) $validated['quantity'] . "\n\n" . $orderDetails;
         }
 
+        $channel = $channelGate['channel'];
+        $payload = [
+            'full_name' => $validated['full_name'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'],
+            'product_description' => $validated['product_description'],
+            'product_reference' => $productReference,
+            'quantity' => $validated['quantity'] ?? null,
+        ];
+
+        $openUrl = FormChannelService::openUrl($channel, $setting, 'order', $payload);
+        if ($openUrl === null) {
+            return $this->channelSubmitFail($request, [
+                'form' => 'Unable to open the selected contact channel. Please try again later.',
+            ]);
+        }
+
         OrderRequest::create([
             'full_name' => $validated['full_name'],
             'phone' => $validated['phone'],
@@ -1120,7 +1161,7 @@ public function gallery(){
             'product_description' => $orderDetails,
             'product_id' => $productId,
             'product_reference' => $productReference !== '' ? $productReference : null,
-            'submission_channel' => $channelGate['channel'],
+            'submission_channel' => $channel,
         ]);
 
         $redirectUrl = route('ourProducts');
@@ -1131,9 +1172,11 @@ public function gallery(){
             }
         }
 
-        return redirect()
-            ->to($redirectUrl . '#product-order-form')
-            ->with('order_success', 'Thank you. We recorded your order after you sent it via ' . FormChannelService::channelLabel($channelGate['channel']) . '. Our team will follow up shortly.');
+        $success = $channel === FormChannelService::CHANNEL_WHATSAPP
+            ? __('site.forms.swal_submitted_whatsapp')
+            : __('site.forms.swal_submitted_email');
+
+        return $this->channelSubmitOk($request, $success, $openUrl, $redirectUrl . '#product-order-form', 'order_success');
     }
 
     public function impactReportsIndex()

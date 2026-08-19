@@ -15,7 +15,7 @@
                 @endif
             </h2>
             <p class="product-order-panel__lead text-muted mb-0">
-                Choose WhatsApp or email, send your order in the app that opens, then confirm here so we can record it.
+                Fill in your details, then submit with WhatsApp or email. We save the request first; the app then opens with your message ready to send.
                 Use an active phone number and email you can receive replies on.
             </p>
         </div>

@@ -34,7 +34,6 @@
     <div class="container">
         <div class="lh-about__grid">
             <div class="lh-reveal">
-                <p class="lh-eyebrow">{{ __('site.landing.about_eyebrow') }}</p>
                 <h2 id="lh-about-title" class="lh-about__title">{{ __('site.landing.about_title') }}</h2>
                 <p class="lh-about__text lh-body">{{ $aboutBody }}</p>
                 <a href="{{ route('backgroundDetails') }}" class="lh-btn lh-btn--ghost-dark">{{ __('site.landing.about_cta') }}</a>

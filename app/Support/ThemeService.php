@@ -130,9 +130,9 @@ class ThemeService
      */
     public static function fromSetting(?Setting $setting): array
     {
-        $primary = self::DEFAULT_PRIMARY;
-        $secondary = self::DEFAULT_SECONDARY;
-        $neutral = self::DEFAULT_NEUTRAL;
+        $primary = self::sanitizeHex($setting?->primary_color ?? null, self::DEFAULT_PRIMARY);
+        $secondary = self::sanitizeHex($setting?->secondary_color ?? null, self::DEFAULT_SECONDARY);
+        $neutral = self::sanitizeHex($setting?->neutral_color ?? null, self::DEFAULT_NEUTRAL);
         $bodyFont = self::sanitizeFont($setting?->font_family ?? null, self::DEFAULT_BODY_FONT);
         $headingFont = self::sanitizeFont($setting?->heading_font ?? null, self::DEFAULT_HEADING_FONT);
 
@@ -140,7 +140,7 @@ class ThemeService
             'primary' => $primary,
             'secondary' => $secondary,
             'neutral' => $neutral,
-            'on_primary' => '#000000',
+            'on_primary' => self::onPrimaryText($primary),
             'primary_rgb' => self::hexToRgbChannels($primary),
             'body_font' => $bodyFont,
             'heading_font' => $headingFont,

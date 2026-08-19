@@ -18,7 +18,6 @@
             <div class="update-hero__overlay">
                 <div class="container">
                     <a class="update-hero__back" href="{{ route('posts') }}">&larr; {{ __('site.updates.back') }}</a>
-                    <p class="update-hero__kicker">{{ __('site.nav.updates') }}</p>
                     <time class="update-hero__date" datetime="{{ optional($blog->displayDate())->toDateString() }}">
                         {{ optional($blog->displayDate())->format('d M Y') }}
                     </time>
@@ -33,7 +32,6 @@
         <header class="update-hero update-hero--plain">
             <div class="container">
                 <a class="update-hero__back update-hero__back--dark" href="{{ route('posts') }}">&larr; {{ __('site.updates.back') }}</a>
-                <p class="update-hero__kicker update-hero__kicker--dark">{{ __('site.nav.updates') }}</p>
                 <time class="update-hero__date" datetime="{{ optional($blog->displayDate())->toDateString() }}">
                     {{ optional($blog->displayDate())->format('d M Y') }}
                 </time>

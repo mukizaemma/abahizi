@@ -36,46 +36,6 @@
             ],
         ];
     }
-
-    $quoteCards = collect($testimonials ?? [])->take(3)->map(function ($item) {
-        $raw = html_entity_decode($item->testimony ?? '');
-        $raw = preg_replace('/<\s*br\s*\/?\s*>/i', "\n", $raw);
-        $raw = preg_replace('/<\s*\/p\s*>/i', "\n", $raw);
-        $plain = trim(preg_replace('/\s+/', ' ', strip_tags($raw)));
-
-        return [
-            'quote' => \Illuminate\Support\Str::limit($plain, 140, '…'),
-            'name' => $item->names ?? __('site.landing.testimonial_name_fallback'),
-            'role' => $item->title ?? __('site.landing.testimonial_role_fallback'),
-            'image' => ! empty($item->image)
-                ? asset('storage/' . ltrim($item->image, '/'))
-                : asset('assets/img/testimonial/author-1-1.png'),
-        ];
-    });
-
-    if ($quoteCards->isEmpty()) {
-        $quoteCards = collect([
-            [
-                'quote' => __('site.landing.testimonial_1_quote'),
-                'name' => __('site.landing.testimonial_1_name'),
-                'role' => __('site.landing.testimonial_1_role'),
-                'image' => asset('assets/img/testimonial/author-1-1.png'),
-            ],
-            [
-                'quote' => __('site.landing.testimonial_2_quote'),
-                'name' => __('site.landing.testimonial_2_name'),
-                'role' => __('site.landing.testimonial_2_role'),
-                'image' => asset('assets/img/testimonial/author-1-2.png'),
-            ],
-        ]);
-    } elseif ($quoteCards->count() === 1) {
-        $quoteCards->push([
-            'quote' => __('site.landing.testimonial_2_quote'),
-            'name' => __('site.landing.testimonial_2_name'),
-            'role' => __('site.landing.testimonial_2_role'),
-            'image' => asset('assets/img/testimonial/author-1-2.png'),
-        ]);
-    }
 @endphp
 
 <section
@@ -84,6 +44,7 @@
     aria-labelledby="lh-impact-title"
     data-lh-counter-section
     data-lux-parallax
+    data-lux-parallax-strength="strong"
 >
     <div class="lh-impact__parallax" data-lux-parallax-layer aria-hidden="true">
         <img
@@ -108,6 +69,7 @@
                     $counterTarget = $digits !== '' ? (int) $digits : 0;
                 @endphp
                 <article class="lh-impact__stat lh-reveal" style="transition-delay: {{ $index * 0.07 }}s">
+                    <span class="lh-impact__index" aria-hidden="true">{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</span>
                     @if($rawValue !== '')
                         <p
                             class="lh-impact__value"
@@ -118,23 +80,6 @@
                     @if(! empty($stat['label']))
                         <p class="lh-impact__label">{{ $stat['label'] }}</p>
                     @endif
-                </article>
-            @endforeach
-        </div>
-
-        <div class="lh-impact__quotes">
-            @foreach($quoteCards as $index => $card)
-                <article class="lh-quote lh-reveal" style="transition-delay: {{ $index * 0.1 }}s">
-                    <div class="lh-quote__photo">
-                        <img src="{{ $card['image'] }}" alt="{{ $card['name'] }}" loading="lazy" decoding="async">
-                    </div>
-                    <div>
-                        <p class="lh-quote__text">“{{ $card['quote'] }}”</p>
-                        <p class="lh-quote__meta">
-                            {{ $card['name'] }}
-                            <span class="lh-quote__role">{{ $card['role'] }}</span>
-                        </p>
-                    </div>
                 </article>
             @endforeach
         </div>

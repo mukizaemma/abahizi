@@ -144,6 +144,13 @@
                 Our team
             </x-admin.nav-link>
             <x-admin.nav-link
+                :href="route('partner')"
+                icon="fa-briefcase"
+                :active="request()->routeIs(['partner', 'savePartner', 'editPartner', 'updatePartner', 'destroyPartner'])"
+            >
+                Partners
+            </x-admin.nav-link>
+            <x-admin.nav-link
                 :href="route('getTestimonials')"
                 icon="fa-quote-right"
                 :active="request()->routeIs(['getTestimonials', 'editTestimony', 'saveTestimony', 'updateTestimony', 'destroyTestimony'])"

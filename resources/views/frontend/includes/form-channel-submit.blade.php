@@ -2,9 +2,8 @@
     $formType = $formType ?? 'partnership';
     $formSource = $formSource ?? null;
     $channelsReady = $formChannels['channels_ready'] ?? false;
-    $submitOpenLabel = $submitOpenLabel ?? 'Submit';
-    $submitConfirmLabel = $submitConfirmLabel ?? 'I sent the message — save my submission';
-    $autosave = (bool) ($autosave ?? false);
+    $whatsappActive = $formChannels['whatsapp_active'] ?? true;
+    $emailActive = $formChannels['email_active'] ?? true;
 @endphp
 
 @if(! $channelsReady)
@@ -15,56 +14,41 @@
         </div>
     </div>
 @else
-    <div class="col-12 site-form-channel">
-        <div class="site-form-channel__choices row g-2 mb-3" role="radiogroup" aria-label="Send via WhatsApp or email">
-            <div class="col-sm-6">
-                <label class="site-form-channel__choice">
-                    <input type="radio" name="submission_channel_choice" value="whatsapp" class="site-form-channel__radio" required>
-                    <span class="site-form-channel__choice-inner">
-                        <i class="fab fa-whatsapp site-form-channel__icon site-form-channel__icon--wa" aria-hidden="true"></i>
-                        <span class="site-form-channel__choice-label">WhatsApp</span>
-                    </span>
-                </label>
-            </div>
-            <div class="col-sm-6">
-                <label class="site-form-channel__choice">
-                    <input type="radio" name="submission_channel_choice" value="email" class="site-form-channel__radio" required>
-                    <span class="site-form-channel__choice-inner">
-                        <i class="far fa-envelope site-form-channel__icon" aria-hidden="true"></i>
-                        <span class="site-form-channel__choice-label">Email</span>
-                    </span>
-                </label>
-            </div>
-        </div>
-
-        @if($autosave)
-            <p class="small text-muted mb-3">{{ __('site.initiative.channel_hint') }}</p>
-            <input type="hidden" name="submission_channel" value="">
-            <button type="button" class="btn btn-lg fw-semibold text-dark site-form-submit site-form-channel__open" disabled>
-                {{ $submitOpenLabel }}
-            </button>
-        @else
-            <button type="button" class="btn btn-lg fw-semibold text-dark site-form-submit site-form-channel__open" disabled>
-                {{ $submitOpenLabel }}
-            </button>
-
-            <div class="site-form-channel__confirm mt-4 d-none" aria-live="polite">
-                <div class="alert alert-info mb-3">
-                    A new tab should have opened with your message ready. Send it in WhatsApp or your email app, then confirm here so we can record your submission.
-                </div>
-                <input type="hidden" name="submission_channel" value="">
-                <input type="hidden" name="channel_confirmed" value="">
-                <input type="hidden" name="channel_token" value="">
-                @if($formSource)
-                    <input type="hidden" name="form_source" value="{{ $formSource }}">
-                @endif
-                <button type="submit" class="btn btn-lg fw-semibold text-dark site-form-submit site-form-channel__confirm-btn" disabled>
-                    {{ $submitConfirmLabel }}
-                </button>
-                <button type="button" class="btn btn-outline-secondary btn-lg ms-0 ms-md-2 mt-2 mt-md-0 site-form-channel__retry">
-                    Choose another option
-                </button>
-            </div>
+    <div
+        class="col-12 site-form-channel"
+        data-msg-submitting="{{ __('site.forms.swal_submitting') }}"
+        data-msg-submitted="{{ __('site.forms.swal_submitted') }}"
+        data-msg-submitted-whatsapp="{{ __('site.forms.swal_submitted_whatsapp') }}"
+        data-msg-submitted-email="{{ __('site.forms.swal_submitted_email') }}"
+        data-msg-open-whatsapp="{{ __('site.forms.swal_open_whatsapp') }}"
+        data-msg-open-email="{{ __('site.forms.swal_open_email') }}"
+        data-msg-failed="{{ __('site.forms.swal_failed') }}"
+        data-msg-failed-text="{{ __('site.forms.swal_failed_text') }}"
+    >
+        <input type="hidden" name="submission_channel" value="">
+        @if($formSource)
+            <input type="hidden" name="form_source" value="{{ $formSource }}">
         @endif
+
+        <div class="site-form-channel__actions">
+            <button
+                type="button"
+                class="site-form-channel__btn site-form-channel__btn--whatsapp"
+                data-channel="whatsapp"
+                @disabled(! $whatsappActive)
+            >
+                <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                <span>{{ __('site.forms.submit_whatsapp') }}</span>
+            </button>
+            <button
+                type="button"
+                class="site-form-channel__btn site-form-channel__btn--email"
+                data-channel="email"
+                @disabled(! $emailActive)
+            >
+                <i class="far fa-envelope" aria-hidden="true"></i>
+                <span>{{ __('site.forms.submit_email') }}</span>
+            </button>
+        </div>
     </div>
 @endif

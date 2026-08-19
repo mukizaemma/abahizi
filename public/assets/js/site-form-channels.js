@@ -1,41 +1,22 @@
 (function () {
     'use strict';
 
-    var intentUrl = document.querySelector('meta[name="form-channel-intent-url"]');
-    if (!intentUrl) {
-        return;
-    }
-
-    var intentEndpoint = intentUrl.getAttribute('content');
     var csrfMeta = document.querySelector('meta[name="csrf-token"]');
     var csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
-
-    function formTypeFor(form) {
-        return form.getAttribute('data-form-type') || 'partnership';
-    }
-
-    function selectedChannel(form) {
-        var checked = form.querySelector('.site-form-channel__radio:checked');
-        return checked ? checked.value : '';
-    }
 
     function channelBlock(form) {
         return form.querySelector('.site-form-channel');
     }
 
-    function openButton(form) {
-        return form.querySelector('.site-form-channel__open');
-    }
-
-    function confirmBlock(form) {
-        return form.querySelector('.site-form-channel__confirm');
-    }
-
     function formMessage(form, key, fallback) {
-        if (!form) {
-            return fallback;
+        if (form && form.getAttribute(key)) {
+            return form.getAttribute(key);
         }
-        return form.getAttribute(key) || fallback;
+        var block = form ? channelBlock(form) : null;
+        if (block && block.getAttribute(key)) {
+            return block.getAttribute(key);
+        }
+        return fallback;
     }
 
     function brandConfirmColor() {
@@ -48,7 +29,7 @@
                 icon: options.icon || 'info',
                 title: options.title || '',
                 text: options.text || '',
-                confirmButtonText: 'OK',
+                confirmButtonText: options.confirmButtonText || 'OK',
                 confirmButtonColor: brandConfirmColor(),
             });
         }
@@ -87,8 +68,23 @@
         }
     }
 
-    function isAutosave(form) {
-        return form.getAttribute('data-form-autosave') === 'true';
+    function firstErrorText(json, fallback) {
+        if (json && json.errors) {
+            var keys = Object.keys(json.errors);
+            if (keys.length) {
+                var first = json.errors[keys[0]];
+                if (Array.isArray(first) && first[0]) {
+                    return first[0];
+                }
+                if (typeof first === 'string' && first) {
+                    return first;
+                }
+            }
+        }
+        if (json && json.message && json.message !== 'The given data was invalid.') {
+            return json.message;
+        }
+        return fallback;
     }
 
     function syncDonateFields(form) {
@@ -108,13 +104,30 @@
         });
     }
 
-    function openAutosave(form) {
-        if (!validateNative(form)) {
-            return;
-        }
+    function serializeForm(form) {
+        return new FormData(form);
+    }
 
-        var channel = selectedChannel(form);
-        if (!channel) {
+    function validateNative(form) {
+        if (typeof form.reportValidity === 'function') {
+            return form.reportValidity();
+        }
+        return form.checkValidity();
+    }
+
+    function setBusy(form, busy) {
+        form.querySelectorAll('.site-form-channel__btn').forEach(function (btn) {
+            btn.disabled = busy;
+            if (busy) {
+                btn.setAttribute('aria-busy', 'true');
+            } else {
+                btn.removeAttribute('aria-busy');
+            }
+        });
+    }
+
+    function submitChannel(form, channel) {
+        if (!validateNative(form)) {
             return;
         }
 
@@ -123,16 +136,11 @@
             hiddenChannel.value = channel;
         }
 
-        var btn = openButton(form);
-        if (btn) {
-            btn.disabled = true;
-            btn.setAttribute('aria-busy', 'true');
-        }
-
+        setBusy(form, true);
         notifyLoading(formMessage(form, 'data-msg-submitting', 'Submitting...'));
 
         var body = serializeForm(form);
-        body.append('submission_channel', channel);
+        body.set('submission_channel', channel);
 
         fetch(form.getAttribute('action'), {
             method: 'POST',
@@ -157,13 +165,15 @@
                     return notify({
                         icon: 'error',
                         title: formMessage(form, 'data-msg-failed', 'Not submitted'),
-                        text: formMessage(form, 'data-msg-failed-text', 'Please try again.'),
+                        text: firstErrorText(result.json, formMessage(form, 'data-msg-failed-text', 'Please try again.')),
                     });
                 }
 
                 var openUrl = result.json && result.json.open_url ? result.json.open_url : '';
                 form.reset();
-                updateOpenButton(form);
+                if (hiddenChannel) {
+                    hiddenChannel.value = '';
+                }
                 syncDonateFields(form);
 
                 var modalEl = form.closest('.modal');
@@ -174,10 +184,19 @@
                     }
                 }
 
+                var isWhatsApp = channel === 'whatsapp';
+                var successText = isWhatsApp
+                    ? formMessage(form, 'data-msg-submitted-whatsapp', 'Your request was saved. WhatsApp will open so you can send the message.')
+                    : formMessage(form, 'data-msg-submitted-email', 'Your request was saved. Your email app will open so you can send the message.');
+                var confirmLabel = isWhatsApp
+                    ? formMessage(form, 'data-msg-open-whatsapp', 'Open WhatsApp')
+                    : formMessage(form, 'data-msg-open-email', 'Open email');
+
                 return notify({
                     icon: 'success',
                     title: formMessage(form, 'data-msg-submitted', 'Submitted'),
-                    text: formMessage(form, 'data-msg-submitted-text', 'Your request was sent.'),
+                    text: (result.json && result.json.message) ? result.json.message : successText,
+                    confirmButtonText: confirmLabel,
                 }).then(function () {
                     openExternal(openUrl);
                 });
@@ -191,170 +210,7 @@
                 });
             })
             .finally(function () {
-                if (btn) {
-                    btn.removeAttribute('aria-busy');
-                    btn.disabled = !selectedChannel(form);
-                }
-            });
-    }
-
-    function updateOpenButton(form) {
-        var btn = openButton(form);
-        if (!btn) {
-            return;
-        }
-        var channel = selectedChannel(form);
-        btn.disabled = !channel;
-        btn.textContent = 'Submit';
-    }
-
-    function resetChannelFlow(form) {
-        var block = channelBlock(form);
-        if (!block) {
-            return;
-        }
-        var confirm = confirmBlock(form);
-        if (confirm) {
-            confirm.classList.add('d-none');
-        }
-        var openBtn = openButton(form);
-        if (openBtn) {
-            openBtn.classList.remove('d-none');
-            openBtn.disabled = !selectedChannel(form);
-        }
-        form.querySelectorAll('.site-form-channel__radio').forEach(function (radio) {
-            radio.disabled = false;
-        });
-        var fields = form.querySelectorAll('[name="submission_channel"], [name="channel_confirmed"], [name="channel_token"]');
-        fields.forEach(function (field) {
-            field.value = '';
-        });
-        var confirmBtn = form.querySelector('.site-form-channel__confirm-btn');
-        if (confirmBtn) {
-            confirmBtn.disabled = true;
-        }
-        form.querySelectorAll('input, textarea, select').forEach(function (el) {
-            if (el.closest('.site-form-channel')) {
-                return;
-            }
-            if (el.type === 'hidden' && (el.name === 'submission_channel' || el.name === 'channel_confirmed' || el.name === 'channel_token')) {
-                return;
-            }
-            el.disabled = false;
-        });
-    }
-
-    function serializeForm(form) {
-        var data = new FormData(form);
-        data.delete('submission_channel');
-        data.delete('channel_confirmed');
-        data.delete('channel_token');
-        data.delete('submission_channel_choice');
-        return data;
-    }
-
-    function validateNative(form) {
-        if (typeof form.reportValidity === 'function') {
-            return form.reportValidity();
-        }
-        return form.checkValidity();
-    }
-
-    function openChannel(form) {
-        if (!validateNative(form)) {
-            return;
-        }
-
-        var channel = selectedChannel(form);
-        if (!channel) {
-            return;
-        }
-
-        var btn = openButton(form);
-        if (btn) {
-            btn.disabled = true;
-            btn.setAttribute('aria-busy', 'true');
-        }
-
-        var body = serializeForm(form);
-        body.append('submission_channel', channel);
-        body.append('form_type', formTypeFor(form));
-
-        fetch(intentEndpoint, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken,
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-            },
-            body: body,
-            credentials: 'same-origin',
-        })
-            .then(function (response) {
-                return response.json().then(function (json) {
-                    return { ok: response.ok, json: json };
-                });
-            })
-            .then(function (result) {
-                if (!result.ok) {
-                    notify({
-                        icon: 'error',
-                        title: formMessage(form, 'data-msg-failed', 'Not submitted'),
-                        text: formMessage(form, 'data-msg-failed-text', 'Please try again.'),
-                    });
-                    resetChannelFlow(form);
-                    return;
-                }
-
-                var openUrl = result.json.open_url;
-                var token = result.json.token;
-                if (!openUrl || !token) {
-                    notify({
-                        icon: 'error',
-                        title: formMessage(form, 'data-msg-failed', 'Not submitted'),
-                        text: formMessage(form, 'data-msg-failed-text', 'Please try again.'),
-                    });
-                    resetChannelFlow(form);
-                    return;
-                }
-
-                window.open(openUrl, '_blank', 'noopener,noreferrer');
-
-                var confirm = confirmBlock(form);
-                if (confirm) {
-                    confirm.classList.remove('d-none');
-                }
-                if (btn) {
-                    btn.classList.add('d-none');
-                }
-
-                form.querySelector('[name="submission_channel"]').value = channel;
-                form.querySelector('[name="channel_token"]').value = token;
-
-                form.querySelectorAll('.site-form-channel__radio').forEach(function (radio) {
-                    radio.disabled = true;
-                });
-
-                var confirmBtn = form.querySelector('.site-form-channel__confirm-btn');
-                if (confirmBtn) {
-                    confirmBtn.disabled = false;
-                }
-            })
-            .catch(function () {
-                notify({
-                    icon: 'error',
-                    title: formMessage(form, 'data-msg-failed', 'Not submitted'),
-                    text: formMessage(form, 'data-msg-failed-text', 'Please try again.'),
-                });
-                resetChannelFlow(form);
-            })
-            .finally(function () {
-                if (btn) {
-                    btn.removeAttribute('aria-busy');
-                    if (!btn.classList.contains('d-none')) {
-                        btn.disabled = !selectedChannel(form);
-                    }
-                }
+                setBusy(form, false);
             });
     }
 
@@ -364,69 +220,21 @@
         }
 
         form.addEventListener('change', function (event) {
-            if (event.target.classList.contains('site-form-channel__radio')) {
-                updateOpenButton(form);
-            }
             if (event.target.name === 'involvement_slug') {
                 syncDonateFields(form);
             }
         });
 
-        var openBtn = openButton(form);
-        if (openBtn) {
-            openBtn.addEventListener('click', function () {
-                if (isAutosave(form)) {
-                    openAutosave(form);
-                    return;
-                }
-                openChannel(form);
+        form.querySelectorAll('.site-form-channel__btn[data-channel]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                submitChannel(form, btn.getAttribute('data-channel'));
             });
-        }
-
-        var retryBtn = form.querySelector('.site-form-channel__retry');
-        if (retryBtn) {
-            retryBtn.addEventListener('click', function () {
-                resetChannelFlow(form);
-            });
-        }
-
-        form.addEventListener('submit', function (event) {
-            if (isAutosave(form)) {
-                event.preventDefault();
-                openAutosave(form);
-                return;
-            }
-
-            var confirm = confirmBlock(form);
-            if (!confirm || confirm.classList.contains('d-none')) {
-                event.preventDefault();
-                openChannel(form);
-                return;
-            }
-
-            var confirmed = form.querySelector('[name="channel_confirmed"]');
-            if (!confirmed || confirmed.value !== '1') {
-                event.preventDefault();
-                notify({
-                    icon: 'info',
-                    title: 'Not submitted',
-                    text: 'Please try again.',
-                });
-                return;
-            }
         });
 
-        var confirmBtn = form.querySelector('.site-form-channel__confirm-btn');
-        if (confirmBtn) {
-            confirmBtn.addEventListener('click', function () {
-                var confirmed = form.querySelector('[name="channel_confirmed"]');
-                if (confirmed) {
-                    confirmed.value = '1';
-                }
-            });
-        }
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+        });
 
-        updateOpenButton(form);
         syncDonateFields(form);
     });
 
@@ -441,7 +249,6 @@
                 started.value = String(Math.floor(Date.now() / 1000));
             }
             syncDonateFields(form);
-            updateOpenButton(form);
         });
     });
 })();

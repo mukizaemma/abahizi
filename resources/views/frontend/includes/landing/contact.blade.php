@@ -72,7 +72,6 @@
                         @include('frontend.includes.form-channel-submit', [
                             'formType' => 'contact',
                             'formSource' => 'home-landing',
-                            'submitOpenLabel' => 'Send Message',
                         ])
                     </form>
                 @endif

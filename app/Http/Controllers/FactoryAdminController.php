@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Background;
 use App\Models\FactoryGalleryImage;
+use App\Support\FactoryPageContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -18,17 +19,36 @@ class FactoryAdminController extends Controller
 
     public function overview()
     {
+        $background = $this->backgroundRow();
+
         return view('admin.factory.edit', [
-            'background' => $this->backgroundRow(),
+            'background' => $background,
             'section' => 'overview',
+            'processSteps' => FactoryPageContent::padCards(
+                FactoryPageContent::processSteps($background->factory_process_steps ?? null),
+                5,
+                ['title' => '', 'text' => '', 'items' => []]
+            ),
         ]);
     }
 
     public function services()
     {
+        $background = $this->backgroundRow();
+        $cards = FactoryPageContent::offerCards($background->factory_services_subitems ?? null);
+        if ($cards === []) {
+            $legacyLines = FactoryPageContent::lines($background->factory_services_subitems ?? '');
+            $cards = [['title' => '', 'text' => '', 'items' => $legacyLines]];
+        }
+
         return view('admin.factory.edit', [
-            'background' => $this->backgroundRow(),
+            'background' => $background,
             'section' => 'services',
+            'offerCards' => FactoryPageContent::padCards(
+                $cards,
+                3,
+                ['title' => '', 'text' => '', 'items' => []]
+            ),
         ]);
     }
 
@@ -121,27 +141,36 @@ class FactoryAdminController extends Controller
         if ($section === 'overview') {
             $data = $request->validate([
                 'factory_description' => ['nullable', 'string'],
+                'process_steps' => ['nullable', 'array'],
+                'process_steps.*.title' => ['nullable', 'string', 'max:160'],
+                'process_steps.*.text' => ['nullable', 'string', 'max:400'],
+                'factory_services_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
             ]);
 
             if (Schema::hasColumn('backgrounds', 'factory_description')) {
                 $bg->factory_description = $data['factory_description'] ?? null;
             }
+            if (Schema::hasColumn('backgrounds', 'factory_process_steps')) {
+                $bg->factory_process_steps = FactoryPageContent::encodeProcess($data['process_steps'] ?? []);
+            }
+            $this->replaceImageIfUploaded($request, $bg, 'factory_services_image', 'factory_services_');
         }
 
         if ($section === 'services') {
             $data = $request->validate([
                 'factory_services' => ['nullable', 'string'],
-                'factory_services_subitems' => ['nullable', 'string'],
-                'factory_services_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
+                'offer_cards' => ['nullable', 'array'],
+                'offer_cards.*.title' => ['nullable', 'string', 'max:160'],
+                'offer_cards.*.text' => ['nullable', 'string', 'max:600'],
+                'offer_cards.*.items' => ['nullable', 'string'],
             ]);
 
             if (Schema::hasColumn('backgrounds', 'factory_services')) {
                 $bg->factory_services = $data['factory_services'] ?? null;
             }
             if (Schema::hasColumn('backgrounds', 'factory_services_subitems')) {
-                $bg->factory_services_subitems = $data['factory_services_subitems'] ?? null;
+                $bg->factory_services_subitems = FactoryPageContent::encodeCards($data['offer_cards'] ?? []);
             }
-            $this->replaceImageIfUploaded($request, $bg, 'factory_services_image', 'factory_services_');
         }
 
         if ($section === 'impact') {
