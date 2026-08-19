@@ -2,7 +2,11 @@
 
 @section('content')
 
-
+        @include('frontend.includes.page-header', [
+            'pageKey' => 'testimonials',
+            'title' => $testimony->title,
+            'titleLocked' => true,
+        ])
 
         <div class="tp-event-details__area pt-120 pb-120">
             <div class="container">

@@ -4,6 +4,20 @@
         $intro = __('site.factory.intro_default');
     }
 
+    $highlightUrl = '';
+    $highlightAlt = __('site.factory.gallery_alt');
+    $firstGallery = collect($factoryGallery ?? [])->first();
+    if ($firstGallery instanceof \App\Models\FactoryGalleryImage) {
+        $highlightUrl = $firstGallery->url();
+        if (trim((string) ($firstGallery->caption ?? '')) !== '') {
+            $highlightAlt = $firstGallery->caption;
+        }
+    } elseif ($firstGallery && ! empty($firstGallery->image)) {
+        $highlightUrl = str_contains((string) $firstGallery->image, '/')
+            ? asset('storage/' . ltrim($firstGallery->image, '/'))
+            : asset('storage/images/gallery/' . $firstGallery->image);
+    }
+
     $whatCards = [
         [
             'icon' => 'fa-industry',
@@ -25,11 +39,24 @@
 
 <section class="lux-section factory-what" aria-labelledby="factory-what-title">
     <div class="container">
-        <div class="row justify-content-center mb-4 mb-lg-5">
-            <div class="col-lg-10 col-xl-9 text-center lux-section-head lux-section-head--solo">
+        <div class="row align-items-center g-4 g-xl-5 mb-4 mb-lg-5">
+            <div class="{{ $highlightUrl !== '' ? 'col-lg-6' : 'col-lg-10 col-xl-9 mx-auto text-center' }} lux-section-head lux-section-head--solo">
                 <h2 id="factory-what-title" class="lux-section-head__title mb-3">{{ __('site.factory.what_title') }}</h2>
-                <p class="lux-lead mb-0">{{ $intro }}</p>
+                <p class="lux-lead mb-3">{{ $intro }}</p>
+                <ul class="factory-what__trust">
+                    <li>{{ __('site.factory.trust_location') }}</li>
+                    <li>{{ __('site.factory.trust_export') }}</li>
+                    <li>{{ __('site.factory.trust_ownership') }}</li>
+                </ul>
+                <a href="#factory-partner" class="tp-btn tp-btn--lux factory-what__cta">{{ __('site.factory.intro_cta') }} <span aria-hidden="true">→</span></a>
             </div>
+            @if($highlightUrl !== '')
+                <div class="col-lg-6">
+                    <figure class="factory-what__visual mb-0">
+                        <img src="{{ $highlightUrl }}" alt="{{ $highlightAlt }}" loading="eager" decoding="async">
+                    </figure>
+                </div>
+            @endif
         </div>
 
         <div class="row g-4">

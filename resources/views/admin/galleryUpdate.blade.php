@@ -45,74 +45,38 @@
                         <form class="form" action="{{ route('updateGallery', $data->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
+                        @php
+                            $imagePath = ltrim((string) $data->image, '/');
+                            $imageUrl = str_contains($imagePath, '/')
+                                ? asset('storage/' . $imagePath)
+                                : asset('storage/images/gallery/' . $imagePath);
+                        @endphp
                         <div class="form-body">
                             <div class="row mb-4">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="projectinput1">Branch</label>
-                                        <select class="form-control select2" name="branch_id"
-                                            style="...">
-                                            @foreach ($branches as $rs)
-                                                {{-- <option value="{{$data->id}}">{{$data->branch->name}}</option> --}}
-                                                <option value="{{ $rs->id }}">{{$rs->name}}</option>
-                                            @endforeach
-                                        </select>
+                                <div class="col-lg-4 col-sm-12">
+                                    <label class="form-label">Current image</label>
+                                    <div>
+                                        <img src="{{ $imageUrl }}" alt="{{ $data->caption ?: 'Gallery image' }}" width="160" class="rounded border">
                                     </div>
                                 </div>
-
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label for="projectinput1">Display on which page?</label>
-                                        <select name="display" id="">
-                                            <option value="{{$data->display}}">{{$data->display}}</option>
-                                            <option value="Home">Home Page</option>
-                                            <option value="Gallery">Gallery Page</option>
-                                        </select>
-                                    </div>
+                                <div class="col-lg-8 col-sm-12">
+                                    <label for="image" class="form-label">Replace file <span class="text-muted fw-normal">(optional)</span></label>
+                                    <input type="file" id="image" name="image" class="form-control" accept="image/*">
+                                    <small class="text-muted">Leave empty to keep the current image.</small>
                                 </div>
-
                             </div>
-
                             <div class="row">
-
-                                <div class="col-lg-4 col-sm-12">
-                                        <label>Featured Image</label>
-                                        <label id="projectinput7" class="file center-block">
-                                            <img src="{{asset('storage/images/gallery').$data->image}}" alt="" width="120px">
-                                        </label>
+                                <div class="col-lg-8 col-sm-12">
+                                    <label for="caption" class="form-label">Caption <span class="text-muted fw-normal">(optional)</span></label>
+                                    <input type="text" class="form-control" id="caption" value="{{ $data->caption }}" name="caption" placeholder="Optional caption">
                                 </div>
-                                <div class="col-lg-4 col-sm-12">
-                                        <label>Select File</label>
-                                        <label id="projectinput7" class="file center-block">
-                                            <input type="file" id="image" name="image">
-                                            <span class="file-custom"></span>
-                                        </label>
-                                </div>
-
                             </div>
-
-                                <div class="col-lg-4 col-sm-12">
-                                    <select name="program_id" id="">
-                                        <option value="" disabled selected>{{ $campain->program->title ?? '' }}</option>
-                                        @foreach ($programs as $program)
-                                            <option value="{{ $program->id }}">{{ $program->title }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="col-lg-6 col-sm-12">
-                                        <label for="projectinput8">Image Caption <br><span style="color: red">(This image should be resized to 540x600 pixels)</span></label>
-                                        <input type="text" class="form-control"
-                                        value="{{$data->caption}}" name="caption">
-                                </div>
-
                         </div>
 
                         <div class="form-actions mt-5">
-                            <button type="submit" class="btn btn-primary text-black">
-                                <i class="fa fa-save"></i> Add New Image
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-save"></i> Save image
                             </button>
-
                         </div>
                     </form>
                     </div>

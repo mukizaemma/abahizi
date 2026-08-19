@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="col-12">
                                     <label class="form-label">Description</label>
-                                    <textarea rows="6" class="form-control" name="description" data-no-editor="true">{!! $data->description !!}</textarea>
+                                    <textarea rows="6" class="form-control" name="description" data-editor="rich">{!! $data->description !!}</textarea>
                                 </div>
                                 <div class="col-lg-6">
                                     <label class="form-label">Change cover image</label>

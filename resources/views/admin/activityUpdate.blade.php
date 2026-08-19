@@ -17,7 +17,7 @@
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
                     <div>
                         <h1>Edit community initiative</h1>
-                        <p class="text-muted mb-0">Update title, description, status, cover image, and gallery images for Impact → Community.</p>
+                        <p class="text-muted mb-0">Update the story, gallery, and ways visitors can get involved.</p>
                     </div>
                     <a href="{{ route('communityImpact.admin.index') }}" class="btn btn-outline-primary">Back to community impact</a>
                 </div>
@@ -53,7 +53,7 @@
                                 @endif
                                 <div class="col-12">
                                     <label class="form-label">Initiative details / description</label>
-                                    <textarea rows="7" class="form-control" name="description" data-no-editor="true" required>{!! $data->description !!}</textarea>
+                                    <textarea rows="7" class="form-control" name="description" data-editor="rich" required>{!! $data->description !!}</textarea>
                                 </div>
                                 <div class="col-lg-6">
                                     <label class="form-label">Current cover</label>
@@ -69,11 +69,63 @@
                                     <label class="form-label">Change cover image</label>
                                     <input type="file" class="form-control" name="image">
                                 </div>
+                                <div class="col-12">
+                                    @include('admin.includes.initiative-ways-editor', [
+                                        'wayRows' => $data->normalizedInvolvementWays() ?: \App\Models\Activity::sampleInvolvementWays(),
+                                    ])
+                                </div>
                             </div>
                             <div class="mt-4">
                                 <button type="submit" class="btn btn-primary px-4">Save changes</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">Recent involvement requests</div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Way</th>
+                                        <th>Donation</th>
+                                        <th>Channel</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse(($involvements ?? collect()) as $row)
+                                        <tr>
+                                            <td class="text-nowrap">{{ $row->created_at }}</td>
+                                            <td>{{ $row->names }}</td>
+                                            <td><a href="mailto:{{ $row->email }}">{{ $row->email }}</a></td>
+                                            <td>{{ $row->phone ?: '—' }}</td>
+                                            <td>{{ $row->involvement_label }}</td>
+                                            <td>
+                                                @if($row->involvement_kind === 'donate')
+                                                    {{ $row->donation_amount }}
+                                                    @if($row->donation_period)
+                                                        <span class="text-muted">({{ $row->donation_period === 'recurring' ? 'Recurring' : 'One-time' }})</span>
+                                                    @endif
+                                                @else
+                                                    —
+                                                @endif
+                                            </td>
+                                            <td>{{ $row->submission_channel === 'whatsapp' ? 'WhatsApp' : ($row->submission_channel === 'email' ? 'Email' : '—') }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7" class="text-muted p-4">No involvement requests yet. They appear here when visitors use the public form.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 

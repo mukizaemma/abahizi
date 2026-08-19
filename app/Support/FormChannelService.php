@@ -98,6 +98,7 @@ class FormChannelService
         return match ($formType) {
             'order' => 'Product order request — ' . $name,
             'contact' => 'Contact inquiry — ' . $name,
+            'initiative' => 'Get involved — ' . trim((string) ($payload['initiative_title'] ?? 'Community initiative')) . ' — ' . $name,
             default => 'Partnership inquiry — ' . $name,
         };
     }
@@ -155,6 +156,36 @@ class FormChannelService
             $lines[] = '';
             $lines[] = 'Message:';
             $lines[] = trim((string) ($payload['message'] ?? ''));
+
+            return implode("\n", $lines);
+        }
+
+        if ($formType === 'initiative') {
+            $lines = [
+                'Get involved (Abahizi CBC website)',
+                '',
+                'Initiative: ' . trim((string) ($payload['initiative_title'] ?? '')),
+                'How I would like to take part: ' . trim((string) ($payload['involvement_label'] ?? '')),
+                '',
+                'Name: ' . trim((string) ($payload['names'] ?? $payload['full_name'] ?? '')),
+                'Email: ' . trim((string) ($payload['email'] ?? '')),
+                'Phone: ' . trim((string) ($payload['phone'] ?? '')),
+                'Address: ' . trim((string) ($payload['address'] ?? '')),
+            ];
+
+            if (! empty($payload['donation_amount'])) {
+                $period = trim((string) ($payload['donation_period'] ?? ''));
+                $periodLabel = $period === 'recurring' ? 'Recurring' : 'One-time';
+                $lines[] = 'Donation amount: ' . trim((string) $payload['donation_amount']);
+                $lines[] = 'Donation type: ' . $periodLabel;
+            }
+
+            $note = trim((string) ($payload['note'] ?? $payload['message'] ?? ''));
+            if ($note !== '') {
+                $lines[] = '';
+                $lines[] = 'Message:';
+                $lines[] = $note;
+            }
 
             return implode("\n", $lines);
         }

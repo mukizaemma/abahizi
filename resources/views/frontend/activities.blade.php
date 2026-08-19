@@ -6,8 +6,9 @@
 
 
         @include('frontend.includes.page-header', [
-            'pageKey' => 'default',
+            'pageKey' => 'programs',
             'title' => $program->title,
+            'titleLocked' => true,
         ])
 
     <section class="tp-blog-2__area tp-blog-2__space programs-home-grid pb-90">

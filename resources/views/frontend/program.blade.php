@@ -68,7 +68,7 @@
                         @foreach ($news as $rs)
                         <div class="rc__post mb-10 d-flex align-items-center">
                         <div class="rc__post-thumb mr-20">
-                            <a href="{{route('postSingle',$rs->slug)}}"><img src="{{ asset('storage/images/news/' . $rs->image) }}" alt="" width="90px"></a>
+                            <a href="{{route('postSingle',$rs->slug)}}"><img src="{{ $rs->coverUrl() }}" alt="{{ $rs->title }}" width="90px"></a>
                         </div>
                         <div class="rc__post-content">
                             {{-- <div class="rc__meta">

@@ -22,25 +22,6 @@ class NewsController extends Controller
         ]);
     }
 
-    // public function showAll()
-    // {
-    //     $blogs = News::latest()->paginate(10);
-    //     return view('pages.blogs.home', [
-    //         'blogs' => $blogs
-    //     ]);
-    // }
-
-    // public function showSingle($slug)
-    // {
-    //     $blog = Blog::where('slug', $slug)->first();
-    //     return view('pages.blogs.blog', compact('blog'));
-    // }
-
-    // public function show($id)
-    // {
-    //     $blog = News::find($id);
-    //     return view('pages.blogs.blog', compact('blog'));
-    // }
     /**
      * Show the form for creating a new resource.
      *
@@ -51,7 +32,6 @@ class NewsController extends Controller
         //
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
@@ -60,12 +40,15 @@ class NewsController extends Controller
             'body' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
             'gallery.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
+            'status' => ['nullable', 'in:draft,publish'],
         ]);
 
         $fileName = '';
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $fileName = $request->file('image')->store('images/news', 'public');
         }
+
+        $publishNow = $request->input('status') === 'publish';
 
         $blog = new News();
         $blog->title = $request->input('title');
@@ -73,15 +56,15 @@ class NewsController extends Controller
         $blog->body = $request->input('body');
         $blog->image = $fileName ?: null;
         $blog->slug = $this->uniqueSlug($request->input('title'));
-        $blog->published_at = null; // explicit draft
-        $blog->published_by = null;
+        $blog->published_at = $publishNow ? now() : null;
+        $blog->published_by = $publishNow ? (Auth::id() ?? Auth::guard('admin')->id()) : null;
         if (Schema::hasColumn('news', 'added_by')) {
             $blog->added_by = Auth::id() ?? Auth::guard('admin')->id();
         }
         $blog->save();
 
-        if($request->hasFile('gallery')){
-            foreach($request->file('gallery') as $gallery){
+        if ($request->hasFile('gallery')) {
+            foreach ($request->file('gallery') as $gallery) {
                 $path = $gallery->store('images/news/gallery', 'public');
                 $blog->blogimages()->create([
                     'gallery' => $path,
@@ -90,17 +73,18 @@ class NewsController extends Controller
             }
         }
 
-        return redirect('blogs')->with('success', 'Blog saved as draft successfully');
+        $message = $publishNow
+            ? 'Update published successfully.'
+            : 'Update saved as draft.';
 
+        return redirect()->route('blog.index')->with('success', $message);
     }
-
 
     public function edit($id)
     {
         $blog = News::with('blogimages')->findOrFail($id);
         return view('admin.newsUpdate', compact('blog'));
     }
-
 
     public function update(Request $request, $id)
     {
@@ -110,23 +94,20 @@ class NewsController extends Controller
             'body' => ['nullable', 'string'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
             'gallery.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
+            'status' => ['nullable', 'in:draft,publish'],
         ]);
 
         $blog = News::with('blogimages')->findOrFail($id);
 
-        // Check if the request has an image
         if ($request->hasFile('image')) {
-            // Delete the old image
-            if (!empty($blog->image) && Storage::disk('public')->exists($blog->image)) {
+            if (! empty($blog->image) && Storage::disk('public')->exists($blog->image)) {
                 Storage::disk('public')->delete($blog->image);
             }
-            // Store the new image
             $blog->image = $request->file('image')->store('images/news', 'public');
         }
 
-        // Append gallery images (don't erase existing)
         if ($request->hasFile('gallery')) {
-            foreach($request->file('gallery') as $gallery){
+            foreach ($request->file('gallery') as $gallery) {
                 $path = $gallery->store('images/news/gallery', 'public');
                 $blog->blogimages()->create([
                     'gallery' => $path,
@@ -135,44 +116,52 @@ class NewsController extends Controller
             }
         }
 
-        // Update the other fields
         $blog->title = $request->input('title');
         $blog->author = $request->input('author');
         $blog->body = $request->input('body');
         $blog->slug = $this->uniqueSlug($request->input('title'), $blog->id);
+
+        if ($request->input('status') === 'publish') {
+            $blog->published_at = $blog->published_at ?: now();
+            $blog->published_by = $blog->published_by ?: (Auth::id() ?? Auth::guard('admin')->id());
+        } elseif ($request->input('status') === 'draft') {
+            $blog->published_at = null;
+            $blog->published_by = null;
+        }
+
         $blog->save();
 
-        return redirect('blogs')->with('success', 'News post has been updated successfully');
+        $message = $request->input('status') === 'publish'
+            ? 'Update published successfully.'
+            : ($request->input('status') === 'draft'
+                ? 'Update saved as draft.'
+                : 'Update saved successfully.');
+
+        return redirect()->route('blog.index')->with('success', $message);
     }
-
-
-
 
     public function destroy($id)
     {
         $blog = News::findOrFail($id);
         $isSuperAdmin = (Auth::user()->email ?? null) === 'admin@iremetech.com';
-        $isOwner = !Schema::hasColumn('news', 'added_by')
+        $isOwner = ! Schema::hasColumn('news', 'added_by')
             || ((int) ($blog->added_by ?? 0) === (int) (Auth::id() ?? Auth::guard('admin')->id()));
         if (! $isSuperAdmin && ! $isOwner) {
-            return redirect()->back()->with('error', 'You can only delete blog posts that you created.');
+            return redirect()->back()->with('error', 'You can only delete updates that you created.');
         }
         $galleries = $blog->blogimages;
-        // delete the image file
-        if (!empty($blog->image) && Storage::disk('public')->exists($blog->image)) {
+        if (! empty($blog->image) && Storage::disk('public')->exists($blog->image)) {
             Storage::disk('public')->delete($blog->image);
         }
-        // delete the gallery files
-        foreach($galleries as $gallery) {
-            if (!empty($gallery->gallery) && Storage::disk('public')->exists($gallery->gallery)) {
+        foreach ($galleries as $gallery) {
+            if (! empty($gallery->gallery) && Storage::disk('public')->exists($gallery->gallery)) {
                 Storage::disk('public')->delete($gallery->gallery);
             }
         }
         $blog->blogimages()->delete();
         $blog->delete();
 
-        return back()
-            ->with('success', 'News deleted successfully');
+        return back()->with('success', 'Update deleted successfully.');
     }
 
     public function publish(News $blog): RedirectResponse
@@ -181,7 +170,7 @@ class NewsController extends Controller
         $blog->published_by = auth()->id();
         $blog->save();
 
-        return back()->with('success', 'News published successfully');
+        return back()->with('success', 'Update published successfully.');
     }
 
     public function unpublish(News $blog): RedirectResponse
@@ -190,17 +179,17 @@ class NewsController extends Controller
         $blog->published_by = null;
         $blog->save();
 
-        return back()->with('warning', 'News moved back to draft');
+        return back()->with('warning', 'Update moved back to draft.');
     }
 
     public function deleteBlogImage($id): RedirectResponse
     {
         $image = Blogimages::findOrFail($id);
-        if (!empty($image->gallery) && Storage::disk('public')->exists($image->gallery)) {
+        if (! empty($image->gallery) && Storage::disk('public')->exists($image->gallery)) {
             Storage::disk('public')->delete($image->gallery);
         }
         $image->delete();
-        return back()->with('warning', 'Blog gallery image deleted');
+        return back()->with('warning', 'Gallery image deleted.');
     }
 
     private function uniqueSlug(string $title, ?int $ignoreId = null): string

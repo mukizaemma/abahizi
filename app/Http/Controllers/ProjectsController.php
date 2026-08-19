@@ -35,6 +35,9 @@ class ProjectsController extends Controller
         $activity->description = $request->input('description');
         $activity->program_id = $request->input('program_id') ?: null;
         $activity->status = $request->input('status', 'Active');
+        if (Schema::hasColumn('activities', 'involvement_ways')) {
+            $activity->involvement_ways = $this->parseInvolvementWays($request);
+        }
         $activity->slug = $this->uniqueSlug($request->input('title'));
         if (Schema::hasColumn('activities', 'added_by')) {
             $activity->added_by = Auth::id() ?? Auth::guard('admin')->id();
@@ -59,7 +62,16 @@ class ProjectsController extends Controller
         $images = $data->images;
         $totalImages = $images->count();
         $programs = Program::query()->orderBy('title')->get();
-        return view('admin.activityUpdate', ['data' => $data, 'programs' => $programs, 'images' => $images, 'totalImages' => $totalImages]);
+        $involvements = Schema::hasTable('initiative_involvements')
+            ? $data->involvements()->latest()->take(20)->get()
+            : collect();
+        return view('admin.activityUpdate', [
+            'data' => $data,
+            'programs' => $programs,
+            'images' => $images,
+            'totalImages' => $totalImages,
+            'involvements' => $involvements,
+        ]);
     }
 
 
@@ -78,6 +90,9 @@ class ProjectsController extends Controller
         $data->description = $request->input('description');
         $data->program_id = $request->input('program_id') ?: null;
         $data->status = $request->input('status', $data->status ?? 'Active');
+        if (Schema::hasColumn('activities', 'involvement_ways')) {
+            $data->involvement_ways = $this->parseInvolvementWays($request);
+        }
         if ($data->slug !== Str::slug($request->input('title'))) {
             $data->slug = $this->uniqueSlug($request->input('title'), $data->id);
         }
@@ -168,5 +183,33 @@ class ProjectsController extends Controller
         }
 
         return $slug;
+    }
+
+    /**
+     * @return array<int, array{slug: string, label: string, kind: string}>
+     */
+    private function parseInvolvementWays(Request $request): array
+    {
+        $labels = $request->input('way_label', []);
+        $kinds = $request->input('way_kind', []);
+        if (! is_array($labels)) {
+            return Activity::sampleInvolvementWays();
+        }
+
+        $raw = [];
+        foreach ($labels as $i => $label) {
+            $raw[] = [
+                'label' => $label,
+                'kind' => is_array($kinds) ? ($kinds[$i] ?? 'standard') : 'standard',
+            ];
+        }
+
+        $ways = Activity::normalizeInvolvementWays($raw);
+
+        if ($ways === [] && $request->routeIs('saveProject')) {
+            return Activity::sampleInvolvementWays();
+        }
+
+        return $ways;
     }
 }

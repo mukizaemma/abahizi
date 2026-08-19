@@ -2,7 +2,11 @@
 
 @section('content')
 
-
+        @include('frontend.includes.page-header', [
+            'pageKey' => 'events',
+            'title' => $event->title,
+            'titleLocked' => true,
+        ])
 
         <!-- event-area-atart -->
         <div class="tp-event-details__area pt-120 pb-120">

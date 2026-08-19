@@ -21,12 +21,14 @@ use App\Models\Partner;
 use App\Models\Program;
 use App\Models\Setting;
 use App\Models\Activity;
+use App\Models\InitiativeInvolvement;
 use App\Models\AnnualReport;
 use App\Models\ImpactReportPage;
 use ReCaptcha\ReCaptcha;
 use App\Models\Testimony;
 use App\Models\Volunteer;
 use App\Mail\ReplyMessage;
+use App\Support\CoreValues;
 use App\Models\Background;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -45,6 +47,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Http\Controllers\Concerns\ValidatesFormChannelSubmission;
 use App\Support\FormChannelService;
 use App\Support\PageHeaderService;
+use App\Support\ThemeService;
 
 class HomeController extends Controller
 {
@@ -66,7 +69,7 @@ class HomeController extends Controller
             $programs = Program::oldest()->get();
             $about = Background::firstOrEmpty();
             $mission = About::firstOrEmpty();
-            $news = News::latest()->paginate(2);
+            $news = News::query()->latestPublished()->paginate(2);
             $homeGallery = DB::table('galleries')->latest()->get();
             $events = DB::table('events')->latest()->get();
             $slides = DB::table('slides')->latest()->get();
@@ -101,8 +104,20 @@ class HomeController extends Controller
                     ->orWhere('status', 'Active');
             })
             ->latest()
-            ->take(3)
+            ->take(4)
             ->get();
+        $homeImpacts = collect();
+        if (Schema::hasTable('impacts')) {
+            $homeImpacts = Impact::query()
+                ->where(function ($q) {
+                    $q->whereNull('status')
+                        ->orWhere('status', 'Active')
+                        ->orWhere('status', 'Publish');
+                })
+                ->latest()
+                ->take(6)
+                ->get();
+        }
         $partners = Partner::latest()->get();
         $staff = Team::query()->where('display', 'Yes')->orderedForDisplay()->get();
 
@@ -115,17 +130,17 @@ class HomeController extends Controller
 
         $setting = Setting::firstOrEmpty();
         $homeProducts = collect();
-        if (($setting->show_products_publicly ?? false) && Schema::hasTable('products')) {
+        if (Schema::hasTable('products')) {
             $homeProducts = Product::query()
                 ->active()
-                ->with('category')
+                ->with(['category', 'images'])
                 ->latest()
-                ->take(3)
+                ->take(12)
                 ->get();
         }
 
         $recentUpdates = Schema::hasTable('news')
-            ? News::query()->whereNotNull('published_at')->latest('published_at')->take(3)->get()
+            ? News::query()->latestPublished()->take(3)->get()
             : collect();
 
         return view('frontend.home', [
@@ -135,6 +150,7 @@ class HomeController extends Controller
             'event' =>$event,
             'slides' =>$slides,
             'testimonials' =>$testimonials,
+            'homeImpacts' => $homeImpacts,
             'partners' =>$partners,
             'staff' =>$staff,
             'about' =>$about,
@@ -197,7 +213,7 @@ class HomeController extends Controller
         $programs = Program::where('id' ,'!=',$program->id)->oldest()->get();
         $about = Background::firstOrEmpty();
         $gallery = Gallery::latest()->get();
-        $news = News::latest()->paginate(9);
+        $news = News::query()->latestPublished()->paginate(9);
         return view('frontend.activities',['program'=>$program, 'programs'=>$programs, 'about'=>$about, 'gallery'=>$gallery,'news'=>$news]);
     }
 
@@ -213,7 +229,7 @@ class HomeController extends Controller
             $programs = Program::where('id', '!=', $program->id)->oldest()->get();
             $about = Background::firstOrEmpty();
             $gallery = Gallery::latest()->get();
-            $news = News::latest()->paginate(9);
+            $news = News::query()->latestPublished()->paginate(9);
 
             return view('frontend.activities', [
                 'program' => $program,
@@ -241,7 +257,7 @@ class HomeController extends Controller
         }
 
         $about = Background::firstOrEmpty();
-        $news = News::latest()->paginate(9);
+        $news = News::query()->latestPublished()->paginate(9);
 
         return view('frontend.activity', [
             'activity' => $activity,
@@ -252,6 +268,201 @@ class HomeController extends Controller
             'news' => $news,
         ]);
     }
+
+    public function saveInitiativeInvolvement(Request $request, string $slug)
+    {
+        $activity = Activity::query()->where('slug', $slug)->firstOrFail();
+        $setting = Setting::firstOrEmpty();
+        $availability = FormChannelService::availability($setting);
+
+        if (! $availability['channels_ready']) {
+            return $this->initiativeInvolveResponse($request, $activity, false, [
+                'form' => 'Submissions are unavailable until both a valid site email and WhatsApp number are configured in admin settings.',
+            ]);
+        }
+
+        $ipKey = 'initiative-involve:ip:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($ipKey, 5)) {
+            return $this->initiativeInvolveResponse($request, $activity, false, [
+                'form' => 'Too many attempts. Please wait a few minutes and try again.',
+            ]);
+        }
+        RateLimiter::hit($ipKey, 10 * 60);
+
+        $ways = $activity->normalizedInvolvementWays();
+        $allowedSlugs = array_column($ways, 'slug');
+
+        if ($allowedSlugs === []) {
+            return $this->initiativeInvolveResponse($request, $activity, false, [
+                'form' => 'This initiative is not accepting involvement requests yet.',
+            ]);
+        }
+
+        $validated = $request->validate([
+            'names' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:64'],
+            'address' => ['required', 'string', 'max:255'],
+            'involvement_slug' => ['required', 'string', 'in:' . implode(',', $allowedSlugs)],
+            'note' => ['nullable', 'string', 'max:20000'],
+            'donation_amount' => ['nullable', 'string', 'max:64'],
+            'donation_period' => ['nullable', 'in:one_time,recurring'],
+            'submission_channel' => ['required', 'in:whatsapp,email'],
+            'website' => ['nullable', 'max:0'],
+            'started_at' => ['nullable', 'integer'],
+        ]);
+
+        $visitorEmail = FormChannelService::normalizeEmail($validated['email']);
+        if ($visitorEmail === null) {
+            return $this->initiativeInvolveResponse($request, $activity, false, [
+                'email' => 'Enter a valid email address so we can record your request.',
+            ]);
+        }
+
+        $phoneDigits = preg_replace('/\D+/', '', (string) $validated['phone']);
+        if (strlen($phoneDigits) < 10) {
+            return $this->initiativeInvolveResponse($request, $activity, false, [
+                'phone' => 'Enter a valid phone number with at least 10 digits.',
+            ]);
+        }
+
+        $startedAt = (int) ($request->input('started_at') ?? 0);
+        if ($startedAt > 0 && (time() - $startedAt) < 3) {
+            return $this->initiativeInvolveResponse($request, $activity, false, [
+                'form' => 'Form submitted too quickly. Please review your details and try again.',
+            ]);
+        }
+
+        foreach (['names', 'address', 'note'] as $field) {
+            $value = (string) ($validated[$field] ?? '');
+            if (FormChannelService::containsSpamLinks($value)) {
+                return $this->initiativeInvolveResponse($request, $activity, false, [
+                    $field => 'Please remove links from this field.',
+                ]);
+            }
+        }
+
+        $way = $activity->involvementWayBySlug($validated['involvement_slug']);
+        if ($way === null) {
+            return $this->initiativeInvolveResponse($request, $activity, false, [
+                'involvement_slug' => 'Select how you would like to take part.',
+            ]);
+        }
+
+        $donationAmount = null;
+        $donationPeriod = null;
+        if ($way['kind'] === 'donate') {
+            $donationAmount = trim((string) ($validated['donation_amount'] ?? ''));
+            $donationPeriod = $validated['donation_period'] ?? null;
+            if ($donationAmount === '' || $donationPeriod === null) {
+                return $this->initiativeInvolveResponse($request, $activity, false, [
+                    'donation_amount' => 'Enter an amount and choose one-time or recurring.',
+                ]);
+            }
+        }
+
+        $channel = $validated['submission_channel'];
+        $payload = [
+            'names' => $validated['names'],
+            'email' => $visitorEmail,
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+            'initiative_title' => $activity->title,
+            'involvement_label' => $way['label'],
+            'note' => $validated['note'] ?? '',
+            'donation_amount' => $donationAmount,
+            'donation_period' => $donationPeriod,
+        ];
+
+        $openUrl = FormChannelService::openUrl($channel, $setting, 'initiative', $payload);
+        if ($openUrl === null) {
+            return $this->initiativeInvolveResponse($request, $activity, false, [
+                'form' => 'Unable to open the selected contact channel. Please try again later.',
+            ]);
+        }
+
+        $note = trim((string) ($validated['note'] ?? ''));
+        InitiativeInvolvement::create([
+            'activity_id' => $activity->id,
+            'names' => $validated['names'],
+            'email' => $visitorEmail,
+            'phone' => $validated['phone'],
+            'address' => $validated['address'],
+            'involvement_slug' => $way['slug'],
+            'involvement_label' => $way['label'],
+            'involvement_kind' => $way['kind'],
+            'note' => $note !== '' ? $note : null,
+            'donation_amount' => $donationAmount,
+            'donation_period' => $donationPeriod,
+            'submission_channel' => $channel,
+        ]);
+
+        $storedMessage = FormChannelService::buildMessage('initiative', $payload);
+        Message::create([
+            'names' => $validated['names'],
+            'email' => $visitorEmail,
+            'phone' => $validated['phone'],
+            'message' => $storedMessage,
+            'submission_channel' => $channel,
+        ]);
+
+        if ($way['kind'] === 'donate' && Schema::hasTable('donates')) {
+            try {
+                Donate::create([
+                    'names' => $validated['names'],
+                    'email' => $visitorEmail,
+                    'amount' => $donationAmount,
+                    'period' => $donationPeriod === 'recurring' ? 'Recurring' : 'One-time',
+                    'address' => $validated['address'],
+                    'program_id' => $activity->program_id,
+                    'message' => 'Initiative: ' . $activity->title,
+                ]);
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        }
+
+        $success = __('site.initiative.swal_submitted_text');
+
+        return $this->initiativeInvolveResponse($request, $activity, true, [], $success, $openUrl);
+    }
+
+    /**
+     * @param  array<string, string>  $errors
+     */
+    private function initiativeInvolveResponse(
+        Request $request,
+        Activity $activity,
+        bool $ok,
+        array $errors = [],
+        string $success = '',
+        ?string $openUrl = null
+    ) {
+        if ($request->expectsJson()) {
+            if (! $ok) {
+                return response()->json([
+                    'message' => reset($errors) ?: 'Unable to submit your request.',
+                    'errors' => collect($errors)->map(fn ($msg) => [$msg])->all(),
+                ], 422);
+            }
+
+            return response()->json([
+                'ok' => true,
+                'message' => $success,
+                'open_url' => $openUrl,
+            ]);
+        }
+
+        if (! $ok) {
+            return back()->withInput()->withErrors($errors);
+        }
+
+        return redirect()
+            ->route('project', ['slug' => $activity->slug])
+            ->with('involve_success', $success)
+            ->with('involve_open_url', $openUrl);
+    }
+
     public function campaigns(){
         $programs = Program::oldest()->get();
         $about = Background::firstOrEmpty();
@@ -274,21 +485,42 @@ class HomeController extends Controller
         return view('frontend.event',['event'=>$event]);
     }
     public function posts(){
-        $news = News::latest()->paginate(20);
+        $news = News::query()->latestPublished()->get();
+        $featured = $news->first();
+        $rail = $news->slice(1, 3)->values();
+        $moreNews = $news->slice(4)->values();
         $programs = Program::latest()->get();
         $about = Background::firstOrEmpty();
-        return view('frontend.blogs',['news'=>$news,'programs'=>$programs, 'about'=>$about]);
+
+        return view('frontend.blogs', [
+            'news' => $news,
+            'featured' => $featured,
+            'rail' => $rail,
+            'moreNews' => $moreNews,
+            'programs' => $programs,
+            'about' => $about,
+        ]);
     }
 
     public function postSingle($slug){
-        $blogs = News::latest()->get();
-        $blog = News::where('slug',$slug)->firstOrFail();
+        $blog = News::query()->published()->with('blogimages')->where('slug', $slug)->firstOrFail();
         $images = $blog->blogimages ?? collect();
-        $relatedBlogs = News::where('id','!=',$blog->id)->latest()->take(9);
+        $relatedBlogs = News::query()
+            ->published()
+            ->where('id', '!=', $blog->id)
+            ->latest('published_at')
+            ->take(3)
+            ->get();
         $programs = Program::latest()->get();
         $about = Background::firstOrEmpty();
-        return view('frontend.blog',['blog'=>$blog,'blogs'=>$blogs,'relatedBlogs'=>$relatedBlogs,
-        'programs'=>$programs,'about'=>$about,'images'=>$images]);
+
+        return view('frontend.blog', [
+            'blog' => $blog,
+            'relatedBlogs' => $relatedBlogs,
+            'programs' => $programs,
+            'about' => $about,
+            'images' => $images,
+        ]);
     }
 
 public function gallery(){
@@ -524,16 +756,19 @@ public function gallery(){
 
         // Theme options (safe if migration hasn't run yet)
         if (Schema::hasColumn('settings', 'primary_color')) {
-            $data->primary_color = $request->input('primary_color') ?: '#fad200';
+            $data->primary_color = ThemeService::DEFAULT_PRIMARY;
         }
         if (Schema::hasColumn('settings', 'secondary_color')) {
-            $data->secondary_color = $request->input('secondary_color') ?: '#000000';
+            $data->secondary_color = ThemeService::DEFAULT_SECONDARY;
         }
         if (Schema::hasColumn('settings', 'neutral_color')) {
-            $data->neutral_color = $request->input('neutral_color') ?: '#b0b0b0';
+            $data->neutral_color = ThemeService::DEFAULT_NEUTRAL;
         }
         if (Schema::hasColumn('settings', 'font_family')) {
-            $data->font_family = $request->input('font_family') ?: 'Poppins';
+            $data->font_family = ThemeService::sanitizeFont($request->input('font_family'), ThemeService::DEFAULT_BODY_FONT);
+        }
+        if (Schema::hasColumn('settings', 'heading_font')) {
+            $data->heading_font = ThemeService::sanitizeFont($request->input('heading_font'), ThemeService::DEFAULT_HEADING_FONT);
         }
         if (Schema::hasColumn('settings', 'show_products_publicly')) {
             $data->show_products_publicly = $request->boolean('show_products_publicly');
@@ -550,7 +785,7 @@ public function gallery(){
         if (Schema::hasColumn('settings', 'google_map_embed_code')) {
             $data->google_map_embed_code = $request->input('google_map_embed_code');
         }
-        if (Schema::hasColumn('settings', 'hero_video_url')) {
+        if (Schema::hasColumn('settings', 'hero_video_url') && $request->exists('hero_video_url')) {
             $data->hero_video_url = $request->input('hero_video_url');
         }
         if (Schema::hasColumn('settings', 'hero_headline')) {
@@ -567,6 +802,9 @@ public function gallery(){
                 $existing = (array) ($headers[$pageKey] ?? []);
                 $incoming = (array) ($inputHeaders[$pageKey] ?? []);
 
+                if (array_key_exists('title', $incoming)) {
+                    $existing['title'] = trim((string) $incoming['title']);
+                }
                 if (array_key_exists('caption', $incoming)) {
                     $existing['caption'] = trim((string) $incoming['caption']);
                 }
@@ -634,8 +872,8 @@ public function gallery(){
         $data->mission = $request->input('mission');
         $data->vision = $request->input('vision');
         $data->values = $request->input('values');
-        if (Schema::hasColumn('abouts', 'core_values_list') && $request->has('core_values_list')) {
-            $data->core_values_list = $request->input('core_values_list');
+        if (Schema::hasColumn('abouts', 'core_values_list')) {
+            $data->core_values_list = implode("\n", CoreValues::parseItems(null, $data->values));
         }
 
 
@@ -701,8 +939,8 @@ public function gallery(){
     public function ourFactory(){
         $about = Background::firstOrEmpty();
         $factoryGallery = Schema::hasTable('factory_gallery_images')
-            ? FactoryGalleryImage::query()->latest()->take(6)->get()
-            : Gallery::query()->latest()->take(6)->get();
+            ? FactoryGalleryImage::query()->orderBy('sort_order')->orderBy('id')->take(12)->get()
+            : Gallery::query()->latest()->take(12)->get();
         $services = Service::query()->active()->orderBy('sort_order')->orderBy('title')->get();
 
         return view('frontend.our-factory', compact('about', 'factoryGallery', 'services'));

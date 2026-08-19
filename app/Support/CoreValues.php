@@ -36,4 +36,19 @@ class CoreValues
 
         return count($lines) > 1 ? $lines : [];
     }
+
+    /**
+     * Turn a one-value-per-line list into HTML for the Summernote editor.
+     */
+    public static function listToHtml(?string $linesField): string
+    {
+        $items = static::parseItems($linesField, '');
+        if ($items === []) {
+            return '';
+        }
+
+        return '<ul>' . implode('', array_map(static function (string $item) {
+            return '<li>' . e($item) . '</li>';
+        }, $items)) . '</ul>';
+    }
 }

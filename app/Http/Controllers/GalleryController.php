@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Gallery;
-use App\Models\Branch;
 use App\Models\Image;
-use App\Models\Program;
 
 class GalleryController extends Controller
 {
@@ -19,8 +16,8 @@ class GalleryController extends Controller
     public function index()
     {
         $images = Image::latest()->get();
-        $programs = Program::latest()->get();
-        return view('admin.gallery', ['images'=>$images,'programs'=>$programs]);
+
+        return view('admin.gallery', ['images' => $images]);
     }
 
     /**
@@ -42,13 +39,12 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'caption' => ['nullable', 'string'],
-            'program_id' => ['nullable', 'exists:programs,id'],
+            'caption' => ['nullable', 'string', 'max:255'],
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
         $data = new Image();
-        $data ->caption = $request->caption;
-        $data ->program_id = $request->program_id;
+        $data->caption = trim((string) $request->input('caption')) ?: null;
+        $data->program_id = null;
 
         // Uploading image
         if ($request->hasFile('image')) {
@@ -97,13 +93,11 @@ class GalleryController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'caption' => ['nullable', 'string'],
-            'program_id' => ['nullable', 'exists:programs,id'],
+            'caption' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
         $data = Image::findOrFail($id);
-        $data->caption = $request->input('caption');
-        $data->program_id = $request->input('program_id');
+        $data->caption = trim((string) $request->input('caption')) ?: null;
 
         if ($request->hasFile('image')) {
             if (!empty($data->image) && Storage::disk('public')->exists($data->image)) {

@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label">Description</label>
-                            <textarea name="description" rows="8" class="form-control">{{ old('description') }}</textarea>
+                            <textarea name="description" rows="8" class="form-control" data-editor="rich">{{ old('description') }}</textarea>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Price (RWF)</label>

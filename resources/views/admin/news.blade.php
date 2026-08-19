@@ -1,6 +1,6 @@
 @extends('layouts.adminbase')
 
-@section('title', 'Blog Management')
+@section('title', 'Updates')
 
 @section('sidebar')
     @parent
@@ -16,8 +16,8 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
                     <div>
-                        <h1>Blog Management</h1>
-                        <p class="text-muted mb-0">Create updates from workshops, events, and community visits. New posts are saved as drafts.</p>
+                        <h1>Updates</h1>
+                        <p class="text-muted mb-0">Publish stories from workshops, events, and community visits. Save as a draft or go live immediately.</p>
                     </div>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createBlogModal">
                         <i class="fa fa-plus me-1"></i> New Update
@@ -41,10 +41,10 @@
                                 <tbody>
                                     @forelse($blogs as $rs)
                                         <tr>
-                                            <td class="text-nowrap">{{ $rs->created_at }}</td>
+                                            <td class="text-nowrap">{{ optional($rs->displayDate())->format('d M Y') }}</td>
                                             <td>
                                                 <div class="fw-semibold">{{ $rs->title }}</div>
-                                                <small class="text-muted">{{ \Illuminate\Support\Str::limit(strip_tags($rs->body), 90) }}</small>
+                                                <small class="text-muted">{{ $rs->excerptText(90) }}</small>
                                             </td>
                                             <td>
                                                 @if($rs->published_at)
@@ -55,8 +55,8 @@
                                             </td>
                                             <td><span class="badge bg-light text-dark border">{{ $rs->blogimages_count }}</span></td>
                                             <td>
-                                                @if(!empty($rs->image))
-                                                    <img src="{{ asset('storage/' . $rs->image) }}" alt="{{ $rs->title }}" width="90" class="rounded border">
+                                                @if($rs->coverUrl())
+                                                    <img src="{{ $rs->coverUrl() }}" alt="{{ $rs->title }}" width="90" class="rounded border">
                                                 @else
                                                     <span class="text-muted">No image</span>
                                                 @endif
@@ -78,7 +78,7 @@
                                             <td colspan="6" class="border-0">
                                                 <div class="admin-empty-state">
                                                     <i class="fas fa-newspaper d-block"></i>
-                                                    <p class="mb-0">No blog updates yet.</p>
+                                                    <p class="mb-0">No updates yet.</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -102,7 +102,7 @@
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Create Blog Update (Draft)</h5>
+                <h5 class="modal-title">Create Update</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -111,27 +111,28 @@
                     <div class="row g-3">
                         <div class="col-lg-8">
                             <label class="form-label">Title</label>
-                            <input type="text" name="title" class="form-control" required>
+                            <input type="text" name="title" class="form-control" value="{{ old('title') }}" required>
                         </div>
                         <div class="col-lg-4">
                             <label class="form-label">Author</label>
-                            <input type="text" name="author" class="form-control" placeholder="e.g. Communications Team">
+                            <input type="text" name="author" class="form-control" value="{{ old('author') }}" placeholder="e.g. Communications Team">
                         </div>
                         <div class="col-12">
-                            <label class="form-label">Story / body</label>
-                            <textarea rows="10" class="form-control" name="body" data-editor="rich" placeholder="Write the session update..."></textarea>
+                            <label class="form-label">Story</label>
+                            <textarea rows="10" class="form-control" name="body" data-editor="rich" data-editor-modal="true" placeholder="Write the update...">{{ old('body') }}</textarea>
                         </div>
                         <div class="col-lg-6">
                             <label class="form-label">Cover image</label>
-                            <input type="file" name="image" class="form-control">
+                            <input type="file" name="image" class="form-control" accept="image/*">
                         </div>
                         <div class="col-lg-6">
-                            <label class="form-label">Gallery images (multiple)</label>
-                            <input type="file" class="form-control" name="gallery[]" multiple>
+                            <label class="form-label">Event gallery (optional, multiple)</label>
+                            <input type="file" class="form-control" name="gallery[]" accept="image/*" multiple>
                         </div>
                     </div>
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary">Save as Draft</button>
+                    <div class="mt-4 d-flex flex-wrap gap-2">
+                        <button type="submit" name="status" value="draft" class="btn btn-outline-secondary">Save as Draft</button>
+                        <button type="submit" name="status" value="publish" class="btn btn-primary">Publish now</button>
                     </div>
                 </form>
             </div>

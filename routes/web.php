@@ -37,6 +37,7 @@ Route::get('/team',[App\Http\Controllers\HomeController::class,'team'])->name('t
 Route::get('/our-programs',[App\Http\Controllers\HomeController::class,'showPrograms'])->name('showPrograms');
 Route::get('/our-programs/{slug}',[App\Http\Controllers\HomeController::class,'singleProgram'])->name('programShow');
 Route::get('/programs/{slug}',[App\Http\Controllers\HomeController::class,'project'])->name('project');
+Route::post('/programs/{slug}/get-involved',[App\Http\Controllers\HomeController::class,'saveInitiativeInvolvement'])->name('initiativeInvolve');
 Route::get('/campaigns',[App\Http\Controllers\HomeController::class,'campaigns'])->name('campaigns');
 Route::get('/campaigns/{slug}',[App\Http\Controllers\HomeController::class,'campaign'])->name('campaign');
 Route::get('/upcoming-events',[App\Http\Controllers\HomeController::class,'upcomingEvents'])->name('upcomingEvents');
@@ -154,6 +155,7 @@ Route::middleware(['auth', 'admin.role'
 
     // Gallery
     Route::get('/slides', [App\Http\Controllers\SlidesController::class, 'index'])->name('slides');
+    Route::post('/slides/hero', [App\Http\Controllers\SlidesController::class, 'saveHero'])->name('saveHero');
     Route::post('/saveSlide', [App\Http\Controllers\SlidesController::class, 'store'])->name('saveSlide');
     Route::get('/editSlide/{id}', [App\Http\Controllers\SlidesController::class, 'edit'])->name('editSlide');
     Route::post('/updateSlide/{id}', [App\Http\Controllers\SlidesController::class, 'update'])->name('updateSlide');
@@ -260,6 +262,12 @@ Route::middleware(['auth', 'admin.role'
     Route::get('/admin/users/{user}/edit', [App\Http\Controllers\UserAdminController::class, 'edit'])->name('admin.users.edit');
     Route::post('/admin/users/{user}', [App\Http\Controllers\UserAdminController::class, 'update'])->name('admin.users.update');
     Route::get('/admin/users/{user}/delete', [App\Http\Controllers\UserAdminController::class, 'destroy'])->name('admin.users.destroy');
+
+    Route::get('/admin/media-library', [App\Http\Controllers\MediaLibraryController::class, 'index'])->name('mediaLibrary.index');
+    Route::get('/admin/media-library/json', [App\Http\Controllers\MediaLibraryController::class, 'library'])->name('mediaLibrary.library');
+    Route::get('/admin/media-library/usages', [App\Http\Controllers\MediaLibraryController::class, 'usages'])->name('mediaLibrary.usages');
+    Route::post('/admin/media-library/replace', [App\Http\Controllers\MediaLibraryController::class, 'replace'])->name('mediaLibrary.replace');
+    Route::post('/admin/media-library/destroy', [App\Http\Controllers\MediaLibraryController::class, 'destroy'])->name('mediaLibrary.destroy');
 
     Route::get('/admin/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::post('/admin/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('admin.profile.update');

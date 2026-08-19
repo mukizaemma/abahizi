@@ -5,8 +5,9 @@
 @section('content')
 
     @include('frontend.includes.page-header', [
-        'pageKey' => 'default',
+        'pageKey' => 'services',
         'title' => $service->title,
+        'titleLocked' => true,
     ])
 
     <div class="tp-about-4__area tp-about-4__space p-relative fix grey-bg pt-60 pb-90">

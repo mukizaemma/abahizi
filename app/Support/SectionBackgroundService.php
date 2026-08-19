@@ -24,6 +24,12 @@ class SectionBackgroundService
                 'fallbacks' => ['image1', 'image2', 'image'],
                 'default' => 'assets/img/breadcrumb/breadcrumb-bg-1.jpg',
             ],
+            'impact_cta_background' => [
+                'label' => 'Home — Impact section',
+                'help' => 'Parallax photo behind homepage impact stats, stories, and CTAs. Recommended 1920×875 or larger; the image is cropped to fill the band on every screen size.',
+                'fallbacks' => ['image2', 'image1', 'image'],
+                'default' => 'assets/img/slider/slider-bg-3-2.jpg',
+            ],
             'factory_capabilities_background' => [
                 'label' => 'Factory capabilities banner',
                 'help' => 'Parallax banner with capacity cards — homepage, factory page, impact pages, and other footers.',

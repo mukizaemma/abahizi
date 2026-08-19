@@ -34,6 +34,10 @@ body {
     background-color: var(--brand-secondary, #000) !important;
 }
 
+.tp-header__logo::after {
+    background-color: var(--brand-primary, #fad200) !important;
+}
+
 /* Consistent hover: dark fill with light (white / brand) label on all primary buttons */
 .tp-btn:hover,
 .tp-btn:focus-visible {
@@ -676,6 +680,10 @@ body {
     color: var(--brand-secondary, #2c2c2c);
 }
 
+.activity-main__copy {
+    max-width: 46rem;
+}
+
 .activity-description {
     font-size: 1.0625rem;
     line-height: 1.75;
@@ -1045,15 +1053,15 @@ body {
 .shop-product-card__badge--sale {
     top: 10px;
     left: 10px;
-    background: #dc2626;
+    background: #000;
     color: #fff;
 }
 
 .shop-product-card__badge--new {
     top: 10px;
     right: 10px;
-    background: #16a34a;
-    color: #fff;
+    background: var(--brand-primary, #fad200);
+    color: #000;
 }
 
 .shop-product-card__body {
@@ -1247,8 +1255,8 @@ body {
 }
 
 .shop-product-card__btn--wa {
-    background: #25d366;
-    color: #fff !important;
+    background: var(--brand-primary, #fad200);
+    color: #000 !important;
 }
 
 .shop-product-card__btn--wa i {
@@ -1256,7 +1264,7 @@ body {
 }
 
 .shop-product-card__stock {
-    background: #1e293b;
+    background: #000;
     color: #fff;
     font-size: 0.7rem;
     font-weight: 600;
@@ -1278,8 +1286,8 @@ body {
 }
 
 .shop-btn-wa {
-    background: #25d366 !important;
-    color: #fff !important;
+    background: var(--brand-primary, #fad200) !important;
+    color: #000 !important;
     border: none;
     border-radius: 8px;
     width: 44px;
@@ -1293,8 +1301,9 @@ body {
 }
 
 .shop-btn-wa:hover {
+    background: #000 !important;
     color: #fff !important;
-    filter: brightness(0.95);
+    filter: none;
 }
 
 .request-order-cta__card {
@@ -1613,7 +1622,7 @@ body {
 }
 
 .site-form-channel__icon--wa {
-    color: #25d366;
+    color: var(--brand-primary, #fad200);
 }
 
 .site-form-channel__choice-label {
@@ -2107,22 +2116,23 @@ body {
     width: 3.5rem;
     height: 3.5rem;
     border-radius: 50%;
-    background: #25d366;
-    color: #fff !important;
+    background: var(--brand-primary, #fad200);
+    color: #000 !important;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-size: 1.75rem;
     text-decoration: none;
-    box-shadow: 0 6px 24px rgba(37, 211, 102, 0.45), 0 2px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22), 0 2px 8px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .site-float-whatsapp:hover {
     color: #fff !important;
-    filter: brightness(1.08);
+    background: #000;
+    filter: none;
     transform: scale(1.06);
-    box-shadow: 0 8px 28px rgba(37, 211, 102, 0.55), 0 4px 12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .site-float-whatsapp:focus-visible {

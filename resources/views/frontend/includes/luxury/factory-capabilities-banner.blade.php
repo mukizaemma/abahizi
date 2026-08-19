@@ -61,11 +61,8 @@
             </div>
 
             <div class="factory-capabilities-banner__actions d-flex flex-wrap justify-content-center gap-3">
-                <a class="tp-btn tp-btn--lux factory-capabilities-banner__btn" href="{{ route('contacts') }}">
-                    {{ __('site.nav.inquiry') }} <span aria-hidden="true">→</span>
-                </a>
-                <a class="tp-btn factory-capabilities-banner__btn factory-capabilities-banner__btn--ghost" href="{{ route('impactPage') }}">
-                    {{ __('site.nav.impact') }} <span aria-hidden="true">→</span>
+                <a class="tp-btn tp-btn--lux factory-capabilities-banner__btn" href="#factory-partner">
+                    {{ __('site.factory.intro_cta') }} <span aria-hidden="true">→</span>
                 </a>
             </div>
         </div>

@@ -2,7 +2,11 @@
 
 @section('content')
 
- 
+    @include('frontend.includes.page-header', [
+        'pageKey' => 'gallery',
+        'title' => 'Gallery',
+    ])
+
     <!-- gallery-area-start -->
     <div class="tp-gallery-3__area pt-120 pb-120">
         <div class="container">

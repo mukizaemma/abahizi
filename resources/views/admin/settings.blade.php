@@ -122,22 +122,54 @@
                                 </div>
 
                                 <div class="tab-pane fade" id="colors-pane" role="tabpanel" aria-labelledby="colors-tab">
+                                    @php
+                                        $bodyFonts = \App\Support\ThemeService::bodyFonts();
+                                        $headingFonts = \App\Support\ThemeService::headingFonts();
+                                        $currentBodyFont = $data->font_family ?: \App\Support\ThemeService::DEFAULT_BODY_FONT;
+                                        $currentHeadingFont = $data->heading_font ?: \App\Support\ThemeService::DEFAULT_HEADING_FONT;
+                                    @endphp
+                                    <p class="text-muted mb-4">The public site uses the logo palette only: yellow, black, and white. Fonts still apply across the public site and the admin panel.</p>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-12">
+                                            <label class="form-label d-block">Logo colors</label>
+                                            <div class="d-flex flex-wrap gap-3 align-items-center">
+                                                <span class="d-inline-flex align-items-center gap-2">
+                                                    <span style="display:inline-block;width:2rem;height:2rem;background:#fad200;border:1px solid #000;"></span>
+                                                    <span>Yellow <code>#fad200</code></span>
+                                                </span>
+                                                <span class="d-inline-flex align-items-center gap-2">
+                                                    <span style="display:inline-block;width:2rem;height:2rem;background:#000;"></span>
+                                                    <span class="text-dark">Black <code>#000000</code></span>
+                                                </span>
+                                                <span class="d-inline-flex align-items-center gap-2">
+                                                    <span style="display:inline-block;width:2rem;height:2rem;background:#fff;border:1px solid #000;"></span>
+                                                    <span>White <code>#ffffff</code></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row g-3">
-                                        <div class="col-lg-4">
-                                            <label class="form-label">Primary color</label>
-                                            <input type="color" class="form-control form-control-color w-100" name="primary_color" value="{{ $data->primary_color ?? '#fad200' }}">
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <label class="form-label">Secondary color</label>
-                                            <input type="color" class="form-control form-control-color w-100" name="secondary_color" value="{{ $data->secondary_color ?? '#000000' }}">
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <label class="form-label">Neutral color</label>
-                                            <input type="color" class="form-control form-control-color w-100" name="neutral_color" value="{{ $data->neutral_color ?? '#9a9a9a' }}">
+                                        <div class="col-lg-6">
+                                            <label class="form-label">Body font (Google Fonts)</label>
+                                            <select class="form-select" name="font_family">
+                                                @foreach($bodyFonts as $font)
+                                                    <option value="{{ $font }}" {{ $currentBodyFont === $font ? 'selected' : '' }} style="font-family: '{{ $font }}', sans-serif;">{{ $font }}</option>
+                                                @endforeach
+                                                @if($currentBodyFont && ! isset($bodyFonts[$currentBodyFont]))
+                                                    <option value="{{ $currentBodyFont }}" selected>{{ $currentBodyFont }} (custom)</option>
+                                                @endif
+                                            </select>
                                         </div>
                                         <div class="col-lg-6">
-                                            <label class="form-label">Font family</label>
-                                            <input type="text" class="form-control" name="font_family" value="{{ $data->font_family ?? 'DM Sans' }}">
+                                            <label class="form-label">Heading font (Google Fonts)</label>
+                                            <select class="form-select" name="heading_font">
+                                                @foreach($headingFonts as $font)
+                                                    <option value="{{ $font }}" {{ $currentHeadingFont === $font ? 'selected' : '' }}>{{ $font }}</option>
+                                                @endforeach
+                                                @if($currentHeadingFont && ! isset($headingFonts[$currentHeadingFont]))
+                                                    <option value="{{ $currentHeadingFont }}" selected>{{ $currentHeadingFont }} (custom)</option>
+                                                @endif
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -150,6 +182,7 @@
                                                 <label class="form-check-label" for="show_products_publicly">
                                                     Show product catalog publicly
                                                 </label>
+                                                <div class="form-text">Product pages with descriptions, materials, and order requests. The homepage photo gallery still appears either way.</div>
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -172,28 +205,20 @@
                                 </div>
 
                                 <div class="tab-pane fade" id="headers-pane" role="tabpanel" aria-labelledby="headers-tab">
-                                    <p class="text-muted mb-4">All inner pages use a full-screen header image with title and caption. Leave a field empty to use the site default shown on each page.</p>
+                                    <p class="text-muted mb-4">Set the title, caption, and header image for each public page. Leave a field empty to keep the site default for that page.</p>
 
                                     <div class="card mb-4 border">
                                         <div class="card-header bg-light fw-semibold">Homepage hero defaults</div>
                                         <div class="card-body">
-                                            <p class="text-muted small mb-3">Manage slide images and captions under <strong>Home Slides</strong> in the admin menu. Settings here apply when a slide has no caption, or when no slides exist.</p>
+                                            <p class="text-muted small mb-3">Hero media (slideshow, banner, or video) is managed under <strong>Homepage hero</strong> in the admin menu. The text here is the default headline when a slide has no caption.</p>
                                             <div class="row g-3">
                                                 <div class="col-lg-6">
                                                     <label class="form-label">Default hero caption</label>
                                                     <input type="text" class="form-control" name="hero_headline" value="{{ $data->hero_headline }}" placeholder="Premium Custom Handbags. Crafted in Rwanda.">
                                                 </div>
                                                 <div class="col-lg-6">
-                                                    <label class="form-label">Hero video URL (optional)</label>
-                                                    <input type="url" class="form-control" name="hero_video_url" value="{{ $data->hero_video_url }}" placeholder="https://... (only used when no slides exist)">
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <label class="form-label">Fallback hero image</label>
-                                                    <input type="file" class="form-control" name="hero_poster" accept="image/*">
-                                                    <small class="text-muted">Used only when no slides are uploaded in Home Slides.</small>
-                                                    @if(!empty($data->hero_poster))
-                                                        <img src="{{ asset('storage/images/' . ltrim($data->hero_poster, '/')) }}" alt="Hero poster" width="220" class="mt-2 rounded border">
-                                                    @endif
+                                                    <label class="form-label">Default hero subheadline</label>
+                                                    <input type="text" class="form-control" name="hero_subheadline" value="{{ $data->hero_subheadline }}" placeholder="Ethical bag manufacturing that strengthens families…">
                                                 </div>
                                             </div>
                                         </div>
@@ -230,6 +255,8 @@
                                                         <strong>{{ $pageLabel }}</strong>
                                                     </div>
                                                     <div class="card-body">
+                                                        <label class="form-label">Page title</label>
+                                                        <input type="text" class="form-control mb-3" name="page_headers[{{ $pageKey }}][title]" value="{{ $stored['title'] ?? '' }}" placeholder="{{ $pageLabel }}">
                                                         <label class="form-label">Caption</label>
                                                         <textarea class="form-control mb-3" rows="3" name="page_headers[{{ $pageKey }}][caption]" placeholder="Optional caption for this page">{{ $stored['caption'] ?? '' }}</textarea>
                                                         <label class="form-label">Header image</label>

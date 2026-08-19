@@ -30,4 +30,9 @@ class FactoryGalleryImage extends Model
 
         return asset('storage/' . $normalized);
     }
+
+    public function url(): string
+    {
+        return self::publicUrl($this->image);
+    }
 }

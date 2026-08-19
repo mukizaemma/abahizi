@@ -7,6 +7,7 @@
         $caption ?? null,
         $image ?? null,
         $about ?? null,
+        $titleLocked ?? false,
     );
 
     $headerTitle = $resolved['title'];

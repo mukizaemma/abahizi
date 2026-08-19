@@ -16,9 +16,14 @@
         $galleryItems->push($im);
     }
     $disc = $product->discountPercent();
-    $headerImageUrl = !empty($setting->page_header_image ?? null)
-        ? asset('storage/images' . $setting->page_header_image)
-        : asset('storage/images/' . ($about->image2 ?? $about->image1 ?? $about->image ?? ''));
+    $headerImageUrl = \App\Support\PageHeaderService::resolve(
+        'products',
+        $product->title,
+        null,
+        null,
+        $about ?? null,
+        true
+    )['image'];
 @endphp
 
 <div class="tp-breadcrumb__area p-relative fix tp-breadcrumb-height" data-background="{{ $headerImageUrl }}">

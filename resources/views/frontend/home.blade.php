@@ -2,12 +2,15 @@
 
 @section('content')
 
-    @include('frontend.includes.luxury.hero-cinematic')
-    @include('frontend.includes.luxury.impact-ticker')
-    @include('frontend.includes.luxury.home-craft-showcase')
-    @include('frontend.includes.luxury.home-process')
-    @include('frontend.includes.luxury.home-why-partner')
-    @include('frontend.includes.luxury.factory-capabilities-banner')
-    @include('frontend.includes.home-recent-updates')
+    @include('frontend.includes.landing.hero')
+    @include('frontend.includes.landing.trust')
+    @include('frontend.includes.landing.about')
+    @include('frontend.includes.landing.why')
+    @include('frontend.includes.landing.products')
+    @include('frontend.includes.landing.process')
+    @include('frontend.includes.landing.ownership')
+    @include('frontend.includes.landing.impact')
+    @include('frontend.includes.landing.partners')
+    @include('frontend.includes.landing.contact')
 
 @endsection

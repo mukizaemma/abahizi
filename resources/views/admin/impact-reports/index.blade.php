@@ -52,7 +52,7 @@
                             </div>
                             <div class="col-12">
                                 <label class="form-label">Introduction</label>
-                                <textarea name="description" class="form-control" rows="4">{{ old('description', $page->description) }}</textarea>
+                                <textarea name="description" class="form-control" rows="4" data-editor="rich">{{ old('description', $page->description) }}</textarea>
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">Save page content</button>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="col-12">
                         <label class="form-label">Highlight message</label>
-                        <textarea name="highlight_message" class="form-control" rows="4">{{ old('highlight_message') }}</textarea>
+                        <textarea name="highlight_message" class="form-control" rows="4" data-editor="rich" data-editor-modal="true">{{ old('highlight_message') }}</textarea>
                     </div>
                     <div class="col-12">
                         @include('admin.includes.chunked-pdf-upload', ['required' => true, 'label' => 'PDF'])

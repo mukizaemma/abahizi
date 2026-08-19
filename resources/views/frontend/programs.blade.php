@@ -6,7 +6,7 @@
 
 
         @include('frontend.includes.page-header', [
-            'pageKey' => 'default',
+            'pageKey' => 'programs',
             'title' => 'Our Programs',
         ])
 

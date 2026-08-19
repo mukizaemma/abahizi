@@ -103,7 +103,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label">Description</label>
-                            <textarea class="form-control" rows="6" name="description" placeholder="Program description" data-no-editor="true"></textarea>
+                            <textarea class="form-control" rows="6" name="description" placeholder="Program description" data-editor="rich" data-editor-modal="true"></textarea>
                         </div>
                         <div class="col-12">
                             <label class="form-label">Cover image</label>

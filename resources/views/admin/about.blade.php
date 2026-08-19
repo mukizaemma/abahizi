@@ -76,16 +76,17 @@
                             <div class="tab-pane fade" id="core-values-pane" role="tabpanel" aria-labelledby="core-values-tab">
                                 <form action="{{ route('saveAbout', $data->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
+                                    @php
+                                        $valuesHtml = old('values', $data->values);
+                                        if (trim(strip_tags((string) $valuesHtml)) === '') {
+                                            $valuesHtml = \App\Support\CoreValues::listToHtml($data->core_values_list ?? '');
+                                        }
+                                    @endphp
                                     <div class="row g-3">
                                         <div class="col-12">
-                                            <label class="form-label">Core values — grid list (recommended)</label>
-                                            <p class="text-muted small mb-2">Enter <strong>one value per line</strong>. These appear as cards in columns on the About Us page. Leave empty to try auto-detect from the rich text below (bullet list or multiple lines).</p>
-                                            <textarea rows="10" class="form-control font-monospace" name="core_values_list" placeholder="One value per line">{{ old('core_values_list', $data->core_values_list ?? '') }}</textarea>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Core values — rich text (optional)</label>
-                                            <p class="text-muted small mb-2">Used as fallback if the grid list is empty, or for extra formatting where auto-detect does not apply.</p>
-                                            <textarea rows="8" class="form-control" name="values" data-editor="rich">{!! $data->values !!}</textarea>
+                                            <label class="form-label">Core values</label>
+                                            <p class="text-muted small mb-2">Add each value as a list item. They appear as cards on the About Us page.</p>
+                                            <textarea rows="8" class="form-control" name="values" data-editor="rich" placeholder="Add each core value as a list item">{!! $valuesHtml !!}</textarea>
                                         </div>
                                         <input type="hidden" name="mission" value="{{ $data->mission }}">
                                         <input type="hidden" name="vision" value="{{ $data->vision }}">

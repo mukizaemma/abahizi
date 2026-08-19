@@ -4,66 +4,33 @@
 
 @section('content')
 
-@php
-    $hasProjectGallery = $images->count() > 0;
-    $hasProgramGallery = isset($programGallery) && $programGallery->count() > 0;
-    $hasAnyGallery = $hasProjectGallery || $hasProgramGallery;
-@endphp
+@include('frontend.includes.initiative-cover')
 
-{{-- Header: cover image 80% width --}}
-<section class="activity-hero-section pt-50 pb-30">
-    <div class="container">
-        @if(!empty($activity->image))
-            <div class="activity-hero mx-auto">
-                <img src="{{ asset('storage/' . $activity->image) }}" alt="{{ $activity->title }}" class="activity-hero__img w-100 rounded-3 shadow-sm">
-            </div>
-        @endif
-    </div>
-</section>
-
-{{-- Description + optional galleries: 40% / 60% or full width --}}
 <section class="activity-main py-4 py-lg-5 bg-white">
     <div class="container">
-        <h1 class="activity-page-title h2 mb-4">{{ $activity->title }}</h1>
-
-        <div class="row g-4 g-lg-5 align-items-start">
-            @if($hasAnyGallery)
-                <div class="col-12 col-lg-5 activity-desc-col">
-                    <div class="postbox__text activity-description">{!! $activity->description !!}</div>
-                </div>
-                <div class="col-12 col-lg-7 activity-gallery-col">
-                    @if($hasProgramGallery)
-                        @include('frontend.includes.gallery-featured', [
-                            'galleryItems' => $programGallery,
-                            'heading' => 'Program gallery',
-                            'galleryKey' => 'program-' . $activity->id,
-                        ])
-                    @endif
-                    @if($hasProjectGallery)
-                        @include('frontend.includes.gallery-featured', [
-                            'galleryItems' => $images,
-                            'heading' => 'Project gallery',
-                            'galleryKey' => 'project-' . $activity->id,
-                        ])
-                    @endif
-                </div>
-            @else
-                <div class="col-12">
-                    <div class="postbox__text activity-description">{!! $activity->description !!}</div>
-                </div>
+        <div class="activity-main__copy mx-auto">
+            <div class="postbox__text activity-description">{!! $activity->description !!}</div>
+            @if(count($activity->normalizedInvolvementWays()) > 0)
+                <p class="mt-4 mb-0">
+                    <button type="button" class="tp-btn tp-btn--lux" data-bs-toggle="modal" data-bs-target="#getInvolvedModal">
+                        {{ __('site.initiative.cta_jump') }} <span aria-hidden="true">→</span>
+                    </button>
+                </p>
             @endif
         </div>
     </div>
 </section>
 
-{{-- Related projects (same program), 3 columns --}}
+@include('frontend.includes.initiative-highlights')
+@include('frontend.includes.initiative-involve')
+
 @if($relatedActivities->count() > 0)
-<section class="related-projects-section py-5 grey-bg">
+<section class="related-projects-section py-5 bg-white">
     <div class="container">
-        <div class="text-center mb-4 mb-lg-5">
-            <h2 class="h3 mb-2">Related Initatives</h2>
+        <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
+            <h2 class="lux-section-head__title h3 mb-2">{{ __('site.initiative.related_title') }}</h2>
             @if($activity->program)
-                <p class="text-muted mb-0">More work under <strong>{{ $activity->program->title }}</strong></p>
+                <p class="text-muted mb-0">{{ __('site.initiative.related_lead') }} <strong>{{ $activity->program->title }}</strong></p>
             @endif
         </div>
         <div class="row g-4 justify-content-center">
@@ -85,7 +52,7 @@
                                 $ex = Str::limit(strip_tags(html_entity_decode($rel->description ?? '')), 110, '…');
                             @endphp
                             <p class="text-muted small flex-grow-1 mb-3">{{ $ex }}</p>
-                            <a href="{{ route('project', ['slug' => $rel->slug]) }}" class="tp-btn align-self-start mt-auto">View more</a>
+                            <a href="{{ route('project', ['slug' => $rel->slug]) }}" class="tp-btn align-self-start mt-auto">{{ __('site.initiative.view_more') }}</a>
                         </div>
                     </article>
                 </div>
@@ -97,30 +64,60 @@
 
 @include('frontend.includes.backImage')
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('[data-gallery-featured]').forEach(function (wrap) {
-        var mainLink = wrap.querySelector('.gallery-featured__main-link');
-        var mainImg = wrap.querySelector('[data-gallery-main]');
-        var buttons = wrap.querySelectorAll('.gallery-featured__thumb-btn');
-        if (!mainImg || buttons.length === 0) return;
+@if(session('involve_success') || session('involve_open_url'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var title = @json(__('site.initiative.swal_submitted'));
+            var text = @json(session('involve_success') ?: __('site.initiative.swal_submitted_text'));
+            var url = @json(session('involve_open_url'));
+            var color = '#111111';
 
-        buttons.forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var url = this.getAttribute('data-full-url');
-                if (!url) return;
-                mainImg.src = url;
-                if (mainLink) mainLink.href = url;
-                buttons.forEach(function (b) {
-                    b.classList.remove('is-active');
-                    b.setAttribute('aria-pressed', 'false');
-                });
-                this.classList.add('is-active');
-                this.setAttribute('aria-pressed', 'true');
-            });
+            function openChannel() {
+                if (!url) {
+                    return;
+                }
+                var opened = window.open(url, '_blank', 'noopener,noreferrer');
+                if (!opened) {
+                    window.location.href = url;
+                }
+            }
+
+            if (window.Swal) {
+                window.Swal.fire({
+                    icon: 'success',
+                    title: title,
+                    text: text,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: color,
+                }).then(openChannel);
+            } else {
+                openChannel();
+            }
         });
-    });
-});
-</script>
+    </script>
+@elseif($errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var color = '#111111';
+            function reopenForm() {
+                var el = document.getElementById('getInvolvedModal');
+                if (el && window.bootstrap && window.bootstrap.Modal) {
+                    window.bootstrap.Modal.getOrCreateInstance(el).show();
+                }
+            }
+            if (window.Swal) {
+                window.Swal.fire({
+                    icon: 'error',
+                    title: @json(__('site.initiative.swal_failed')),
+                    text: @json(__('site.initiative.swal_failed_text')),
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: color,
+                }).then(reopenForm);
+            } else {
+                reopenForm();
+            }
+        });
+    </script>
+@endif
 
 @endsection

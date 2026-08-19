@@ -19,9 +19,15 @@ class PageHeaderService
             'contact' => 'Contact',
             'mission' => 'Mission & Vision',
             'what_we_do' => 'What We Do',
+            'approach' => 'Our Approach',
+            'model' => 'Our Model',
+            'services' => 'Services',
+            'programs' => 'Programs',
+            'events' => 'Events',
+            'gallery' => 'Gallery',
             'team' => 'Team',
             'testimonials' => 'Testimonials',
-            'updates' => 'News & Updates',
+            'updates' => 'Updates',
             'about' => 'About Us',
             'default' => 'Other pages (fallback)',
         ];
@@ -49,11 +55,20 @@ class PageHeaderService
         ?string $caption = null,
         ?string $image = null,
         ?Background $about = null,
+        bool $titleLocked = false,
     ): array {
         $setting = Setting::firstOrEmpty();
         $about ??= Background::firstOrEmpty();
         $key = $pageKey ?: 'default';
         $stored = static::storedHeaders($setting)[$key] ?? [];
+
+        $resolvedTitle = trim((string) ($title ?? ''));
+        if (! $titleLocked) {
+            $storedTitle = trim((string) ($stored['title'] ?? ''));
+            if ($storedTitle !== '') {
+                $resolvedTitle = $storedTitle;
+            }
+        }
 
         $resolvedCaption = trim((string) ($stored['caption'] ?? ''));
         if ($resolvedCaption === '') {
@@ -69,7 +84,7 @@ class PageHeaderService
             ?? static::aboutFallbackImage($about);
 
         return [
-            'title' => $title ?? '',
+            'title' => $resolvedTitle,
             'caption' => $resolvedCaption !== '' ? $resolvedCaption : null,
             'image' => $resolvedImage,
         ];

@@ -1,60 +1,120 @@
 @extends('layouts.frontbase')
 
-@section('title', 'Home Page')
+@section('title', __('site.nav.updates'))
 
 @section('content')
 
+    @include('frontend.includes.page-header', [
+        'pageKey' => 'updates',
+        'title' => __('site.updates.title'),
+        'caption' => __('site.updates.lead'),
+    ])
 
-        @include('frontend.includes.page-header', [
-            'pageKey' => 'updates',
-            'title' => 'Our Recent Updates',
-        ])
-
-    <!-- service-area-start -->
-
-    
-    <div class="tp-blog-2__area pt-120 pb-90">
+    <section class="updates-widget" aria-labelledby="updates-widget-title">
         <div class="container">
-            {{-- <div class="row">
-                <div class="col-xl-12">
-                    <div class="tp-blog-2__section-title pb-50 text-center">
-                        <h4 class="tp-section-title">Recent Updates</h4>
-                    </div>
+            <header class="updates-widget__intro">
+                <p class="updates-widget__eyebrow">{{ __('site.updates.eyebrow') }}</p>
+                <h2 id="updates-widget-title" class="updates-widget__heading">{{ __('site.updates.heading') }}</h2>
+            </header>
+
+            @if(!$featured)
+                <div class="updates-widget__empty">
+                    <p class="mb-0">{{ __('site.updates.empty') }}</p>
                 </div>
-            </div> --}}
-            <div class="row">
-                @foreach ($news as $blog)
-                <div class="col-xl-4 col-lg-4 col-md-6 mb-30 wow tpfadeUp" data-wow-duration=".9s"
-                data-wow-delay=".3s">
-                    <div class="tp-blog-2__item">
-                        <a href="{{route('postSingle',$blog->slug)}}">
-                            <div class="tp-blog-2__thumb p-relative">
-                                <img src="{{ asset('storage/images/news/' . $blog->image) }}" alt="">
+            @else
+                <div class="updates-widget__stage{{ $rail->isEmpty() ? ' updates-widget__stage--solo' : '' }}">
+                    <article class="updates-widget__featured">
+                        <a href="{{ route('postSingle', $featured->slug) }}" class="updates-widget__featured-link">
+                            @if($featured->coverUrl())
+                                <img src="{{ $featured->coverUrl() }}" alt="{{ $featured->title }}" class="updates-widget__featured-img">
+                            @else
+                                <div class="updates-widget__featured-fallback" aria-hidden="true"></div>
+                            @endif
+                            <div class="updates-widget__featured-copy">
+                                <span class="updates-widget__badge">{{ __('site.updates.latest_badge') }}</span>
+                                <time datetime="{{ optional($featured->displayDate())->toDateString() }}">
+                                    {{ optional($featured->displayDate())->format('d M Y') }}
+                                </time>
+                                <h3>{{ $featured->title }}</h3>
+                                @if($featured->previewText(150))
+                                    <p>{{ $featured->previewText(150) }}</p>
+                                @endif
+                                <span class="updates-widget__cta">{{ __('site.updates.read') }} <span aria-hidden="true">→</span></span>
                             </div>
                         </a>
-                        <div class="tp-blog-2__content">
-                            <div class="{{route('postSingle',$blog->slug)}}">
-                            </div>
-                            <a href="{{route('postSingle',$blog->slug)}}"><h4 class="tp-blog-2__title-sm">{{$blog->title}}</h4></a>
-                            <span class="tp-blog-2__meta-3">{{$blog->created_at->format('d M,Y')}}</span>
-                            <a href="{{route('postSingle',$blog->slug)}}">
-                                <div class="tp-blog-2__link text-center">
-                                    <span>Read More<i class="flaticon-arrow-right"></i><span>
-                                </span></span></div>
-                            </a>
-                        </div>
+                    </article>
+
+                    @if($rail->isNotEmpty())
+                    <div class="updates-widget__rail" aria-label="{{ __('site.updates.more_title') }}">
+                        @foreach($rail as $update)
+                            <article class="updates-widget__rail-card">
+                                <a href="{{ route('postSingle', $update->slug) }}" class="updates-widget__rail-link">
+                                    <div class="updates-widget__rail-media">
+                                        @if($update->coverUrl())
+                                            <img src="{{ $update->coverUrl() }}" alt="{{ $update->title }}" loading="lazy">
+                                        @else
+                                            <div class="updates-widget__rail-fallback" aria-hidden="true"></div>
+                                        @endif
+                                    </div>
+                                    <div class="updates-widget__rail-body">
+                                        <time datetime="{{ optional($update->displayDate())->toDateString() }}">
+                                            {{ optional($update->displayDate())->format('d M Y') }}
+                                        </time>
+                                        <h3>{{ $update->title }}</h3>
+                                        @if($update->previewText(70))
+                                            <p class="updates-widget__rail-preview">{{ $update->previewText(70) }}</p>
+                                        @endif
+                                        <span>{{ __('site.updates.read') }} <span aria-hidden="true">→</span></span>
+                                    </div>
+                                </a>
+                            </article>
+                        @endforeach
                     </div>
+                    @endif
                 </div>
-                @endforeach
 
-            </div>
+                @if($moreNews->isNotEmpty())
+                    <div class="updates-widget__more-bar">
+                        <button
+                            type="button"
+                            class="updates-widget__more-btn"
+                            data-updates-toggle="#updates-more-grid"
+                            aria-expanded="false"
+                            aria-controls="updates-more-grid"
+                        >
+                            <span data-updates-more-label>{{ __('site.updates.view_more') }}</span>
+                            <span data-updates-less-label hidden>{{ __('site.updates.view_less') }}</span>
+                        </button>
+                    </div>
+
+                    <div id="updates-more-grid" class="updates-widget__grid" hidden>
+                        @foreach($moreNews as $update)
+                            <article class="updates-widget__grid-card">
+                                <a href="{{ route('postSingle', $update->slug) }}" class="updates-widget__grid-link">
+                                    <div class="updates-widget__grid-media">
+                                        @if($update->coverUrl())
+                                            <img src="{{ $update->coverUrl() }}" alt="{{ $update->title }}" loading="lazy">
+                                        @endif
+                                    </div>
+                                    <div class="updates-widget__grid-body">
+                                        <time datetime="{{ optional($update->displayDate())->toDateString() }}">
+                                            {{ optional($update->displayDate())->format('d M Y') }}
+                                        </time>
+                                        <h3>{{ $update->title }}</h3>
+                                        @if($update->previewText(110))
+                                            <p>{{ $update->previewText(110) }}</p>
+                                        @endif
+                                        <span class="updates-widget__grid-read">{{ __('site.updates.read') }} <span aria-hidden="true">→</span></span>
+                                    </div>
+                                </a>
+                            </article>
+                        @endforeach
+                    </div>
+                @endif
+            @endif
         </div>
-    </div>
-    <!-- service-area-end -->
+    </section>
 
-        <!-- cta-area-start -->
     @include('frontend.includes.backImage')
-        <!-- cta-area-end -->
-
 
 @endsection

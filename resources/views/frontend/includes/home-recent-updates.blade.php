@@ -15,19 +15,22 @@
                     <div class="col-md-6 col-lg-4 wow tpfadeUp" data-wow-duration=".9s" data-wow-delay=".1s">
                         <article class="home-recent-updates__card h-100">
                             <a href="{{ route('postSingle', $update->slug) }}" class="home-recent-updates__media d-block">
-                                @if(!empty($update->image))
-                                    <img src="{{ asset('storage/images/news/' . $update->image) }}" alt="{{ $update->title }}" loading="lazy">
+                                @if($update->coverUrl())
+                                    <img src="{{ $update->coverUrl() }}" alt="{{ $update->title }}" loading="lazy">
                                 @else
                                     <div class="home-recent-updates__placeholder">{{ __('site.home.updates_title') }}</div>
                                 @endif
                             </a>
                             <div class="home-recent-updates__body">
-                                <time class="home-recent-updates__date" datetime="{{ $update->created_at?->toDateString() }}">
-                                    {{ $update->created_at?->format('d M, Y') }}
+                                <time class="home-recent-updates__date" datetime="{{ optional($update->displayDate())->toDateString() }}">
+                                    {{ optional($update->displayDate())->format('d M, Y') }}
                                 </time>
                                 <h3 class="home-recent-updates__title">
                                     <a href="{{ route('postSingle', $update->slug) }}">{{ $update->title }}</a>
                                 </h3>
+                                @if($update->previewText(120))
+                                    <p class="home-recent-updates__preview">{{ $update->previewText(120) }}</p>
+                                @endif
                                 <a href="{{ route('postSingle', $update->slug) }}" class="home-recent-updates__link">
                                     {{ __('site.home.updates_read') }} <span aria-hidden="true">→</span>
                                 </a>

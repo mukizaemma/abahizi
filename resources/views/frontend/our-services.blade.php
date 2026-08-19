@@ -5,7 +5,7 @@
 @section('content')
 
     @include('frontend.includes.page-header', [
-        'pageKey' => 'default',
+        'pageKey' => 'services',
         'title' => 'Our Services',
     ])
 

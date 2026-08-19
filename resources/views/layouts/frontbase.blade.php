@@ -28,32 +28,37 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme-custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/luxury-demo.css') }}">
+    @if(request()->routeIs('home'))
+        <link rel="stylesheet" href="{{ asset('assets/css/landing-home.css') }}">
+    @endif
 
     @php
-        $primary = $setting->primary_color ?? '#fad200';
-        $secondary = $setting->secondary_color ?? '#000000';
-        $neutral = $setting->neutral_color ?? '#9a9a9a';
-        $fontFamily = $setting->font_family ?? 'DM Sans';
-        $googleFontParam = str_replace(' ', '+', $fontFamily);
+        $theme = \App\Support\ThemeService::fromSetting($setting ?? null);
+        $isLandingHome = request()->routeIs('home');
     @endphp
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family={{ $googleFontParam }}:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ $theme['fonts_href'] }}" rel="stylesheet">
 
     <style>
-        body {
-            font-family: var(--lux-sans, "{{ $fontFamily }}"), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        }
         :root {
-            --brand-primary: {{ $primary }};
-            --brand-secondary: {{ $secondary }};
-            --brand-neutral: {{ $neutral }};
+            --brand-primary: {{ $theme['primary'] }};
+            --brand-secondary: {{ $theme['secondary'] }};
+            --brand-neutral: {{ $theme['neutral'] }};
+            --brand-on-primary: {{ $theme['on_primary'] }};
+            --bs-primary: {{ $theme['primary'] }};
+            --bs-primary-rgb: {{ $theme['primary_rgb'] }};
+            --lux-sans: "{{ $theme['body_font'] }}", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            --lux-serif: "{{ $theme['heading_font'] }}", Georgia, "Times New Roman", serif;
+        }
+        body {
+            font-family: var(--lux-sans);
         }
     </style>
 </head>
 
-<body>
+<body @class(['landing-home' => $isLandingHome ?? false])>
 
     <!-- back-to-top-start  -->
     <button class="scroll-top scroll-to-target" data-target="html">
@@ -153,6 +158,7 @@
                                             <li><a href="{{ route('impactReports') }}">{{ __('site.nav.social_impact_reports') }}</a></li>
                                         </ul>
                                     </li>
+                                    <li><a href="{{ route('posts') }}">{{ __('site.nav.updates') }}</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -208,6 +214,7 @@
                             <li><a href="{{ route('ourMission') }}">{{ __('site.nav.mission') }}</a></li>
                             <li><a href="{{ route('ourFactory') }}">{{ __('site.nav.factory') }}</a></li>
                             <li><a href="{{ route('impactPage') }}">{{ __('site.nav.impact') }}</a></li>
+                            <li><a href="{{ route('posts') }}">{{ __('site.nav.updates') }}</a></li>
                             <li><a href="{{ route('impactReports') }}">{{ __('site.nav.social_impact_reports') }}</a></li>
                         </ul>
                     </div>
@@ -307,9 +314,13 @@
     <script src="{{ asset('assets/js/imagesloaded-pkgd.js') }}"></script>
     <script src="{{ asset('assets/js/ajax-form.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('assets/js/site-form-channels.js') }}"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
     <script src="{{ asset('assets/js/luxury-site.js') }}"></script>
+    @if($isLandingHome ?? false)
+        <script src="{{ asset('assets/js/landing-home.js') }}"></script>
+    @endif
 
 </body>
 

@@ -2,6 +2,9 @@
     $formType = $formType ?? 'partnership';
     $formSource = $formSource ?? null;
     $channelsReady = $formChannels['channels_ready'] ?? false;
+    $submitOpenLabel = $submitOpenLabel ?? 'Submit';
+    $submitConfirmLabel = $submitConfirmLabel ?? 'I sent the message — save my submission';
+    $autosave = (bool) ($autosave ?? false);
 @endphp
 
 @if(! $channelsReady)
@@ -34,26 +37,34 @@
             </div>
         </div>
 
-        <button type="button" class="btn btn-lg fw-semibold text-dark site-form-submit site-form-channel__open" disabled>
-            Submit
-        </button>
-
-        <div class="site-form-channel__confirm mt-4 d-none" aria-live="polite">
-            <div class="alert alert-info mb-3">
-                A new tab should have opened with your message ready. Send it in WhatsApp or your email app, then confirm here so we can record your submission.
-            </div>
+        @if($autosave)
+            <p class="small text-muted mb-3">{{ __('site.initiative.channel_hint') }}</p>
             <input type="hidden" name="submission_channel" value="">
-            <input type="hidden" name="channel_confirmed" value="">
-            <input type="hidden" name="channel_token" value="">
-            @if($formSource)
-                <input type="hidden" name="form_source" value="{{ $formSource }}">
-            @endif
-            <button type="submit" class="btn btn-lg fw-semibold text-dark site-form-submit site-form-channel__confirm-btn" disabled>
-                I sent the message — save my submission
+            <button type="button" class="btn btn-lg fw-semibold text-dark site-form-submit site-form-channel__open" disabled>
+                {{ $submitOpenLabel }}
             </button>
-            <button type="button" class="btn btn-outline-secondary btn-lg ms-0 ms-md-2 mt-2 mt-md-0 site-form-channel__retry">
-                Choose another option
+        @else
+            <button type="button" class="btn btn-lg fw-semibold text-dark site-form-submit site-form-channel__open" disabled>
+                {{ $submitOpenLabel }}
             </button>
-        </div>
+
+            <div class="site-form-channel__confirm mt-4 d-none" aria-live="polite">
+                <div class="alert alert-info mb-3">
+                    A new tab should have opened with your message ready. Send it in WhatsApp or your email app, then confirm here so we can record your submission.
+                </div>
+                <input type="hidden" name="submission_channel" value="">
+                <input type="hidden" name="channel_confirmed" value="">
+                <input type="hidden" name="channel_token" value="">
+                @if($formSource)
+                    <input type="hidden" name="form_source" value="{{ $formSource }}">
+                @endif
+                <button type="submit" class="btn btn-lg fw-semibold text-dark site-form-submit site-form-channel__confirm-btn" disabled>
+                    {{ $submitConfirmLabel }}
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-lg ms-0 ms-md-2 mt-2 mt-md-0 site-form-channel__retry">
+                    Choose another option
+                </button>
+            </div>
+        @endif
     </div>
 @endif
