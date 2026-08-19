@@ -16,6 +16,7 @@ use App\Models\Member;
 use App\Models\Country;
 use App\Models\Gallery;
 use App\Models\FactoryGalleryImage;
+use App\Models\HandoverFeedback;
 use App\Models\Message;
 use App\Models\Partner;
 use App\Models\Program;
@@ -1229,6 +1230,46 @@ public function gallery(){
         $about = Background::firstOrEmpty();
 
         return view('frontend.handover', compact('about'));
+    }
+
+    public function storeHandoverFeedback(Request $request)
+    {
+        $ipKey = 'handover-feedback:ip:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($ipKey, 5)) {
+            return back()
+                ->withInput()
+                ->withErrors(['form' => 'Too many attempts. Please wait a few minutes and try again.']);
+        }
+
+        if ($request->filled('hp_url')) {
+            return redirect()
+                ->route('handoverPage')
+                ->withFragment('feedback')
+                ->with('success', 'Thank you. Your feedback has been recorded. We will review it before the site goes live.');
+        }
+
+        $validated = $request->validate([
+            'names' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'intent' => ['required', 'string', 'in:' . implode(',', array_keys(HandoverFeedback::intentOptions()))],
+            'message' => ['required', 'string', 'min:10', 'max:20000'],
+        ]);
+
+        HandoverFeedback::create([
+            'names' => $validated['names'],
+            'email' => $validated['email'],
+            'topic' => '',
+            'intent' => $validated['intent'],
+            'message' => trim($validated['message']),
+            'ip' => $request->ip(),
+        ]);
+
+        RateLimiter::hit($ipKey, 10 * 60);
+
+        return redirect()
+            ->route('handoverPage')
+            ->withFragment('feedback')
+            ->with('success', 'Thank you. Your feedback has been recorded. We will review it before the site goes live.');
     }
 
 

@@ -3,8 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{{ $setting->company ?? ''}}</title>
-    <meta name="description" content="Premium custom handbag manufacturing in Masoro, Rwanda. B-Corp certified CMT factory delivering ethical production for global fashion brands.">
+    <title>@hasSection('title')@yield('title') · {{ $setting->company ?? 'Abahizi CBC' }}@else{{ $setting->company ?? 'Abahizi CBC' }}@endif</title>
+    <meta name="description" content="@yield('meta_description', 'Premium custom handbag manufacturing in Masoro, Rwanda. B-Corp certified CMT factory delivering ethical production for global fashion brands.')">
+    @stack('head')
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="form-channel-intent-url" content="{{ route('formChannel.intent') }}">

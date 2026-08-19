@@ -56,13 +56,13 @@
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand ps-3 d-flex align-items-center gap-2" href="{{ route('redirects') }}">
+            <button class="btn btn-link btn-sm order-0 ms-2 me-1" id="sidebarToggle" type="button" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+            <a class="navbar-brand ps-2 pe-2 d-flex align-items-center gap-2 flex-grow-1 flex-lg-grow-0" href="{{ route('redirects') }}">
                 @if(!empty($themeSetting->logo))
                     <img src="{{ asset('storage/images' . $themeSetting->logo) }}" alt="" class="admin-brand-logo" height="32">
                 @endif
-                <span>{{ $themeSetting->company ?: 'Abahizi CBC' }}</span>
+                <span class="admin-brand-name">{{ $themeSetting->company ?: 'Abahizi CBC' }}</span>
             </a>
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" type="button" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>
 
             <div class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
@@ -233,16 +233,23 @@
                     $el.removeAttr('data-editor-ready');
 
                     const isModalEditor = $el.attr('data-editor-modal') === 'true' || $el.closest('.modal').length > 0;
+                    const compact = window.innerWidth < 768;
                     $el.summernote({
-                        height: isModalEditor ? 180 : 240,
+                        height: compact ? 160 : (isModalEditor ? 180 : 240),
                         placeholder: $el.attr('placeholder') || 'Write content here...',
-                        toolbar: [
-                            ['style', ['style']],
-                            ['font', ['bold', 'italic', 'underline', 'clear']],
-                            ['para', ['ul', 'ol', 'paragraph']],
-                            ['insert', ['link', 'picture']],
-                            ['view', ['codeview']]
-                        ]
+                        toolbar: compact
+                            ? [
+                                ['font', ['bold', 'italic', 'underline']],
+                                ['para', ['ul', 'ol']],
+                                ['insert', ['link']],
+                            ]
+                            : [
+                                ['style', ['style']],
+                                ['font', ['bold', 'italic', 'underline', 'clear']],
+                                ['para', ['ul', 'ol', 'paragraph']],
+                                ['insert', ['link', 'picture']],
+                                ['view', ['codeview']]
+                            ]
                     });
                     $el.attr('data-editor-ready', '1');
                 });

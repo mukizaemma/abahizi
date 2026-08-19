@@ -55,6 +55,7 @@ Route::post('/get-involved', function () {
 })->name('storePartnershipInquiry');
 Route::post('/form-channel/intent',[App\Http\Controllers\FormChannelController::class,'intent'])->name('formChannel.intent');
 Route::get('/handover',[App\Http\Controllers\HomeController::class,'handoverPage'])->name('handoverPage');
+Route::post('/handover/feedback',[App\Http\Controllers\HomeController::class,'storeHandoverFeedback'])->name('handoverFeedback');
 Route::get('/testimonials',[App\Http\Controllers\HomeController::class,'testimonials'])->name('testimonials');
 Route::get('/testimonials/{id}',[App\Http\Controllers\HomeController::class,'testimony'])->name('testimony');
 Route::get('/updates',[App\Http\Controllers\HomeController::class,'posts'])->name('posts');
@@ -271,6 +272,12 @@ Route::middleware(['auth', 'admin.role'
 
     Route::get('/admin/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::post('/admin/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('admin.profile.update');
+
+    Route::middleware('super.admin')->group(function () {
+        Route::get('/admin/handover-feedback', [App\Http\Controllers\HandoverFeedbackController::class, 'index'])->name('handoverFeedback.index');
+        Route::get('/admin/handover-feedback/{feedback}', [App\Http\Controllers\HandoverFeedbackController::class, 'show'])->name('handoverFeedback.show');
+        Route::delete('/admin/handover-feedback/{feedback}', [App\Http\Controllers\HandoverFeedbackController::class, 'destroy'])->name('handoverFeedback.destroy');
+    });
 
 });
 

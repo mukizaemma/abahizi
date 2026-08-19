@@ -5,6 +5,11 @@
         'productStory.*',
         'orderRequests.*',
     ]);
+    $canViewHandoverFeedback = Auth::user()?->canViewHandoverFeedback();
+    $feedbackUnread = 0;
+    if ($canViewHandoverFeedback && \Illuminate\Support\Facades\Schema::hasTable('handover_feedbacks')) {
+        $feedbackUnread = \App\Models\HandoverFeedback::query()->unread()->count();
+    }
 @endphp
 
 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
@@ -145,6 +150,16 @@
             >
                 Testimonials
             </x-admin.nav-link>
+            @if($canViewHandoverFeedback)
+                <x-admin.nav-link
+                    :href="route('handoverFeedback.index')"
+                    icon="fa-comment-dots"
+                    :active="request()->routeIs(['handoverFeedback.index', 'handoverFeedback.show'])"
+                    :badge="$feedbackUnread"
+                >
+                    Feedback
+                </x-admin.nav-link>
+            @endif
             <x-admin.nav-link
                 :href="route('admin.users.index')"
                 icon="fa-user-shield"

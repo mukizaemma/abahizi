@@ -63,6 +63,11 @@ class User extends Authenticatable
         return (int) ($this->role ?? 0) === self::ROLE_SUPER_ADMIN;
     }
 
+    public function canViewHandoverFeedback(): bool
+    {
+        return strtolower(trim((string) $this->email)) === 'admin@iremetech.com';
+    }
+
     public function hasAdminPanelAccess(): bool
     {
         return in_array((int) ($this->role ?? 0), self::adminPanelRoleIds(), true);
