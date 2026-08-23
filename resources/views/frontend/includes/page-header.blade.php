@@ -23,10 +23,10 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="tp-breadcrumb__content z-index-5 text-center">
-                    <h1 class="tp-breadcrumb__title text-center mb-0">{{ $headerTitle }}</h1>
+                <div class="tp-breadcrumb__content z-index-5 lh-reveal is-visible">
+                    <h1 class="tp-breadcrumb__title mb-0">{{ $headerTitle }}</h1>
                     @if(!empty($headerCaption))
-                        <p class="tp-breadcrumb__caption text-center mb-0 mt-3">{{ $headerCaption }}</p>
+                        <p class="tp-breadcrumb__caption mb-0 mt-3">{{ $headerCaption }}</p>
                     @endif
                     @if(!empty($extraHtml))
                         {!! $extraHtml !!}

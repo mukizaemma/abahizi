@@ -127,7 +127,7 @@
             return true;
         }
         if (el.classList.contains('wow')) {
-            return true;
+            el.classList.remove('wow');
         }
         if (el.classList.contains('lh-hero') || el.closest('.lh-hero')) {
             return true;
@@ -171,7 +171,10 @@
             'main .tp-gallery-3__area',
             'main .lh-impact',
             'main .lh-products',
+            'main .lh-craft',
             'main .lh-about',
+            'main .lh-move',
+            'main .lh-social',
             'main .lh-why',
             'main .lh-process',
             'main .lh-partners',
@@ -186,6 +189,16 @@
             'main article',
             'main .card',
             'main .lh-product-card',
+            'main .lh-pillar',
+            'main .lh-impact-photo',
+            'main .lh-value-card',
+            'main .lh-social__item',
+            'main .lh-craft__features li',
+            'main .shop-product-card',
+            'main .impact-hub-card',
+            'main .impact-initiative-card',
+            'main .about-core-white-card',
+            'main .contact-stat-card',
             'main .lh-impact__stat',
             'main .lh-process__step',
             'main .lh-why__item',
@@ -264,9 +277,8 @@
         );
 
         nodes.forEach(function (el, index) {
-            var fromTop = index % 2 === 1;
-            el.setAttribute('data-reveal-dir', fromTop ? 'down' : 'up');
-            el.setAttribute('data-reveal-stagger', String((index % 5) * 60));
+            el.setAttribute('data-reveal-dir', 'up');
+            el.setAttribute('data-reveal-stagger', String((index % 5) * 70));
 
             var rect = el.getBoundingClientRect();
             var viewport = window.innerHeight || document.documentElement.clientHeight;

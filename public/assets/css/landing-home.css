@@ -5,7 +5,7 @@
     --lh-green-mid: var(--brand-neutral, #9a9a9a);
     --lh-orange: var(--brand-primary, #fad200);
     --lh-orange-deep: var(--brand-primary, #fad200);
-    --lh-fog: #f7f7f7;
+    --lh-fog: #f6f1e6;
     --lh-ink: var(--brand-secondary, #000000);
     --lh-muted: #4a4a4a;
     --lh-line: color-mix(in srgb, var(--brand-secondary, #000) 12%, transparent);
@@ -151,7 +151,7 @@
     gap: 0.55rem;
     min-height: 3.15rem;
     padding: 0.9rem 1.7rem;
-    border-radius: 0.2rem;
+    border-radius: 0.75rem;
     font-family: var(--lh-sans);
     font-size: 0.78rem;
     font-weight: 600;
@@ -1920,8 +1920,6 @@ body.lh-modal-open {
     border: 1px solid #fff;
 }
 
-.lh-eyebrow,
-.lh-impact__kicker,
 .lh-hero__brand {
     display: none !important;
 }

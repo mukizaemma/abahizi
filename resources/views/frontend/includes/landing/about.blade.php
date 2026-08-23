@@ -30,9 +30,10 @@
     <div class="container">
         <div class="lh-about__grid">
             <div class="lh-reveal">
+                <p class="lh-eyebrow">{{ __('site.landing.about_eyebrow') }}</p>
                 <h2 id="lh-about-title" class="lh-about__title">{{ __('site.landing.about_title') }}</h2>
                 <p class="lh-about__text lh-body">{{ $aboutBody }}</p>
-                <a href="{{ route('backgroundDetails') }}" class="lh-btn lh-btn--ghost-dark">{{ __('site.landing.about_cta') }}</a>
+                <a href="{{ route('backgroundDetails') }}" class="lh-btn lh-btn--soft">{{ __('site.landing.about_cta') }}</a>
             </div>
             <div class="lh-reveal">
                 <div class="lh-about__media">
@@ -46,7 +47,6 @@
                             aria-label="{{ __('site.landing.watch_story') }}"
                         >
                             <span class="lh-about__play-icon" aria-hidden="true"><i class="fas fa-play"></i></span>
-                            <span class="lh-about__watch">{{ __('site.landing.watch_story') }}</span>
                         </button>
                     @endif
                 </div>

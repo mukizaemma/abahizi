@@ -7,6 +7,11 @@
         $headline = __('site.landing.hero_title');
     }
 
+    $subtitle = trim((string) ($setting->hero_subheadline ?? ''));
+    if ($subtitle === '') {
+        $subtitle = __('site.landing.hero_subtitle');
+    }
+
     $heroType = $setting->resolvedHeroMediaType();
     $videoUrl = $setting->heroVideoPublicUrl();
     $posterFromSetting = $setting->heroPosterPublicUrl();
@@ -53,11 +58,18 @@
         }
     }
 
-    $headlineLines = preg_split('/,\s+/', $headline, 2) ?: [$headline];
-    $headlineLines = array_values(array_filter(array_map('trim', $headlineLines), fn ($line) => $line !== ''));
-    if ($headlineLines === []) {
-        $headlineLines = [$headline];
+    $headlineParts = preg_split('/(?<=[.!?])\s+/', $headline) ?: [$headline];
+    $headlineParts = array_values(array_filter(array_map('trim', $headlineParts), fn ($part) => $part !== ''));
+    if ($headlineParts === []) {
+        $headlineParts = [$headline];
     }
+
+    $barItems = [
+        ['icon' => 'fa-users', 'label' => __('site.landing.bar_1')],
+        ['icon' => 'fa-hand-holding-heart', 'label' => __('site.landing.bar_2')],
+        ['icon' => 'fa-heart', 'label' => __('site.landing.bar_3')],
+        ['icon' => 'fa-location-dot', 'label' => __('site.landing.bar_4')],
+    ];
 @endphp
 
 <section class="lh-hero" aria-label="{{ $brandName }}">
@@ -72,7 +84,7 @@
             ></iframe>
         @elseif($useVideo)
             <video class="lh-hero__video" autoplay muted loop playsinline poster="{{ $posterFromSetting }}" preload="metadata">
-                <source src="{{ $videoUrl }}" type="video/mp4">
+                <source src="{{ $videoUrl }}" type="mp4">
             </video>
         @else
             @foreach($heroSlides as $index => $slide)
@@ -91,24 +103,50 @@
         <div class="lh-hero__overlay" aria-hidden="true"></div>
     </div>
 
-    <div class="container lh-hero__content lh-reveal is-visible">
-        <h1 class="lh-hero__title">
-            @if(count($headlineLines) > 1)
-                @foreach($headlineLines as $index => $line)
-                    <span class="lh-hero__title-line">{{ $line }}{{ $index === 0 ? ',' : '' }}</span>
+    <div class="container lh-hero__content">
+        <div class="lh-hero__copy">
+            <h1 class="lh-hero__title">
+                @foreach($headlineParts as $index => $part)
+                    @php
+                        $isAccent = count($headlineParts) > 1 && $index === 1;
+                    @endphp
+                    <span class="lh-hero__title-line{{ $isAccent ? ' lh-hero__title-line--accent' : '' }}">{{ $part }}</span>
                 @endforeach
-            @else
-                {{ $headline }}
-            @endif
-        </h1>
-        <div class="lh-hero__actions">
-            <a href="#lh-contact" class="lh-btn lh-btn--primary">{{ __('site.landing.cta_partner') }}</a>
-            <a href="#lh-products" class="lh-btn lh-btn--ghost">{{ __('site.landing.cta_products') }}</a>
+            </h1>
+            <p class="lh-hero__subtitle">{{ $subtitle }}</p>
+            <div class="lh-hero__actions">
+                <a href="#lh-about" class="lh-btn lh-btn--solid">{{ __('site.landing.cta_story') }}</a>
+                <a href="#lh-impact" class="lh-btn lh-btn--ghost">
+                    <i class="far fa-heart" aria-hidden="true"></i>
+                    {{ __('site.landing.cta_impact') }}
+                </a>
+            </div>
+        </div>
+
+        <div class="lh-hero__seal" aria-hidden="true">
+            <svg viewBox="0 0 200 200" class="lh-hero__seal-svg">
+                <defs>
+                    <path id="lh-seal-circle" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" />
+                </defs>
+                <circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.35" />
+                <text class="lh-hero__seal-text">
+                    <textPath href="#lh-seal-circle" startOffset="0%">{{ __('site.landing.hero_seal') }} · {{ __('site.landing.hero_seal') }}</textPath>
+                </text>
+            </svg>
+            <span class="lh-hero__seal-mark"><i class="fas fa-certificate"></i></span>
         </div>
     </div>
 
-    <a href="#lh-about" class="lh-hero__scroll" aria-label="Scroll to about">
-        <span>Scroll</span>
-        <span class="lh-hero__scroll-line" aria-hidden="true"></span>
-    </a>
+    <div class="lh-hero__bar" aria-label="{{ $brandName }} highlights">
+        <div class="container">
+            <ul class="lh-hero__bar-list">
+                @foreach($barItems as $item)
+                    <li>
+                        <span class="lh-hero__bar-icon" aria-hidden="true"><i class="fas {{ $item['icon'] }}"></i></span>
+                        <span>{{ $item['label'] }}</span>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    </div>
 </section>

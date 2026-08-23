@@ -26,9 +26,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme-custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/luxury-demo.css') }}">
-    @if(request()->routeIs('home'))
-        <link rel="stylesheet" href="{{ asset('assets/css/landing-home.css') }}">
-    @endif
+    <link rel="stylesheet" href="{{ asset('assets/css/landing-home.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/site-editorial.css') }}">
 
     <!-- Non-critical CSS: load after first paint -->
     <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}" media="print" onload="this.media='all'">
@@ -84,7 +83,7 @@
     </script>
 </head>
 
-<body @class(['landing-home' => $isLandingHome ?? false])>
+<body @class(['site-editorial' => true, 'landing-home' => $isLandingHome ?? false])>
 
     <!-- back-to-top-start  -->
     <button class="scroll-top scroll-to-target" data-target="html">
@@ -195,7 +194,10 @@
                                 <ul class="d-flex align-items-center justify-content-end">
                                     <li>
                                         <div class="tp-header-3__btn d-none d-md-block">
-                                            <a class="tp-btn tp-btn--lux" href="{{ route('contacts') }}">{{ __('site.nav.inquiry') }}</a>
+                                            <a class="tp-btn tp-btn--lux" href="{{ route('contacts') }}">
+                                                <i class="far fa-envelope" aria-hidden="true"></i>
+                                                {{ __('site.nav.inquiry') }}
+                                            </a>
                                         </div>
                                     </li>  
                                     <li>
@@ -222,7 +224,7 @@
         <div class="site-footer__upper">
             <div class="container py-5 py-lg-5">
                 <div class="row g-4 g-lg-5 align-items-start site-footer__grid">
-                    <div class="col-12 col-lg-4 site-footer__col">
+                    <div class="col-12 col-lg-3 site-footer__col">
                         <a href="{{ route('home') }}" class="site-footer__logo-link d-inline-block">
                             @if(!empty($setting->logo))
                                 <img src="{{ asset('storage/images' . $setting->logo) }}" alt="{{ $setting->company ?? 'Abahizi CBC' }}" class="site-footer__logo" height="72" width="auto">
@@ -234,21 +236,22 @@
                         <p class="site-footer__place">{{ __('site.footer.place') }}</p>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-lg-4 site-footer__col">
+                    <div class="col-12 col-sm-6 col-lg-3 site-footer__col">
                         <h3 class="site-footer__heading">{{ __('site.footer.explore') }}</h3>
                         <ul class="site-footer__nav list-unstyled mb-0">
+                            <li><a href="{{ route('home') }}">{{ __('site.nav.home') }}</a></li>
+                            <li><a href="{{ route('backgroundDetails') }}">{{ __('site.landing.about_eyebrow') }}</a></li>
                             <li><a href="{{ route('ourFactory') }}">{{ __('site.nav.factory') }}</a></li>
                             @if(($setting->show_products_page ?? true))
                                 <li><a href="{{ route('ourProducts') }}">{{ __('site.nav.products') }}</a></li>
                             @endif
                             <li><a href="{{ route('impactPage') }}">{{ __('site.nav.impact') }}</a></li>
-                            <li><a href="{{ route('impactEmployeeEmpowerment') }}">{{ __('site.nav.employee_empowerment') }}</a></li>
-                            <li><a href="{{ route('impactReports') }}">{{ __('site.nav.social_impact_reports') }}</a></li>
+                            <li><a href="{{ route('impactCommunity') }}">{{ __('site.nav.community') }}</a></li>
                             <li><a href="{{ route('posts') }}">{{ __('site.nav.updates') }}</a></li>
                         </ul>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-lg-4 site-footer__col site-footer__col--touch">
+                    <div class="col-12 col-sm-6 col-lg-3 site-footer__col site-footer__col--touch">
                         <h3 class="site-footer__heading">{{ __('site.footer.visit') }}</h3>
                         <ul class="site-footer__contact list-unstyled mb-0">
                             @if(!empty($setting->phone))
@@ -277,7 +280,7 @@
                             @endif
                         </ul>
 
-                        @if(!empty($setting->facebook) || !empty($setting->instagram))
+                        @if(!empty($setting->facebook) || !empty($setting->instagram) || !empty($setting->twitter) || !empty($setting->youtube))
                             <div class="site-footer__socials">
                                 @if(!empty($setting->facebook))
                                     <a href="{{ $setting->facebook }}" class="site-footer__social" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -285,17 +288,23 @@
                                 @if(!empty($setting->instagram))
                                     <a href="{{ $setting->instagram }}" class="site-footer__social" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                                 @endif
+                                @if(!empty($setting->twitter))
+                                    <a href="{{ $setting->twitter }}" class="site-footer__social" target="_blank" rel="noopener noreferrer" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                                @endif
+                                @if(!empty($setting->youtube))
+                                    <a href="{{ $setting->youtube }}" class="site-footer__social" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                                @endif
                             </div>
                         @endif
+                    </div>
 
-                        <div class="site-footer__cta-group">
-                            <a href="{{ route('contacts') }}" class="site-footer__btn site-footer__btn--order tp-btn--lux">
-                                {{ __('site.nav.inquiry') }}
-                            </a>
-                            <a href="{{ route('ourFactory') }}" class="site-footer__btn site-footer__btn--ghost">
-                                {{ __('site.footer.factory_cta') }}
-                            </a>
-                        </div>
+                    <div class="col-12 col-sm-6 col-lg-3 site-footer__col">
+                        <h3 class="site-footer__heading">{{ __('site.footer.hours') }}</h3>
+                        <ul class="site-footer__hours">
+                            <li>{{ __('site.footer.hours_weekdays') }}</li>
+                            <li>{{ __('site.footer.hours_saturday') }}</li>
+                            <li>{{ __('site.footer.hours_sunday') }}</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -304,10 +313,12 @@
         <div class="site-footer__lower">
             <div class="container py-3 py-md-4">
                 <div class="row align-items-center justify-content-between g-2">
-                    <div class="col-12 text-center text-md-start">
-                        <span class="site-footer__copy">&copy; Abahizi CBC <span id="footer-year"></span></span>
-                        <span class="site-footer__copy-sep d-none d-md-inline">·</span>
-                        <span class="site-footer__credit">Site by <a href="https://iremetech.com" target="_blank" rel="noopener noreferrer">Ireme Technologies</a></span>
+                    <div class="col-12 site-footer__legal">
+                        <div>
+                            <span class="site-footer__copy">&copy; {{ $setting->company ?? 'Abahizi CBC' }} <span id="footer-year"></span></span>
+                            <span class="site-footer__copy-sep d-none d-md-inline">·</span>
+                            <span class="site-footer__credit">Site by <a href="https://iremetech.com" target="_blank" rel="noopener noreferrer">Ireme Technologies</a></span>
+                        </div>
                     </div>
                 </div>
             </div>
