@@ -89,19 +89,34 @@
     filter: brightness(0) invert(1);
 }
 
-.site-editorial .tp-header-3__area.header-sticky {
+.site-editorial .tp-header-3__area.header-sticky,
+.site-editorial:has(.lh-hero) .tp-header-3__area.header-sticky,
+.site-editorial:has(main > .tp-breadcrumb__area:first-child) .tp-header-3__area.header-sticky {
     background: rgba(255, 255, 255, 0.96) !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
 }
 
 .site-editorial .tp-header-3__area.header-sticky .tp-header-3__main-menu > nav > ul > li > a,
-.site-editorial .tp-header-3__area.header-sticky .tp-menu-bar {
-    color: var(--ed-ink) !important;
+.site-editorial .tp-header-3__area.header-sticky .tp-header-3__menu-bar button,
+.site-editorial .tp-header-3__area.header-sticky .tp-menu-bar,
+.site-editorial:has(.lh-hero) .tp-header-3__area.header-sticky .tp-header-3__main-menu > nav > ul > li > a,
+.site-editorial:has(.lh-hero) .tp-header-3__area.header-sticky .tp-menu-bar,
+.site-editorial:has(main > .tp-breadcrumb__area:first-child) .tp-header-3__area.header-sticky .tp-header-3__main-menu > nav > ul > li > a,
+.site-editorial:has(main > .tp-breadcrumb__area:first-child) .tp-header-3__area.header-sticky .tp-menu-bar {
+    color: var(--ed-ink, #111) !important;
     text-shadow: none;
 }
 
-.site-editorial .tp-header-3__area.header-sticky .site-header__logo-img {
+.site-editorial .tp-header-3__area.header-sticky .tp-header-3__main-menu > nav > ul > li > a:hover,
+.site-editorial:has(.lh-hero) .tp-header-3__area.header-sticky .tp-header-3__main-menu > nav > ul > li > a:hover,
+.site-editorial:has(main > .tp-breadcrumb__area:first-child) .tp-header-3__area.header-sticky .tp-header-3__main-menu > nav > ul > li > a:hover {
+    color: var(--brand-primary, #fad200) !important;
+}
+
+.site-editorial .tp-header-3__area.header-sticky .site-header__logo-img,
+.site-editorial:has(.lh-hero) .tp-header-3__area.header-sticky .site-header__logo-img,
+.site-editorial:has(main > .tp-breadcrumb__area:first-child) .tp-header-3__area.header-sticky .site-header__logo-img {
     filter: none;
 }
 
