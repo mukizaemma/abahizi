@@ -24,7 +24,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
                     <h1>Site settings</h1>
-                    <p class="text-muted mb-0">Manage account details, contact links, brand colors, and page headers.</p>
+                    <p class="text-muted mb-0">Brand, contact details, colours, product visibility, and headers for pages that appear on the public site.</p>
                 </div>
 
                 @if (session()->has('success'))
@@ -90,17 +90,13 @@
                                             <label class="form-label">Email</label>
                                             <input type="email" class="form-control" value="{{ $data->email }}" name="email">
                                         </div>
-                                        <div class="col-lg-4">
-                                            <label class="form-label">Phone</label>
+                                        <div class="col-lg-6">
+                                            <label class="form-label">Phone (also used for WhatsApp)</label>
                                             <input type="text" class="form-control" value="{{ $data->phone }}" name="phone">
                                         </div>
-                                        <div class="col-lg-4">
-                                            <label class="form-label">Phone 2</label>
+                                        <div class="col-lg-6">
+                                            <label class="form-label">Alternate phone <span class="text-muted fw-normal">(optional)</span></label>
                                             <input type="text" class="form-control" value="{{ $data->phone1 }}" name="phone1">
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <label class="form-label">Phone 3</label>
-                                            <input type="text" class="form-control" value="{{ $data->phone2 }}" name="phone2">
                                         </div>
                                         <div class="col-lg-6">
                                             <label class="form-label">Facebook</label>
@@ -113,6 +109,10 @@
                                         <div class="col-lg-6">
                                             <label class="form-label">YouTube</label>
                                             <input type="url" class="form-control" value="{{ $data->youtube }}" name="youtube">
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="form-label">X / Twitter</label>
+                                            <input type="url" class="form-control" value="{{ $data->twitter }}" name="twitter">
                                         </div>
                                         <div class="col-12">
                                             <label class="form-label">Google Map embed code</label>
@@ -215,24 +215,7 @@
                                 </div>
 
                                 <div class="tab-pane fade" id="headers-pane" role="tabpanel" aria-labelledby="headers-tab">
-                                    <p class="text-muted mb-4">Set the title, caption, and header image for each public page. Leave a field empty to keep the site default for that page.</p>
-
-                                    <div class="card mb-4 border">
-                                        <div class="card-header bg-light fw-semibold">Homepage hero defaults</div>
-                                        <div class="card-body">
-                                            <p class="text-muted small mb-3">Hero media (slideshow, banner, or video) is managed under <strong>Homepage hero</strong> in the admin menu. The text here is the default headline when a slide has no caption.</p>
-                                            <div class="row g-3">
-                                                <div class="col-lg-6">
-                                                    <label class="form-label">Default hero caption</label>
-                                                    <input type="text" class="form-control" name="hero_headline" value="{{ $data->hero_headline }}" placeholder="Premium Custom Handbags. Crafted in Rwanda.">
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <label class="form-label">Default hero subheadline</label>
-                                                    <input type="text" class="form-control" name="hero_subheadline" value="{{ $data->hero_subheadline }}" placeholder="Ethical bag manufacturing that strengthens families…">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <p class="text-muted mb-4">Headers for pages in the public menu. Homepage headline and media are under <strong>Homepage hero</strong>. Leave a field empty to keep the default.</p>
 
                                     <div class="card mb-4 border">
                                         <div class="card-header bg-light fw-semibold">Default fallback (all pages)</div>

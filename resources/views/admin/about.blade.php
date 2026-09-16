@@ -21,8 +21,8 @@
         <main>
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
-                    <h1>About</h1>
-                    <p class="text-muted mb-0">Mission, story, impact numbers, and the photos that appear on the homepage.</p>
+                    <h1>About &amp; homepage</h1>
+                    <p class="text-muted mb-0">Copy and photos for Home, Our Story, Mission &amp; Vision, and What We Do. Factory, products, team, and impact reports have their own menu items.</p>
                 </div>
 
                 @if(session()->has('success'))
@@ -33,22 +33,22 @@
                     <div class="card-body">
                         <ul class="nav nav-tabs mb-4" id="aboutTabs" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="mission-vision-tab" data-bs-toggle="tab" data-bs-target="#mission-vision-pane" type="button" role="tab">Mission &amp; Vision</button>
+                                <button class="nav-link active" id="mission-vision-tab" data-bs-toggle="tab" data-bs-target="#mission-vision-pane" type="button" role="tab">Mission &amp; vision</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="core-values-tab" data-bs-toggle="tab" data-bs-target="#core-values-pane" type="button" role="tab">Core values</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="project-background-tab" data-bs-toggle="tab" data-bs-target="#project-background-pane" type="button" role="tab">Project background</button>
+                                <button class="nav-link" id="story-tab" data-bs-toggle="tab" data-bs-target="#story-pane" type="button" role="tab">Our story</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="story-flow-tab" data-bs-toggle="tab" data-bs-target="#story-flow-pane" type="button" role="tab">Problem, solution & manufacturing story</button>
+                                <button class="nav-link" id="what-we-do-tab" data-bs-toggle="tab" data-bs-target="#what-we-do-pane" type="button" role="tab">Homepage &amp; what we do</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="impact-tab" data-bs-toggle="tab" data-bs-target="#impact-pane" type="button" role="tab">Impact</button>
+                                <button class="nav-link" id="impact-tab" data-bs-toggle="tab" data-bs-target="#impact-pane" type="button" role="tab">Impact numbers</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="section-backgrounds-tab" data-bs-toggle="tab" data-bs-target="#section-backgrounds-pane" type="button" role="tab">Homepage &amp; section photos</button>
+                                <button class="nav-link" id="section-backgrounds-tab" data-bs-toggle="tab" data-bs-target="#section-backgrounds-pane" type="button" role="tab">Section photos</button>
                             </li>
                         </ul>
 
@@ -56,6 +56,7 @@
                             <div class="tab-pane fade show active" id="mission-vision-pane" role="tabpanel" aria-labelledby="mission-vision-tab">
                                 <form action="{{ route('saveAbout', $data->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
+                                    <p class="text-muted mb-3">Shown on <strong>About → Mission &amp; Vision</strong> and on the Our Story page.</p>
                                     <div class="row g-3">
                                         <div class="col-lg-6">
                                             <label class="form-label">Mission</label>
@@ -85,7 +86,7 @@
                                     <div class="row g-3">
                                         <div class="col-12">
                                             <label class="form-label">Core values</label>
-                                            <p class="text-muted small mb-2">Add each value as a list item. They appear as cards on the About Us page.</p>
+                                            <p class="text-muted small mb-2">Add each value as a list item. They appear as cards on Our Story and Mission &amp; Vision.</p>
                                             <textarea rows="8" class="form-control" name="values" data-editor="rich" placeholder="Add each core value as a list item">{!! $valuesHtml !!}</textarea>
                                         </div>
                                         <input type="hidden" name="mission" value="{{ $data->mission }}">
@@ -97,113 +98,57 @@
                                 </form>
                             </div>
 
-                            <div class="tab-pane fade" id="project-background-pane" role="tabpanel" aria-labelledby="project-background-tab">
+                            <div class="tab-pane fade" id="story-pane" role="tabpanel" aria-labelledby="story-tab">
                                 <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
+                                    <p class="text-muted mb-3">This is the long story on <strong>Our Story</strong> (footer “Our Story” / <code>/about-us</code>).</p>
                                     <div class="row g-3">
                                         <div class="col-12">
-                                            <label class="form-label">Project background details</label>
-                                            <textarea rows="8" class="form-control" name="description" data-editor="rich">{!! $background->description !!}</textarea>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Our Approach content</label>
-                                            <textarea rows="8" class="form-control" name="approach_content" data-editor="rich">{!! $background->approach_content !!}</textarea>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Our Model content</label>
-                                            <textarea rows="8" class="form-control" name="model_content" data-editor="rich">{!! $background->model_content !!}</textarea>
+                                            <label class="form-label">Story</label>
+                                            <textarea rows="10" class="form-control" name="description" data-editor="rich">{!! $background->description !!}</textarea>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="admin-image-card">
-                                                <label class="form-label">Our Model image (diagram/photo)</label>
-                                                <input type="file" class="form-control" name="model_image" accept="image/*">
-                                                @if(!empty($background->model_image))
-                                                    <img src="{{ asset('storage/images/' . $background->model_image) }}" class="admin-preview-img" alt="Our Model image">
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="admin-image-card">
-                                                <label class="form-label">About cover image</label>
+                                                <label class="form-label">Story cover image <span class="text-muted fw-normal">(optional)</span></label>
                                                 <input type="file" class="form-control" name="image" accept="image/*">
                                                 @if(!empty($background->image))
                                                     <img src="{{ asset('storage/images/' . $background->image) }}" class="admin-preview-img" alt="About cover">
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="admin-image-card">
-                                                <label class="form-label">Home background image</label>
-                                                <input type="file" class="form-control" name="image1" accept="image/*">
-                                                @if(!empty($background->image1))
-                                                    <img src="{{ asset('storage/images/' . $background->image1) }}" class="admin-preview-img" alt="Home background">
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="admin-image-card">
-                                                <label class="form-label">Pages header image</label>
-                                                <input type="file" class="form-control" name="image2" accept="image/*">
-                                                @if(!empty($background->image2))
-                                                    <img src="{{ asset('storage/images/' . $background->image2) }}" class="admin-preview-img" alt="Pages header">
-                                                @endif
-                                            </div>
-                                        </div>
                                         <div class="col-12">
-                                            <p class="text-muted small mb-0">Parallax and homepage section photos are managed under the <strong>Homepage &amp; section photos</strong> tab (including “Craft with purpose” and “Quality you can scale”). Page-specific breadcrumb heroes are under <a href="{{ route('settings') }}#page-headers">Settings → Page headers</a>.</p>
-                                        </div>
-                                        <div class="col-12">
-                                            <input type="hidden" name="donations" value="{{ $background->donations }}">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save project background</button>
+                                            <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save story</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
 
-                            <div class="tab-pane fade" id="story-flow-pane" role="tabpanel" aria-labelledby="story-flow-tab">
+                            <div class="tab-pane fade" id="what-we-do-pane" role="tabpanel" aria-labelledby="what-we-do-tab">
                                 <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row g-3">
                                         <div class="col-12">
-                                            <label class="form-label">Problem statement</label>
-                                            <textarea rows="6" class="form-control" name="problem_statement" data-editor="rich">{!! $background->problem_statement !!}</textarea>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Solution statement</label>
-                                            <textarea rows="6" class="form-control" name="solution_statement" data-editor="rich">{!! $background->solution_statement !!}</textarea>
+                                            <label class="form-label">Homepage story text</label>
+                                            <p class="text-muted small mb-2">Short paragraph beside the homepage photo (“From a small group of women…”). Keep it to a few sentences.</p>
+                                            <textarea rows="5" class="form-control" name="solution_statement" data-editor="rich">{!! $background->solution_statement !!}</textarea>
                                         </div>
                                         <div class="col-12">
                                             <label class="form-label">What we do</label>
+                                            <p class="text-muted small mb-2">Intro on the <strong>What We Do</strong> page.</p>
                                             <textarea rows="6" class="form-control" name="what_we_do" data-editor="rich">{!! $background->what_we_do !!}</textarea>
                                         </div>
                                         <div class="col-12">
                                             <label class="form-label">How it works</label>
-                                            <p class="text-muted small mb-2">Use one step per line or bullet. Format as <strong>Step title:</strong> short description — these appear as cards on the What We Do page.</p>
+                                            <p class="text-muted small mb-2">One step per line or bullet. Format as <strong>Step title:</strong> short description — these appear as cards on What We Do.</p>
                                             <textarea rows="6" class="form-control" name="how_it_works" data-editor="rich">{!! $background->how_it_works !!}</textarea>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <label class="form-label">Our expertise</label>
-                                            <p class="text-muted small mb-2">Format as: intro line, then items separated by new lines, bullets, or commas. End with a closing line if needed.</p>
-                                            <textarea rows="6" class="form-control" name="expertise_content" data-editor="rich">{!! $background->expertise_content !!}</textarea>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <label class="form-label">Our impact through manufacturing</label>
-                                            <p class="text-muted small mb-2">Use new lines or commas between list items. The website will render them as bullets automatically.</p>
-                                            <textarea rows="6" class="form-control" name="manufacturing_impact_content" data-editor="rich">{!! $background->manufacturing_impact_content !!}</textarea>
+                                        <div class="col-12">
+                                            <label class="form-label">Products page intro <span class="text-muted fw-normal">(optional)</span></label>
+                                            <p class="text-muted small mb-2">Shown at the top of the Products catalog page when that page is public.</p>
+                                            <textarea rows="4" class="form-control" name="products_intro" data-editor="rich">{!! $background->products_intro !!}</textarea>
                                         </div>
                                         <div class="col-12">
-                                            <label class="form-label">Products intro</label>
-                                            <textarea rows="5" class="form-control" name="products_intro" data-editor="rich">{!! $background->products_intro !!}</textarea>
-                                        </div>
-                                        <input type="hidden" name="description" value="{{ $background->description }}">
-                                        <input type="hidden" name="donations" value="{{ $background->donations }}">
-                                        <input type="hidden" name="approach_content" value="{{ $background->approach_content }}">
-                                        <input type="hidden" name="model_content" value="{{ $background->model_content }}">
-                                        <input type="hidden" name="families_impacted" value="{{ $background->families_impacted }}">
-                                        <input type="hidden" name="jobs_created" value="{{ $background->jobs_created }}">
-                                        <input type="hidden" name="training_hours" value="{{ $background->training_hours }}">
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save story flow content</button>
+                                            <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save homepage &amp; what we do</button>
                                         </div>
                                     </div>
                                 </form>
@@ -212,33 +157,29 @@
                             <div class="tab-pane fade" id="impact-pane" role="tabpanel" aria-labelledby="impact-tab">
                                 <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
+                                    <p class="text-muted mb-3">Large numbers on the Impact page and factory community band. Homepage pillars (Health Insurance, Education, …) are edited under <a href="{{ route('impacts.index') }}">Impact pillars</a>.</p>
                                     <div class="row g-3">
                                         <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Handbags Exported</label>
+                                            <label class="form-label">Handbags exported</label>
                                             <input type="text" class="form-control" name="handbags_exported" value="{{ $background->handbags_exported }}" placeholder="310,000+">
                                         </div>
                                         <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Full-Time Factory Employees</label>
+                                            <label class="form-label">Full-time factory employees</label>
                                             <input type="text" class="form-control" name="artisans_count" value="{{ $background->artisans_count }}" placeholder="260+">
                                         </div>
                                         <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Families Impacted</label>
+                                            <label class="form-label">Families impacted</label>
                                             <input type="text" class="form-control" name="families_impacted" value="{{ $background->families_impacted }}">
                                         </div>
                                         <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Jobs Created</label>
+                                            <label class="form-label">Jobs created</label>
                                             <input type="text" class="form-control" name="jobs_created" value="{{ $background->jobs_created }}">
                                         </div>
                                         <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Hours of Vocational Training</label>
+                                            <label class="form-label">Hours of vocational training</label>
                                             <input type="text" class="form-control" name="training_hours" value="{{ $background->training_hours }}">
                                         </div>
-                                        <input type="hidden" name="description" value="{{ $background->description }}">
-                                        <input type="hidden" name="donations" value="{{ $background->donations }}">
-                                        <input type="hidden" name="approach_content" value="{{ $background->approach_content }}">
-                                        <input type="hidden" name="model_content" value="{{ $background->model_content }}">
                                         <div class="col-12">
-                                            <p class="text-muted mb-2">For item-based impact metrics (title + value), use the <a href="{{ route('impacts.index') }}">Impact Items</a> page.</p>
                                             <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save impact stats</button>
                                         </div>
                                     </div>
@@ -249,7 +190,7 @@
                                 <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <input type="hidden" name="return_tab" value="section-backgrounds">
-                                    <p class="text-muted mb-4">Each photo is named after the heading visitors see on the site. Upload, save, then refresh the homepage. The three product cards (Custom Handbags, Totes, Pouches) are edited at the top of <a href="{{ route('catalogProducts.index') }}">Products</a> — you do not need a catalog item to show them.</p>
+                                    <p class="text-muted mb-4">Photos named after the section visitors see. Homepage product cards are on <a href="{{ route('catalogProducts.index') }}">Products</a>. Factory photos are on <a href="{{ route('factory.admin.overview') }}">Our factory</a>.</p>
                                     @foreach(SectionBackgroundService::groupedDefinitions() as $group => $fields)
                                         <h2 class="h6 text-uppercase text-muted mt-2 mb-3">{{ $group }}</h2>
                                         <div class="row g-4 mb-4">
@@ -273,7 +214,7 @@
                                             @endforeach
                                         </div>
                                     @endforeach
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save homepage &amp; section photos</button>
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save section photos</button>
                                 </form>
                             </div>
                         </div>
@@ -291,10 +232,16 @@
 <script>
     (function () {
         var hash = (window.location.hash || '').replace('#', '');
-        if (hash !== 'section-backgrounds' && hash !== 'homepage-photos') {
+        var map = {
+            'section-backgrounds': 'section-backgrounds-tab',
+            'homepage-photos': 'section-backgrounds-tab',
+            'what-we-do': 'what-we-do-tab'
+        };
+        var tabId = map[hash];
+        if (!tabId) {
             return;
         }
-        var tab = document.getElementById('section-backgrounds-tab');
+        var tab = document.getElementById(tabId);
         if (tab && window.bootstrap && bootstrap.Tab) {
             bootstrap.Tab.getOrCreateInstance(tab).show();
         }

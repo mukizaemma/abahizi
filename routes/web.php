@@ -118,16 +118,20 @@ Route::middleware(['auth', 'admin.role'
     Route::get('/factory/gallery/images/{id}/delete', [App\Http\Controllers\FactoryAdminController::class, 'destroyGalleryImage'])->name('factory.admin.gallery.destroy');
     Route::post('/factory/{section}', [App\Http\Controllers\FactoryAdminController::class, 'save'])->name('factory.admin.save');
 
-    Route::get('/aboutUs',[App\Http\Controllers\BackgroundController::class,'background'])->name('background');
+    Route::get('/aboutUs', function () {
+        return redirect()->route('about');
+    })->name('background');
     Route::POST('/saveBackg',[App\Http\Controllers\BackgroundController::class,'saveBackg'])->name('saveBackg');
 
-    Route::get('/homePage',[App\Http\Controllers\BackgroundController::class,'homePage'])->name('homePage');
+    Route::get('/homePage', function () {
+        return redirect()->route('slides');
+    })->name('homePage');
     Route::POST('/saveHom',[App\Http\Controllers\BackgroundController::class,'saveHom'])->name('saveHom');
 
-
-
-    // Programs
-    Route::get('/progras', [App\Http\Controllers\ProgramController::class, 'index'])->name('programs');
+    // Legacy programs screen — public site uses Community programs instead
+    Route::get('/progras', function () {
+        return redirect()->route('communityImpact.admin.index');
+    })->name('programs');
     Route::post('/saveProgram', [App\Http\Controllers\ProgramController::class, 'store'])->name('saveProgram');
     Route::get('/editProgram/{id}', [App\Http\Controllers\ProgramController::class, 'edit'])->name('editProgram');
     Route::post('/updateProgram/{id}', [App\Http\Controllers\ProgramController::class, 'update'])->name('updateProgram');
@@ -145,8 +149,10 @@ Route::middleware(['auth', 'admin.role'
         Route::post('/addProjectImage', [App\Http\Controllers\ProjectsController::class, 'addProjectImage'])->name('addProjectImage');
     Route::post('/deleteProjectImage/{id}', [App\Http\Controllers\ProjectsController::class, 'deleteProjectImage'])->name('deleteProjectImage');
 
-    // Gallery
-    Route::get('/images', [App\Http\Controllers\GalleryController::class, 'index'])->name('images');
+    // Legacy public-gallery CRUD — files are managed in Media library
+    Route::get('/images', function () {
+        return redirect()->route('mediaLibrary.index');
+    })->name('images');
     Route::post('/saveGallery', [App\Http\Controllers\GalleryController::class, 'store'])->name('saveGallery');
     Route::get('/editGallery/{id}', [App\Http\Controllers\GalleryController::class, 'edit'])->name('editGallery');
     Route::post('/updateGallery/{id}', [App\Http\Controllers\GalleryController::class, 'update'])->name('updateGallery');
@@ -160,8 +166,10 @@ Route::middleware(['auth', 'admin.role'
     Route::post('/updateSlide/{id}', [App\Http\Controllers\SlidesController::class, 'update'])->name('updateSlide');
     Route::get('/destroySlide/{id}', [App\Http\Controllers\SlidesController::class, 'destroy'])->name('destroySlide');
 
-    // Events
-    Route::get('/events', [App\Http\Controllers\EventController::class, 'index'])->name('events');
+    // Events are not on the current public site
+    Route::get('/events', function () {
+        return redirect()->route('dashboard');
+    })->name('events');
     Route::post('/saveEvent', [App\Http\Controllers\EventController::class, 'store'])->name('saveEvent');
     Route::get('/editEvent/{id}', [App\Http\Controllers\EventController::class, 'edit'])->name('editEvent');
     Route::post('/updateEvent/{id}', [App\Http\Controllers\EventController::class, 'update'])->name('updateEvent');
@@ -183,14 +191,18 @@ Route::middleware(['auth', 'admin.role'
     Route::post('/updateTestimony/{id}', [App\Http\Controllers\TestimoniesController::class, 'update'])->name('updateTestimony');
     Route::get('/destroyTestimony/{id}', [App\Http\Controllers\TestimoniesController::class, 'destroy'])->name('destroyTestimony');
 
-    // Partners
-    Route::get('/partner', [App\Http\Controllers\PartnersController::class, 'index'])->name('partner');
+    // Partners logos are not shown on the current homepage
+    Route::get('/partner', function () {
+        return redirect()->route('dashboard');
+    })->name('partner');
     Route::post('/savePartner', [App\Http\Controllers\PartnersController::class, 'store'])->name('savePartner');
     Route::get('/editPartner/{id}', [App\Http\Controllers\PartnersController::class, 'edit'])->name('editPartner');
     Route::post('/updatePartner/{id}', [App\Http\Controllers\PartnersController::class, 'update'])->name('updatePartner');
     Route::get('/destroyPartner/{id}', [App\Http\Controllers\PartnersController::class, 'destroy'])->name('destroyPartner');
 
-        Route::get('/get-campaigns',[App\Http\Controllers\CampainsController::class,'index'])->name('campainCrud');
+        Route::get('/get-campaigns', function () {
+            return redirect()->route('dashboard');
+        })->name('campainCrud');
         Route::post('/saveCampaign',[App\Http\Controllers\CampainsController::class,'store'])->name('saveCampain');
         Route::get('/editCampaign/{id}',[App\Http\Controllers\CampainsController::class,'edit'])->name('editCampain');
         Route::post('/updateCampaign/{id}',[App\Http\Controllers\CampainsController::class,'update'])->name('updateCampain');
@@ -207,7 +219,9 @@ Route::middleware(['auth', 'admin.role'
     Route::get('/blogs/{blog}/unpublish', [App\Http\Controllers\NewsController::class, 'unpublish'])->name('unpublishBlog');
     Route::get('/blogs/gallery/{id}/delete', [App\Http\Controllers\NewsController::class, 'deleteBlogImage'])->name('deleteBlogImage');
 
-    Route::get('/AllMembers',[App\Http\Controllers\MembersController::class,'AllMembers'])->name('AllMembers');
+    Route::get('/AllMembers', function () {
+        return redirect()->route('dashboard');
+    })->name('AllMembers');
     Route::get('/saveMemb',[App\Http\Controllers\MembersController::class,'saveMemb'])->name('saveMemb');
 
     // Emails

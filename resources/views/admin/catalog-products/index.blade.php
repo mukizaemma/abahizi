@@ -16,8 +16,8 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
                     <div>
-                        <h1>Products (Abahizi Manufacturing)</h1>
-                        <p class="text-muted mb-0">The catalog is for items you sell or quote. The three homepage cards below can show photos even when there is nothing in the catalog.</p>
+                        <h1>Products</h1>
+                        <p class="text-muted mb-0">Homepage bag cards (shown on Home) and the optional catalog page. Turn the catalog on or off in Site settings → Visibility.</p>
                     </div>
                     <div class="d-flex gap-2 flex-wrap">
                         <a href="{{ route('productCategories.index') }}" class="btn btn-outline-secondary">Categories</a>
@@ -31,8 +31,8 @@
 
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h2 class="h5 mb-1">Homepage cards</h2>
-                        <p class="text-muted mb-4">These three photos appear on the homepage under <strong>Built for partners who care how things are made.</strong> You do not need a product in the catalog. Portrait photos about 900×1200 work well.</p>
+                        <h2 class="h5 mb-1">Homepage bag cards</h2>
+                        <p class="text-muted mb-4">These three photos appear on the homepage under the bags section. You do not need a catalog item. Portrait photos about 900×1200 work well.</p>
                         <form action="{{ route('catalogProducts.homepageCards') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row g-4">

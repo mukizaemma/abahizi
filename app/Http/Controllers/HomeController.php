@@ -773,12 +773,17 @@ public function gallery(){
         $data->address = $request->input('address');
         $data->phone = $request->input('phone');
         $data->phone1 = $request->input('phone1');
-        $data->phone2 = $request->input('phone2');
+        if ($request->exists('phone2')) {
+            $data->phone2 = $request->input('phone2');
+        }
         $data->email = $request->input('email');
         $data->keywords = $request->input('keywords');
         $data->facebook = $request->input('facebook');
         $data->instagram = $request->input('instagram');
         $data->youtube = $request->input('youtube');
+        if (Schema::hasColumn('settings', 'twitter')) {
+            $data->twitter = $request->input('twitter');
+        }
 
         // Theme options (safe if migration hasn't run yet)
         if (Schema::hasColumn('settings', 'primary_color')) {
@@ -814,10 +819,10 @@ public function gallery(){
         if (Schema::hasColumn('settings', 'hero_video_url') && $request->exists('hero_video_url')) {
             $data->hero_video_url = $request->input('hero_video_url');
         }
-        if (Schema::hasColumn('settings', 'hero_headline')) {
+        if (Schema::hasColumn('settings', 'hero_headline') && $request->exists('hero_headline')) {
             $data->hero_headline = $request->input('hero_headline');
         }
-        if (Schema::hasColumn('settings', 'hero_subheadline')) {
+        if (Schema::hasColumn('settings', 'hero_subheadline') && $request->exists('hero_subheadline')) {
             $data->hero_subheadline = $request->input('hero_subheadline');
         }
         if (Schema::hasColumn('settings', 'page_headers')) {

@@ -10,25 +10,19 @@ class PageHeaderService
     public static function definitions(): array
     {
         return [
+            'about' => 'Our Story',
+            'mission' => 'Mission & Vision',
+            'what_we_do' => 'What We Do',
+            'team' => 'Team',
+            'testimonials' => 'Testimonials',
             'factory' => 'Our Factory',
             'products' => 'Products',
             'impact' => 'Impact',
             'impact_employee' => 'Employee Empowerment',
             'impact_community' => 'Community',
             'impact_reports' => 'Impact Reports',
-            'contact' => 'Contact',
-            'mission' => 'Mission & Vision',
-            'what_we_do' => 'What We Do',
-            'approach' => 'Our Approach',
-            'model' => 'Our Model',
-            'services' => 'Services',
-            'programs' => 'Programs',
-            'events' => 'Events',
-            'gallery' => 'Gallery',
-            'team' => 'Team',
-            'testimonials' => 'Testimonials',
             'updates' => 'Updates',
-            'about' => 'About Us',
+            'contact' => 'Get In Touch',
             'default' => 'Other pages (fallback)',
         ];
     }

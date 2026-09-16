@@ -5,6 +5,13 @@
         'productStory.*',
         'orderRequests.*',
     ]);
+    $inboxOpen = request()->routeIs([
+        'redirects',
+        'dashboard',
+        'webMessages',
+        'messageReply',
+        'partnershipInquiries.index',
+    ]);
     $canViewHandoverFeedback = Auth::user()?->canViewHandoverFeedback();
     $feedbackUnread = 0;
     if ($canViewHandoverFeedback && \Illuminate\Support\Facades\Schema::hasTable('handover_feedbacks')) {
@@ -16,6 +23,7 @@
     <div class="sb-sidenav-menu">
         <div class="nav flex-column pt-2">
 
+            <div class="sb-sidenav-menu-heading">Site</div>
             <x-admin.nav-link
                 :href="route('settings')"
                 icon="fa-cogs"
@@ -31,11 +39,20 @@
                 Homepage hero
             </x-admin.nav-link>
             <x-admin.nav-link
+                :href="route('mediaLibrary.index')"
+                icon="fa-photo-video"
+                :active="request()->routeIs(['mediaLibrary.*'])"
+            >
+                Media library
+            </x-admin.nav-link>
+
+            <div class="sb-sidenav-menu-heading">Pages</div>
+            <x-admin.nav-link
                 :href="route('about')"
                 icon="fa-bullseye"
-                :active="request()->routeIs(['about', 'background', 'saveAbout', 'saveBackg'])"
+                :active="request()->routeIs(['about', 'saveAbout', 'saveBackg'])"
             >
-                About &amp; story
+                About &amp; homepage
             </x-admin.nav-link>
             <x-admin.nav-link
                 :href="route('factory.admin.overview')"
@@ -68,7 +85,7 @@
                         icon="fa-box"
                         :active="request()->routeIs(['catalogProducts.index', 'catalogProducts.create', 'catalogProducts.store', 'catalogProducts.edit', 'catalogProducts.update', 'catalogProducts.destroy', 'catalogProducts.deleteImage', 'catalogProducts.homepageCards'])"
                     >
-                        Products catalog
+                        Catalog &amp; homepage cards
                     </x-admin.nav-link>
                     <x-admin.nav-link
                         :href="route('productCategories.index')"
@@ -99,7 +116,14 @@
                 icon="fa-chart-line"
                 :active="request()->routeIs(['impacts.index', 'editImpact', 'saveImpact', 'updateImpact', 'destroyImpact'])"
             >
-                Our impact
+                Impact pillars
+            </x-admin.nav-link>
+            <x-admin.nav-link
+                :href="route('communityImpact.admin.index')"
+                icon="fa-hands-helping"
+                :active="request()->routeIs(['communityImpact.admin.index', 'editProject', 'saveProject', 'updateProject', 'destroyProject'])"
+            >
+                Community programs
             </x-admin.nav-link>
             <x-admin.nav-link
                 :href="route('impactReports.admin.index')"
@@ -109,32 +133,11 @@
                 Impact reports
             </x-admin.nav-link>
             <x-admin.nav-link
-                :href="route('redirects')"
-                icon="fa-inbox"
-                :active="request()->routeIs(['redirects', 'dashboard', 'webMessages', 'messageReply'])"
-            >
-                Messages
-            </x-admin.nav-link>
-            <x-admin.nav-link
-                :href="route('partnershipInquiries.index')"
-                icon="fa-handshake"
-                :active="request()->routeIs('partnershipInquiries.index')"
-            >
-                Orders
-            </x-admin.nav-link>
-            <x-admin.nav-link
                 :href="route('blog.index')"
                 icon="fa-newspaper"
                 :active="request()->routeIs(['blog.index', 'editBlog', 'saveBlog', 'updateBlog', 'deleteBlog', 'publishBlog', 'unpublishBlog', 'deleteBlogImage'])"
             >
                 Updates
-            </x-admin.nav-link>
-            <x-admin.nav-link
-                :href="route('mediaLibrary.index')"
-                icon="fa-photo-video"
-                :active="request()->routeIs(['mediaLibrary.*'])"
-            >
-                Media gallery
             </x-admin.nav-link>
             <x-admin.nav-link
                 :href="route('staff')"
@@ -144,19 +147,48 @@
                 Our team
             </x-admin.nav-link>
             <x-admin.nav-link
-                :href="route('partner')"
-                icon="fa-briefcase"
-                :active="request()->routeIs(['partner', 'savePartner', 'editPartner', 'updatePartner', 'destroyPartner'])"
-            >
-                Partners
-            </x-admin.nav-link>
-            <x-admin.nav-link
                 :href="route('getTestimonials')"
                 icon="fa-quote-right"
                 :active="request()->routeIs(['getTestimonials', 'editTestimony', 'saveTestimony', 'updateTestimony', 'destroyTestimony'])"
             >
                 Testimonials
             </x-admin.nav-link>
+
+            <div class="sb-sidenav-menu-heading">Inbox</div>
+            <a
+                class="nav-link d-flex align-items-center{{ $inboxOpen ? '' : ' collapsed' }}{{ $inboxOpen ? ' active' : '' }}"
+                href="#"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapseInbox"
+                aria-expanded="{{ $inboxOpen ? 'true' : 'false' }}"
+                aria-controls="collapseInbox"
+            >
+                <div class="sb-nav-link-icon"><i class="fa fa-inbox"></i></div>
+                <span>Messages</span>
+                <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
+            </a>
+            <div
+                class="collapse{{ $inboxOpen ? ' show' : '' }}"
+                id="collapseInbox"
+                data-bs-parent="#sidenavAccordion"
+            >
+                <nav class="sb-sidenav-menu-nested nav">
+                    <x-admin.nav-link
+                        :href="route('redirects')"
+                        icon="fa-envelope"
+                        :active="request()->routeIs(['redirects', 'dashboard', 'webMessages', 'messageReply'])"
+                    >
+                        Contact messages
+                    </x-admin.nav-link>
+                    <x-admin.nav-link
+                        :href="route('partnershipInquiries.index')"
+                        icon="fa-handshake"
+                        :active="request()->routeIs('partnershipInquiries.index')"
+                    >
+                        Form submissions
+                    </x-admin.nav-link>
+                </nav>
+            </div>
             @if($canViewHandoverFeedback)
                 <x-admin.nav-link
                     :href="route('handoverFeedback.index')"
@@ -167,6 +199,8 @@
                     Feedback
                 </x-admin.nav-link>
             @endif
+
+            <div class="sb-sidenav-menu-heading">Account</div>
             <x-admin.nav-link
                 :href="route('admin.users.index')"
                 icon="fa-user-shield"

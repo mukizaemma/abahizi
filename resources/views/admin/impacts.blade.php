@@ -18,9 +18,10 @@
         <main>
             <div class="container-fluid px-4">
                 {{-- <h1 class="mt-4">Dashboard</h1> --}}
-                <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">Abahizi CBC Impacts</li>
-                </ol>
+                <div class="admin-page-header">
+                    <h1>Impact pillars</h1>
+                    <p class="text-muted mb-0">These four items appear on the homepage impact band (for example Health Insurance, Education). Large stats (handbags exported, jobs) are under About &amp; homepage → Impact numbers.</p>
+                </div>
                 <div class="row">
                     @if(session()->has('success'))
                     <div class="arlert alert-success">
