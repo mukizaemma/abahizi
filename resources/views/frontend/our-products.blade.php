@@ -44,25 +44,6 @@
         </div>
     </section>
 
-    @php
-        $productsIntroHtml = trim((string) ($about->products_intro ?? ''));
-        if ($productsIntroHtml === '') {
-            $productsIntroHtml = '<p>We develop handbags and accessories tailored to each brief—totes, crossbody bags, pouches, and embellished pieces produced in Masoro.</p><p>To respect client confidentiality we do not publish every finished branded style. Share your specs, and we will talk sampling, materials, and capacity.</p>';
-        }
-    @endphp
-
-    <section class="products-page-intro py-5" aria-label="{{ __('site.nav.products') }}">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-12 col-xl-10">
-                    <div class="products-page-intro__card">
-                        <div class="products-page-intro__content">{!! $productsIntroHtml !!}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     @if(($pageGallery ?? collect())->isNotEmpty())
         <section class="products-page-gallery py-5 grey-bg" aria-labelledby="products-gallery-title">
             <div class="container">
