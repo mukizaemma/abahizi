@@ -163,6 +163,4 @@
 
     @include('frontend.includes.product-story-section')
 
-    @include('frontend.includes.request-order-cta')
-
 @endsection
