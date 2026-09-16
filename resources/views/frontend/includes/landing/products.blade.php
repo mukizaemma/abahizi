@@ -128,7 +128,9 @@
                         </li>
                     @endforeach
                 </ul>
-                <a href="{{ route('ourProducts') }}" class="lh-btn lh-btn--solid">{{ __('site.landing.products_view_more') }}</a>
+                @if($showCraftCta ?? true)
+                    <a href="{{ $craftCtaHref ?? route('ourProducts') }}" class="lh-btn lh-btn--solid">{{ $craftCtaLabel ?? __('site.landing.products_view_more') }}</a>
+                @endif
             </div>
 
             <div class="lh-craft__cards">

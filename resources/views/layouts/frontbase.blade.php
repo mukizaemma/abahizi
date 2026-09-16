@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/spacing.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme-custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/luxury-demo.css') }}?v=20260916">
+    <link rel="stylesheet" href="{{ asset('assets/css/luxury-demo.css') }}?v=20260916b">
     <link rel="stylesheet" href="{{ asset('assets/css/landing-home.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/site-editorial.css') }}">
 

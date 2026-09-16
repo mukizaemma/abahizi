@@ -7,22 +7,55 @@
     @include('frontend.includes.page-header', [
         'pageKey' => 'products',
         'title' => 'Our Products',
-        'caption' => 'Abahizi Manufacturing - bags, accessories and apparel crafted in Rwanda. We produce to order for partners, retailers, and organisations.',
+        'caption' => __('site.products_page.header_caption'),
     ])
+
+    @include('frontend.includes.landing.products', [
+        'showCraftCta' => true,
+        'craftCtaHref' => route('contacts'),
+        'craftCtaLabel' => __('site.products_page.craft_cta'),
+    ])
+
+    <section class="lux-section products-page-paths" aria-labelledby="products-paths-title">
+        <div class="container">
+            <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
+                <p class="lh-eyebrow mb-2">{{ __('site.products_page.paths_eyebrow') }}</p>
+                <h2 id="products-paths-title" class="lux-section-head__title mb-3">{{ __('site.products_page.paths_title') }}</h2>
+                <p class="lux-lead mb-0 mx-auto" style="max-width: 40rem;">{{ __('site.products_page.paths_lead') }}</p>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-6 wow tpfadeUp" data-wow-duration=".85s">
+                    <a href="{{ route('contacts') }}" class="factory-partner__card is-featured h-100">
+                        <span class="factory-partner__icon" aria-hidden="true"><i class="fas fa-shopping-bag"></i></span>
+                        <h3 class="factory-partner__title">{{ __('site.products_page.buy_title') }}</h3>
+                        <p class="factory-partner__desc">{{ __('site.products_page.buy_text') }}</p>
+                        <span class="factory-partner__action">{{ __('site.products_page.buy_cta') }} <span aria-hidden="true">→</span></span>
+                    </a>
+                </div>
+                <div class="col-md-6 wow tpfadeUp" data-wow-duration=".85s" data-wow-delay="0.08s">
+                    <a href="{{ route('contacts') }}" class="factory-partner__card h-100">
+                        <span class="factory-partner__icon" aria-hidden="true"><i class="fas fa-industry"></i></span>
+                        <h3 class="factory-partner__title">{{ __('site.products_page.make_title') }}</h3>
+                        <p class="factory-partner__desc">{{ __('site.products_page.make_text') }}</p>
+                        <span class="factory-partner__action">{{ __('site.products_page.make_cta') }} <span aria-hidden="true">→</span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     @php
         $productsIntroHtml = trim((string) ($about->products_intro ?? ''));
         if ($productsIntroHtml === '') {
-            $productsIntroHtml = '<h4>Our Products (Confidential &amp; Custom)</h4><p>We develop a wide range of handbags and accessories tailored to client needs, including totes, crossbody bags, pouches, and embellished pieces.</p><p>To respect client confidentiality, we do not publicly showcase final branded products. Instead, we focus on delivering custom, high-quality solutions aligned with each partner\'s vision.</p>';
+            $productsIntroHtml = '<p>We develop handbags and accessories tailored to each brief—totes, crossbody bags, pouches, and embellished pieces produced in Masoro.</p><p>To respect client confidentiality we do not publish every finished branded style. Share your specs, and we will talk sampling, materials, and capacity.</p>';
         }
     @endphp
 
-    <section class="products-page-intro grey-bg pt-70 pb-40">
+    <section class="products-page-intro py-5" aria-label="{{ __('site.nav.products') }}">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-xl-10">
                     <div class="products-page-intro__card">
-                        <div class="products-page-intro__badge">Products intro</div>
                         <div class="products-page-intro__content">{!! $productsIntroHtml !!}</div>
                     </div>
                 </div>
@@ -30,12 +63,35 @@
         </div>
     </section>
 
+    @if(($pageGallery ?? collect())->isNotEmpty())
+        <section class="products-page-gallery py-5 grey-bg" aria-labelledby="products-gallery-title">
+            <div class="container">
+                <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
+                    <h2 id="products-gallery-title" class="lux-section-head__title mb-2">{{ __('site.products_page.gallery_title') }}</h2>
+                    <p class="text-muted mb-0 mx-auto" style="max-width: 40rem;">{{ __('site.products_page.gallery_lead') }}</p>
+                </div>
+                <div class="row g-3 g-md-4">
+                    @foreach($pageGallery as $image)
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a class="products-page-gallery__item d-block popup-image" href="{{ $image->url() }}">
+                                <img src="{{ $image->url() }}" alt="{{ $image->caption ?: 'Product photo' }}" class="w-100" loading="lazy" decoding="async">
+                                @if($image->caption)
+                                    <span class="products-page-gallery__caption">{{ $image->caption }}</span>
+                                @endif
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
     @if($hasCatalogProducts ?? false)
         <section class="shop-catalog-section py-5" aria-labelledby="shop-catalog-title">
             <div class="container">
                 <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
-                    <h2 id="shop-catalog-title" class="lux-section-head__title mb-2">Browse our catalog</h2>
-                    <p class="text-muted mb-0 mx-auto" style="max-width: 40rem;">Select a product to view details and submit an order via WhatsApp or email.</p>
+                    <h2 id="shop-catalog-title" class="lux-section-head__title mb-2">{{ __('site.products_page.catalog_title') }}</h2>
+                    <p class="text-muted mb-0 mx-auto" style="max-width: 40rem;">{{ __('site.products_page.catalog_lead') }}</p>
                 </div>
 
                 <form action="{{ route('ourProducts') }}" method="GET" class="shop-catalog-filters card border-0 shadow-sm mb-4 mb-lg-5 p-3 p-md-4 bg-white">
@@ -124,110 +180,8 @@
         </section>
     @endif
 
-    @if(($pageGallery ?? collect())->isNotEmpty())
-        <section class="products-page-gallery py-5" aria-labelledby="products-gallery-title">
-            <div class="container">
-                <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
-                    <h2 id="products-gallery-title" class="lux-section-head__title mb-2">Product photos</h2>
-                    <p class="text-muted mb-0 mx-auto" style="max-width: 40rem;">A look at work from our factory. Final branded pieces for partners stay confidential.</p>
-                </div>
-                <div class="row g-3 g-md-4">
-                    @foreach($pageGallery as $image)
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <a class="products-page-gallery__item d-block popup-image" href="{{ $image->url() }}">
-                                <img src="{{ $image->url() }}" alt="{{ $image->caption ?: 'Product photo' }}" class="w-100" loading="lazy" decoding="async">
-                                @if($image->caption)
-                                    <span class="products-page-gallery__caption">{{ $image->caption }}</span>
-                                @endif
-                            </a>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </section>
-    @endif
-
     @include('frontend.includes.product-story-section')
 
-@endsection
+    @include('frontend.includes.request-order-cta')
 
-<style>
-    .products-page-intro__card {
-        background: #fff;
-        border: 1px solid #ebedf0;
-        border-radius: 16px;
-        padding: 1.4rem 1.4rem 1.15rem;
-        box-shadow: 0 18px 44px rgba(18, 33, 52, 0.08);
-        position: relative;
-        overflow: hidden;
-    }
-    .products-page-intro__card::before {
-        content: "";
-        position: absolute;
-        inset: 0 auto 0 0;
-        width: 6px;
-        background: linear-gradient(180deg, var(--brand-primary, #fad200), #f2be00);
-    }
-    .products-page-intro__badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        background: rgba(250, 210, 0, 0.14);
-        border: 1px solid rgba(250, 210, 0, 0.35);
-        color: #6b5600;
-        font-size: 0.78rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
-        border-radius: 999px;
-        padding: 0.25rem 0.65rem;
-        margin-bottom: 0.75rem;
-    }
-    .products-page-intro__content h1,
-    .products-page-intro__content h2,
-    .products-page-intro__content h3,
-    .products-page-intro__content h4 {
-        font-size: clamp(1.4rem, 2vw, 2rem);
-        line-height: 1.2;
-        margin-bottom: 0.75rem;
-        color: #1e2b3a;
-        font-weight: 800;
-    }
-    .products-page-intro__content p,
-    .products-page-intro__content li {
-        font-size: clamp(1rem, 1.15vw, 1.12rem);
-        line-height: 1.72;
-        color: #3b4652;
-        margin-bottom: 0.65rem;
-    }
-    .products-page-intro__content p:last-child {
-        margin-bottom: 0;
-    }
-    .shop-product-card__category {
-        letter-spacing: 0.08em;
-        font-size: 0.68rem;
-        font-weight: 700;
-    }
-    .products-page-gallery__item {
-        position: relative;
-        overflow: hidden;
-        border-radius: 14px;
-        background: #f3f4f6;
-        box-shadow: 0 14px 32px rgba(18, 33, 52, 0.08);
-    }
-    .products-page-gallery__item img {
-        height: 240px;
-        object-fit: cover;
-        display: block;
-    }
-    .products-page-gallery__caption {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        padding: 0.55rem 0.7rem;
-        background: linear-gradient(transparent, rgba(18, 24, 33, 0.72));
-        color: #fff;
-        font-size: 0.85rem;
-    }
-</style>
+@endsection
