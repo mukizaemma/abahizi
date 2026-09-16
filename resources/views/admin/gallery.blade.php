@@ -16,27 +16,29 @@
     </div>
     <div id="layoutSidenav_content">
         <main>
-            <div class="container-fluid px-4">
-                {{-- <h1 class="mt-4">Dashboard</h1> --}}
-                <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">Gallery</li>
-                </ol>
-                <div class="row">
-                    @if(session()->has('success'))
-                    <div class="arlert alert-success">
-                        <button class="close" type="button" data-dismiss="alert">X</button>
-                        {{ session()->get('success') }}
+            <div class="container-fluid px-4 py-4">
+                <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                    <div>
+                        <h1>Site gallery</h1>
+                        <p class="text-muted mb-0">Photos on the public Gallery page (next to Updates). This is separate from the media library file manager.</p>
                     </div>
-
-                    @endif
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+                        <i class="fa fa-plus me-1"></i> Add image
+                    </button>
                 </div>
+                @if(session()->has('success'))
+                    <div class="alert alert-success">{{ session()->get('success') }}</div>
+                @endif
+                @if(session()->has('warning'))
+                    <div class="alert alert-warning">{{ session()->get('warning') }}</div>
+                @endif
+                @if(session()->has('error'))
+                    <div class="alert alert-danger">{{ session()->get('error') }}</div>
+                @endif
 
                     <div class="card mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <span>Photo gallery</span>
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
-                                <i class="fa fa-plus"></i> Add Image
-                            </button>
+                            <span>Public gallery photos</span>
                         </div>
 
                         <div class="card-body">

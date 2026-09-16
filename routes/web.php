@@ -149,10 +149,7 @@ Route::middleware(['auth', 'admin.role'
         Route::post('/addProjectImage', [App\Http\Controllers\ProjectsController::class, 'addProjectImage'])->name('addProjectImage');
     Route::post('/deleteProjectImage/{id}', [App\Http\Controllers\ProjectsController::class, 'deleteProjectImage'])->name('deleteProjectImage');
 
-    // Legacy public-gallery CRUD — files are managed in Media library
-    Route::get('/images', function () {
-        return redirect()->route('mediaLibrary.index');
-    })->name('images');
+    Route::get('/images', [App\Http\Controllers\GalleryController::class, 'index'])->name('images');
     Route::post('/saveGallery', [App\Http\Controllers\GalleryController::class, 'store'])->name('saveGallery');
     Route::get('/editGallery/{id}', [App\Http\Controllers\GalleryController::class, 'edit'])->name('editGallery');
     Route::post('/updateGallery/{id}', [App\Http\Controllers\GalleryController::class, 'update'])->name('updateGallery');
@@ -254,7 +251,12 @@ Route::middleware(['auth', 'admin.role'
     Route::get('/product-categories/{id}/delete', [App\Http\Controllers\ProductCategoryController::class, 'destroy'])->name('productCategories.destroy');
 
     Route::get('/catalog-products', [App\Http\Controllers\CatalogProductController::class, 'index'])->name('catalogProducts.index');
+    Route::get('/catalog-products/homepage', [App\Http\Controllers\CatalogProductController::class, 'homepage'])->name('catalogProducts.homepage');
     Route::post('/catalog-products/homepage-cards', [App\Http\Controllers\CatalogProductController::class, 'saveHomepageCards'])->name('catalogProducts.homepageCards');
+    Route::get('/catalog-products/page-gallery', [App\Http\Controllers\CatalogProductController::class, 'pageGallery'])->name('catalogProducts.pageGallery');
+    Route::post('/catalog-products/page-gallery', [App\Http\Controllers\CatalogProductController::class, 'storePageGallery'])->name('catalogProducts.pageGallery.store');
+    Route::post('/catalog-products/page-gallery/{id}/delete', [App\Http\Controllers\CatalogProductController::class, 'destroyPageGallery'])->name('catalogProducts.pageGallery.destroy');
+    Route::post('/catalog-products/page-intro', [App\Http\Controllers\CatalogProductController::class, 'savePageIntro'])->name('catalogProducts.pageIntro');
     Route::get('/catalog-products/create', [App\Http\Controllers\CatalogProductController::class, 'create'])->name('catalogProducts.create');
     Route::post('/catalog-products', [App\Http\Controllers\CatalogProductController::class, 'store'])->name('catalogProducts.store');
     Route::get('/catalog-products/{id}/edit', [App\Http\Controllers\CatalogProductController::class, 'edit'])->name('catalogProducts.edit');
@@ -282,6 +284,7 @@ Route::middleware(['auth', 'admin.role'
     Route::get('/admin/media-library/usages', [App\Http\Controllers\MediaLibraryController::class, 'usages'])->name('mediaLibrary.usages');
     Route::post('/admin/media-library/replace', [App\Http\Controllers\MediaLibraryController::class, 'replace'])->name('mediaLibrary.replace');
     Route::post('/admin/media-library/destroy', [App\Http\Controllers\MediaLibraryController::class, 'destroy'])->name('mediaLibrary.destroy');
+    Route::post('/admin/media-library/purge-duplicates', [App\Http\Controllers\MediaLibraryController::class, 'purgeUnusedDuplicates'])->name('mediaLibrary.purgeDuplicates');
 
     Route::get('/admin/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::post('/admin/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('admin.profile.update');

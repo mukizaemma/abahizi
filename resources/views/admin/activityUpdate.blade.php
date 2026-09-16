@@ -55,19 +55,15 @@
                                     <label class="form-label">Initiative details / description</label>
                                     <textarea rows="7" class="form-control" name="description" data-editor="rich" required>{!! $data->description !!}</textarea>
                                 </div>
-                                <div class="col-lg-6">
-                                    <label class="form-label">Current cover</label>
-                                    <div>
+                                <div class="col-12">
+                                    <div class="admin-image-card">
+                                        <label class="form-label">Cover photo</label>
+                                        <p class="text-muted small mb-2">This is the large photo at the top of the program page. Click Change this photo to update it.</p>
+                                        <input type="file" class="form-control" name="image" accept="image/*">
                                         @if(!empty($data->image))
-                                            <img src="{{ asset('storage/' . $data->image) }}" alt="{{ $data->title }}" class="rounded border" width="120">
-                                        @else
-                                            <span class="text-muted">No image</span>
+                                            <img src="{{ asset('storage/' . $data->image) }}" alt="{{ $data->title }}" class="admin-preview-img">
                                         @endif
                                     </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <label class="form-label">Change cover image</label>
-                                    <input type="file" class="form-control" name="image">
                                 </div>
                                 <div class="col-12">
                                     @include('admin.includes.initiative-ways-editor', [
@@ -130,27 +126,35 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header d-flex align-items-center justify-content-between">
-                        <span>Gallery images ({{ $totalImages }})</span>
-                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#projectImageModal">
-                            <i class="fa fa-plus me-1"></i> Add Images
-                        </button>
-                    </div>
                     <div class="card-body">
+                        <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-3">
+                            <div>
+                                <h2 class="h5 mb-1">Program gallery</h2>
+                                <p class="text-muted mb-0">These photos appear under the story on the public program page. Add several so visitors can see the work.</p>
+                            </div>
+                        </div>
+                        <form action="{{ route('addProjectImage') }}" method="POST" enctype="multipart/form-data" class="admin-image-card mb-4">
+                            @csrf
+                            <input type="hidden" name="activity_id" value="{{ $data->id }}">
+                            <label class="form-label">Add gallery photos</label>
+                            <p class="text-muted small mb-2">Click Add photos, then upload new pictures or choose ones already on the website. Save is on this card.</p>
+                            <input type="file" class="form-control" name="image[]" accept="image/*" multiple required>
+                            <button type="submit" class="btn btn-primary mt-3">Save gallery photos</button>
+                        </form>
                         @if($images->isEmpty())
                             <div class="admin-empty-state py-4">
                                 <i class="fas fa-images d-block"></i>
-                                <p class="mb-0">No initiative gallery images added yet.</p>
+                                <p class="mb-0">No gallery photos yet. Add the first ones above.</p>
                             </div>
                         @else
                             <div class="row g-3">
                                 @foreach($images as $image)
-                                    <div class="col-md-3 col-sm-6">
-                                        <div class="border rounded p-2 h-100">
-                                            <img src="{{ asset('storage/' . $image->image) }}" class="img-fluid rounded mb-2" alt="Project image">
-                                            <form action="{{ route('deleteProjectImage', $image->id) }}" method="POST" onsubmit="return confirm('Delete this image?')">
+                                    <div class="col-md-4 col-lg-3">
+                                        <div class="border rounded-3 overflow-hidden h-100">
+                                            <img src="{{ asset('storage/' . $image->image) }}" class="w-100" alt="Program gallery" style="height: 180px; object-fit: cover;">
+                                            <form action="{{ route('deleteProjectImage', $image->id) }}" method="POST" class="p-2" onsubmit="return confirm('Remove this photo from the gallery?')">
                                                 @csrf
-                                                <button type="submit" class="btn btn-outline-danger btn-sm w-100">Delete image</button>
+                                                <button type="submit" class="btn btn-outline-danger btn-sm w-100">Remove photo</button>
                                             </form>
                                         </div>
                                     </div>
@@ -165,25 +169,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="projectImageModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Upload gallery images</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ route('addProjectImage') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="activity_id" value="{{ $data->id }}">
-                    <div class="mb-3">
-                        <label class="form-label">Select one or more images</label>
-                        <input type="file" class="form-control" name="image[]" multiple required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Upload Images</button>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
+
 @endsection

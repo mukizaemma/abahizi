@@ -129,27 +129,75 @@
         input.files = dt.files;
     }
 
-    function renderPreview(wrap, files, notes) {
-        var preview = wrap.querySelector('[data-media-preview]');
+    function setFieldStatus(wrap, text, pending) {
+        var badge = wrap.querySelector('[data-media-badge]');
         var note = wrap.querySelector('[data-media-note]');
-        if (!preview || !note) {
+        if (badge) {
+            badge.textContent = text;
+            badge.classList.toggle('is-pending', !!pending);
+        }
+        if (note) {
+            note.hidden = !pending;
+            note.textContent = pending
+                ? 'New photo selected. Click Save on this page to publish it on the website.'
+                : '';
+        }
+        var btn = wrap.querySelector('[data-media-change]');
+        if (btn) {
+            btn.textContent = wrap.getAttribute('data-media-multiple') === 'true' ? 'Add more photos' : 'Change this photo';
+        }
+    }
+
+    function renderPreview(wrap, files, notes) {
+        var stage = wrap.querySelector('[data-media-stage]');
+        var note = wrap.querySelector('[data-media-note]');
+        if (!stage) {
             return;
         }
-        preview.innerHTML = '';
+        stage.innerHTML = '';
         Array.prototype.forEach.call(files, function (file) {
-            var item = document.createElement('div');
-            item.className = 'media-field__preview-item';
             var img = document.createElement('img');
-            img.alt = file.name;
+            img.alt = file.name || 'Selected photo';
+            img.className = 'media-field__photo';
             img.src = URL.createObjectURL(file);
-            var cap = document.createElement('span');
-            cap.textContent = file.name + ' · ' + formatBytes(file.size);
-            item.appendChild(img);
-            item.appendChild(cap);
-            preview.appendChild(item);
+            stage.appendChild(img);
         });
-        note.innerHTML = notes.join('<br>');
-        note.hidden = notes.length === 0;
+        if (!files.length) {
+            stage.innerHTML = '<div class="media-field__empty">No photo yet</div>';
+        }
+        setFieldStatus(wrap, files.length ? 'New photo selected — save to update the website' : 'No photo yet', !!files.length);
+        if (note && notes && notes.length) {
+            note.hidden = false;
+            note.innerHTML = notes.join('<br>');
+        }
+    }
+
+    function claimCurrentImage(input, wrap) {
+        var host = wrap.parentNode;
+        if (!host) {
+            return null;
+        }
+        var node = input.nextElementSibling;
+        while (node) {
+            if (node.tagName === 'IMG') {
+                return node;
+            }
+            if (node.matches && node.matches('.admin-preview-img, img')) {
+                return node;
+            }
+            var nested = node.querySelector && node.querySelector('img.admin-preview-img, img');
+            if (nested && !nested.closest('[data-media-field]') && node.children.length <= 2) {
+                return nested;
+            }
+            node = node.nextElementSibling;
+        }
+        var imgs = host.querySelectorAll('img.admin-preview-img, img');
+        for (var i = 0; i < imgs.length; i += 1) {
+            if (!imgs[i].closest('[data-media-field]') && !imgs[i].closest('table')) {
+                return imgs[i];
+            }
+        }
+        return null;
     }
 
     async function processFiles(input, fileList, append) {
@@ -185,43 +233,53 @@
         var wrap = document.createElement('div');
         wrap.className = 'media-field';
         wrap.setAttribute('data-media-field', 'true');
+        if (input.multiple) {
+            wrap.setAttribute('data-media-multiple', 'true');
+        }
         input.parentNode.insertBefore(wrap, input);
-        wrap.appendChild(input);
 
-        var actions = document.createElement('div');
-        actions.className = 'media-field__actions';
-        actions.innerHTML = '<button type="button" class="btn btn-outline-secondary btn-sm" data-media-upload>Upload new</button>' +
-            '<button type="button" class="btn btn-outline-primary btn-sm" data-media-choose>Choose existing</button>';
-        wrap.insertBefore(actions, input);
+        var current = claimCurrentImage(input, wrap);
 
-        var preview = document.createElement('div');
-        preview.className = 'media-field__preview';
-        preview.setAttribute('data-media-preview', 'true');
-        wrap.appendChild(preview);
+        var stage = document.createElement('div');
+        stage.className = 'media-field__stage';
+        stage.setAttribute('data-media-stage', 'true');
+        if (current) {
+            current.classList.add('media-field__photo');
+            current.removeAttribute('width');
+            stage.appendChild(current);
+        } else {
+            stage.innerHTML = '<div class="media-field__empty">' + (input.multiple ? 'No photos selected yet' : 'No photo yet') + '</div>';
+        }
+
+        var badge = document.createElement('div');
+        badge.className = 'media-field__badge';
+        badge.setAttribute('data-media-badge', 'true');
+        badge.textContent = current
+            ? 'This photo is on the website'
+            : (input.multiple ? 'Add photos for this section' : 'Add a photo for this section');
+
+        var changeBtn = document.createElement('button');
+        changeBtn.type = 'button';
+        changeBtn.className = 'btn media-field__change';
+        changeBtn.setAttribute('data-media-change', 'true');
+        changeBtn.textContent = current
+            ? (input.multiple ? 'Add more photos' : 'Change this photo')
+            : (input.multiple ? 'Add photos' : 'Add a photo');
 
         var note = document.createElement('div');
         note.className = 'media-field__note';
         note.setAttribute('data-media-note', 'true');
         note.hidden = true;
-        wrap.appendChild(note);
 
         input.classList.add('media-field__input');
+        wrap.appendChild(stage);
+        wrap.appendChild(badge);
+        wrap.appendChild(changeBtn);
+        wrap.appendChild(note);
+        wrap.appendChild(input);
 
-        var host = wrap.parentNode;
-        if (host) {
-            Array.prototype.slice.call(host.children).forEach(function (child) {
-                if (child.tagName === 'IMG') {
-                    child.classList.add('media-field__current');
-                    wrap.appendChild(child);
-                }
-            });
-        }
-
-        actions.querySelector('[data-media-upload]').addEventListener('click', function () {
-            input.click();
-        });
-        actions.querySelector('[data-media-choose]').addEventListener('click', function () {
-            openPicker(input);
+        changeBtn.addEventListener('click', function () {
+            openChangeChoice(input);
         });
 
         input.addEventListener('change', function (event) {
@@ -235,6 +293,36 @@
             }
             processFiles(input, files, false);
         });
+    }
+
+    function openChangeChoice(input) {
+        pickerTarget = input;
+        var modalEl = document.getElementById('mediaChangeChoiceModal');
+        if (!modalEl || typeof bootstrap === 'undefined') {
+            openPicker(input);
+            return;
+        }
+        var title = modalEl.querySelector('[data-choice-title]');
+        var lead = modalEl.querySelector('[data-choice-lead]');
+        var uploadLabel = modalEl.querySelector('[data-choice-upload-label]');
+        var uploadHelp = modalEl.querySelector('[data-choice-upload-help]');
+        if (title) {
+            title.textContent = input.multiple ? 'How do you want to add photos?' : 'How do you want to change this photo?';
+        }
+        if (lead) {
+            lead.textContent = input.multiple
+                ? 'Choose one option. The website will update after you save this page.'
+                : 'Choose one option. The current photo stays on the website until you save this page.';
+        }
+        if (uploadLabel) {
+            uploadLabel.textContent = input.multiple ? 'Upload from this computer' : 'Upload a new photo';
+        }
+        if (uploadHelp) {
+            uploadHelp.textContent = input.multiple
+                ? 'Select one or more pictures from your computer or phone.'
+                : 'Take or choose a picture from your computer or phone.';
+        }
+        bootstrap.Modal.getOrCreateInstance(modalEl).show();
     }
 
     function openPicker(input) {
@@ -301,15 +389,11 @@
             existing.value = item.path;
             var wrap = pickerTarget.closest('[data-media-field]');
             if (wrap) {
-                var preview = wrap.querySelector('[data-media-preview]');
-                var note = wrap.querySelector('[data-media-note]');
-                if (preview) {
-                    preview.innerHTML = '<div class="media-field__preview-item"><img src="' + item.url + '" alt="' + item.name + '"><span>' + item.name + ' · ' + item.size_label + '</span></div>';
+                var stage = wrap.querySelector('[data-media-stage]');
+                if (stage) {
+                    stage.innerHTML = '<img class="media-field__photo" src="' + item.url + '" alt="' + item.name + '">';
                 }
-                if (note) {
-                    note.hidden = false;
-                    note.textContent = 'Existing image selected and ready to use.';
-                }
+                setFieldStatus(wrap, 'New photo selected — save to update the website', true);
             }
             var modalEl = document.getElementById('mediaPickerModal');
             if (modalEl && typeof bootstrap !== 'undefined') {
@@ -414,6 +498,33 @@
 
     function initMedia() {
         document.querySelectorAll('input[type="file"]').forEach(enhanceInput);
+
+        var choiceModal = document.getElementById('mediaChangeChoiceModal');
+        if (choiceModal && !choiceModal.dataset.bound) {
+            choiceModal.dataset.bound = '1';
+            choiceModal.addEventListener('click', function (event) {
+                var uploadBtn = event.target.closest('[data-choice="upload"]');
+                var libraryBtn = event.target.closest('[data-choice="library"]');
+                if (!uploadBtn && !libraryBtn) {
+                    return;
+                }
+                event.preventDefault();
+                var target = pickerTarget;
+                bootstrap.Modal.getOrCreateInstance(choiceModal).hide();
+                if (!target) {
+                    return;
+                }
+                if (uploadBtn) {
+                    window.setTimeout(function () {
+                        target.click();
+                    }, 200);
+                    return;
+                }
+                window.setTimeout(function () {
+                    openPicker(target);
+                }, 200);
+            });
+        }
 
         var prev = document.getElementById('mediaPickerPrev');
         var next = document.getElementById('mediaPickerNext');

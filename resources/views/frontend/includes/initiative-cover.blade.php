@@ -1,5 +1,5 @@
 @php
-    $ways = $activity->normalizedInvolvementWays();
+    $ways = $activity->publicInvolvementWays();
     $channelsReady = $formChannels['channels_ready'] ?? false;
     $oldWay = old('involvement_slug');
     $coverUrl = !empty($activity->image)
@@ -18,14 +18,26 @@
             <div class="initiative-cover__bar">
                 <h1 class="initiative-cover__title">{{ $activity->title }}</h1>
                 @if(count($ways) > 0)
-                    <button
-                        type="button"
-                        class="tp-btn tp-btn--lux initiative-cover__cta"
-                        data-bs-toggle="modal"
-                        data-bs-target="#getInvolvedModal"
-                    >
-                        {{ __('site.initiative.cta_jump') }} <span aria-hidden="true">→</span>
-                    </button>
+                    <div class="initiative-cover__actions">
+                        <button
+                            type="button"
+                            class="tp-btn tp-btn--lux initiative-cover__cta"
+                            data-bs-toggle="modal"
+                            data-bs-target="#getInvolvedModal"
+                            data-involve-way="volunteer"
+                        >
+                            {{ __('site.initiative.volunteer_btn') }}
+                        </button>
+                        <button
+                            type="button"
+                            class="tp-btn tp-btn--outline-light initiative-cover__cta"
+                            data-bs-toggle="modal"
+                            data-bs-target="#getInvolvedModal"
+                            data-involve-way="partner"
+                        >
+                            {{ __('site.initiative.partner_btn') }}
+                        </button>
+                    </div>
                 @endif
             </div>
         </div>

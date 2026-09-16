@@ -124,6 +124,29 @@
         </section>
     @endif
 
+    @if(($pageGallery ?? collect())->isNotEmpty())
+        <section class="products-page-gallery py-5" aria-labelledby="products-gallery-title">
+            <div class="container">
+                <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
+                    <h2 id="products-gallery-title" class="lux-section-head__title mb-2">Product photos</h2>
+                    <p class="text-muted mb-0 mx-auto" style="max-width: 40rem;">A look at work from our factory. Final branded pieces for partners stay confidential.</p>
+                </div>
+                <div class="row g-3 g-md-4">
+                    @foreach($pageGallery as $image)
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a class="products-page-gallery__item d-block popup-image" href="{{ $image->url() }}">
+                                <img src="{{ $image->url() }}" alt="{{ $image->caption ?: 'Product photo' }}" class="w-100" loading="lazy" decoding="async">
+                                @if($image->caption)
+                                    <span class="products-page-gallery__caption">{{ $image->caption }}</span>
+                                @endif
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+    @endif
+
     @include('frontend.includes.product-story-section')
 
 @endsection
@@ -184,5 +207,27 @@
         letter-spacing: 0.08em;
         font-size: 0.68rem;
         font-weight: 700;
+    }
+    .products-page-gallery__item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 14px;
+        background: #f3f4f6;
+        box-shadow: 0 14px 32px rgba(18, 33, 52, 0.08);
+    }
+    .products-page-gallery__item img {
+        height: 240px;
+        object-fit: cover;
+        display: block;
+    }
+    .products-page-gallery__caption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0.55rem 0.7rem;
+        background: linear-gradient(transparent, rgba(18, 24, 33, 0.72));
+        color: #fff;
+        font-size: 0.85rem;
     }
 </style>

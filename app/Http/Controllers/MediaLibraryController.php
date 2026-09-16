@@ -107,4 +107,19 @@ class MediaLibraryController extends Controller
 
         return back()->with('success', 'Image removed from the system.');
     }
+
+    public function purgeUnusedDuplicates(): RedirectResponse
+    {
+        $deleted = $this->media->deleteUnusedDuplicates();
+
+        if ($deleted === 0) {
+            return redirect()
+                ->route('mediaLibrary.index', ['duplicates' => 1])
+                ->with('warning', 'No unused duplicate files to remove. Copies that are still used on the site were kept.');
+        }
+
+        return redirect()
+            ->route('mediaLibrary.index')
+            ->with('success', $deleted . ' unused duplicate file' . ($deleted === 1 ? '' : 's') . ' removed. Used copies were kept.');
+    }
 }

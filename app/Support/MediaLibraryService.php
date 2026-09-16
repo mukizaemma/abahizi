@@ -125,6 +125,40 @@ class MediaLibraryService
         return $updated;
     }
 
+    public function deleteUnusedDuplicates(): int
+    {
+        $groups = $this->files()->groupBy('hash')->filter(fn (Collection $group) => $group->count() > 1);
+        $pathsToDelete = [];
+
+        foreach ($groups as $group) {
+            $used = $group->filter(fn (array $file) => ($file['usage_count'] ?? 0) > 0);
+            $keepPath = $used->isNotEmpty()
+                ? $used->first()['path']
+                : $group->first()['path'];
+
+            foreach ($group as $file) {
+                if ($file['path'] === $keepPath) {
+                    continue;
+                }
+                if (($file['usage_count'] ?? 0) > 0) {
+                    continue;
+                }
+                $pathsToDelete[] = $file['path'];
+            }
+        }
+
+        $deleted = 0;
+        foreach ($pathsToDelete as $path) {
+            if (Storage::disk('public')->exists($path) && Storage::disk('public')->delete($path)) {
+                $deleted++;
+            }
+        }
+
+        $this->fileCache = null;
+
+        return $deleted;
+    }
+
     public function deleteFile(string $path): bool
     {
         $this->fileCache = null;
@@ -280,6 +314,7 @@ class MediaLibraryService
             ['table' => 'projectimages', 'column' => 'image', 'label' => 'Community gallery', 'edit_route' => null],
             ['table' => 'products', 'column' => 'image', 'label' => 'Product cover', 'edit_route' => 'catalogProducts.edit'],
             ['table' => 'product_images', 'column' => 'image', 'label' => 'Product gallery', 'edit_route' => null],
+            ['table' => 'product_gallery_images', 'column' => 'image', 'label' => 'Products page gallery', 'edit_route' => 'catalogProducts.pageGallery'],
             ['table' => 'impacts', 'column' => 'image', 'label' => 'Impact stat', 'edit_route' => 'editImpact'],
             ['table' => 'annual_report_images', 'column' => 'image', 'label' => 'Impact report gallery', 'edit_route' => null],
             ['table' => 'factory_gallery_images', 'column' => 'image', 'label' => 'Factory gallery', 'edit_route' => null],
@@ -292,9 +327,9 @@ class MediaLibraryService
             ['table' => 'backgrounds', 'column' => 'home_partners_image', 'label' => 'Home partners photo', 'edit_route' => 'about'],
             ['table' => 'backgrounds', 'column' => 'home_why_partner_background', 'label' => 'Homepage: Quality you can scale photo', 'edit_route' => 'about'],
             ['table' => 'backgrounds', 'column' => 'home_craft_image', 'label' => 'Homepage: Craft with purpose photo', 'edit_route' => 'about'],
-            ['table' => 'backgrounds', 'column' => 'home_product_card_1_image', 'label' => 'Homepage product card 1', 'edit_route' => 'catalogProducts.index'],
-            ['table' => 'backgrounds', 'column' => 'home_product_card_2_image', 'label' => 'Homepage product card 2', 'edit_route' => 'catalogProducts.index'],
-            ['table' => 'backgrounds', 'column' => 'home_product_card_3_image', 'label' => 'Homepage product card 3', 'edit_route' => 'catalogProducts.index'],
+            ['table' => 'backgrounds', 'column' => 'home_product_card_1_image', 'label' => 'Homepage product card 1', 'edit_route' => 'catalogProducts.homepage'],
+            ['table' => 'backgrounds', 'column' => 'home_product_card_2_image', 'label' => 'Homepage product card 2', 'edit_route' => 'catalogProducts.homepage'],
+            ['table' => 'backgrounds', 'column' => 'home_product_card_3_image', 'label' => 'Homepage product card 3', 'edit_route' => 'catalogProducts.homepage'],
             ['table' => 'backgrounds', 'column' => 'model_image', 'label' => 'Our Model image', 'edit_route' => 'about'],
             ['table' => 'backgrounds', 'column' => 'factory_services_image', 'label' => 'Factory page photo', 'edit_route' => 'factory.admin.overview'],
             ['table' => 'backgrounds', 'column' => 'factory_community_impact_image', 'label' => 'Factory impact image', 'edit_route' => 'factory.admin.impact'],
@@ -341,7 +376,7 @@ class MediaLibraryService
         }
 
         try {
-            if (in_array($route, ['about', 'settings', 'factory.admin.overview', 'factory.admin.services', 'factory.admin.impact', 'factory.admin.training', 'catalogProducts.index'], true)) {
+            if (in_array($route, ['about', 'settings', 'factory.admin.overview', 'factory.admin.services', 'factory.admin.impact', 'factory.admin.training', 'catalogProducts.index', 'catalogProducts.homepage', 'catalogProducts.pageGallery'], true)) {
                 return route($route);
             }
 

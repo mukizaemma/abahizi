@@ -14,14 +14,29 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4 py-4">
+                @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+                @if(session('warning'))
+                    <div class="alert alert-warning">{{ session('warning') }}</div>
+                @endif
+                @if(session('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
                     <div>
                         <h1>Media library</h1>
                         <p class="text-muted mb-0">All images stored on the site. This is a file manager, not a public gallery — check where a file is used before replacing or removing it.</p>
                     </div>
-                    <div class="d-flex gap-2">
+                    <div class="d-flex flex-wrap gap-2">
                         <a href="{{ route('mediaLibrary.index') }}" class="btn {{ ! $duplicatesOnly ? 'btn-primary' : 'btn-outline-primary' }}">All images</a>
                         <a href="{{ route('mediaLibrary.index', ['duplicates' => 1]) }}" class="btn {{ $duplicatesOnly ? 'btn-primary' : 'btn-outline-primary' }}">Duplicates</a>
+                        @if($duplicatesOnly)
+                            <form action="{{ route('mediaLibrary.purgeDuplicates') }}" method="POST" onsubmit="return confirm('Remove unused duplicate copies? Files that are still used on the site will be kept.')">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-danger">Remove unused duplicates</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
 

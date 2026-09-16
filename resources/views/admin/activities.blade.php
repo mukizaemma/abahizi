@@ -141,7 +141,8 @@
                             <textarea class="form-control" rows="6" name="description" data-editor="rich" data-editor-modal="true" required></textarea>
                         </div>
                         <div class="col-12">
-                            <label class="form-label">Cover image</label>
+                            <label class="form-label">Cover photo</label>
+                            <p class="text-muted small mb-2">Shown at the top of this program’s page.</p>
                             <input type="file" class="form-control" name="image" accept="image/*" required>
                         </div>
                         <div class="col-12">

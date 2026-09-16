@@ -128,10 +128,13 @@ class ThemeService
      *     fonts_href: string
      * }
      */
-    public static function fromSetting(?Setting $setting): array
+    public static function fromSetting($setting = null): array
     {
-        $primary = self::sanitizeHex($setting?->primary_color ?? null, self::DEFAULT_PRIMARY);
-        $secondary = self::sanitizeHex($setting?->secondary_color ?? null, self::DEFAULT_SECONDARY);
+        if (! $setting instanceof Setting) {
+            $setting = Setting::firstOrEmpty();
+        }
+        $primary = self::sanitizeHex($setting->primary_color ?? null, self::DEFAULT_PRIMARY);
+        $secondary = self::sanitizeHex($setting->secondary_color ?? null, self::DEFAULT_SECONDARY);
         $neutral = self::sanitizeHex($setting?->neutral_color ?? null, self::DEFAULT_NEUTRAL);
         $bodyFont = self::sanitizeFont($setting?->font_family ?? null, self::DEFAULT_BODY_FONT);
         $headingFont = self::sanitizeFont($setting?->heading_font ?? null, self::DEFAULT_HEADING_FONT);

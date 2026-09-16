@@ -46,9 +46,7 @@ class Activity extends Model
     {
         return [
             ['slug' => 'volunteer', 'label' => 'Volunteer', 'kind' => 'standard'],
-            ['slug' => 'training', 'label' => 'Offer training materials', 'kind' => 'standard'],
-            ['slug' => 'partner', 'label' => 'Become our partner', 'kind' => 'standard'],
-            ['slug' => 'donate', 'label' => 'Just donate', 'kind' => 'donate'],
+            ['slug' => 'partner', 'label' => 'Partner with us', 'kind' => 'standard'],
         ];
     }
 
@@ -104,6 +102,16 @@ class Activity extends Model
     }
 
     /**
+     * @return array<int, array{slug: string, label: string, kind: string}>
+     */
+    public function publicInvolvementWays(): array
+    {
+        $ways = $this->normalizedInvolvementWays();
+
+        return $ways !== [] ? $ways : self::sampleInvolvementWays();
+    }
+
+    /**
      * @return array{slug: string, label: string, kind: string}|null
      */
     public function involvementWayBySlug(?string $slug): ?array
@@ -113,7 +121,7 @@ class Activity extends Model
             return null;
         }
 
-        foreach ($this->normalizedInvolvementWays() as $way) {
+        foreach ($this->publicInvolvementWays() as $way) {
             if ($way['slug'] === $slug) {
                 return $way;
             }

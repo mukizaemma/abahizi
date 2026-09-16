@@ -22,6 +22,7 @@ class PageHeaderService
             'impact_community' => 'Community',
             'impact_reports' => 'Impact Reports',
             'updates' => 'Updates',
+            'gallery' => 'Gallery',
             'contact' => 'Get In Touch',
             'default' => 'Other pages (fallback)',
         ];

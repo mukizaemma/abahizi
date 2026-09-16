@@ -14,13 +14,11 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4 py-4">
-                <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
-                    <div>
-                        <h1>Product categories</h1>
-                        <p class="text-muted mb-0">Used to group bags, accessories, men, women, etc.</p>
-                    </div>
-                    <a href="{{ route('catalogProducts.index') }}" class="btn btn-outline-primary">Back to products</a>
+                <div class="admin-page-header mb-3">
+                    <h1>Products</h1>
+                    <p class="text-muted mb-0">Used to group bags, accessories, men, women, etc.</p>
                 </div>
+                @include('admin.includes.products-tabs', ['tab' => 'categories'])
 
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>

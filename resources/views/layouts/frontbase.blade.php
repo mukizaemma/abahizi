@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/spacing.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme-custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/luxury-demo.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/luxury-demo.css') }}?v=20260916">
     <link rel="stylesheet" href="{{ asset('assets/css/landing-home.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/site-editorial.css') }}">
 
@@ -172,9 +172,7 @@
                                         </ul>
                                     </li>
                                     <li><a href="{{ route('ourFactory') }}">{{ __('site.nav.factory') }}</a></li>
-                                    @if(($setting->show_products_page ?? true))
-                                        <li><a href="{{ route('ourProducts') }}">{{ __('site.nav.products') }}</a></li>
-                                    @endif
+                                    <li><a href="{{ route('ourProducts') }}">{{ __('site.nav.products') }}</a></li>
                                     <li class="has-dropdown">
                                         <a href="{{ route('impactPage') }}">{{ __('site.nav.impact') }}</a>
                                         <ul class="submenu tp-submenu">
@@ -184,6 +182,7 @@
                                         </ul>
                                     </li>
                                     <li><a href="{{ route('posts') }}">{{ __('site.nav.updates') }}</a></li>
+                                    <li><a href="{{ route('gallery') }}">{{ __('site.nav.gallery') }}</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -242,12 +241,11 @@
                             <li><a href="{{ route('home') }}">{{ __('site.nav.home') }}</a></li>
                             <li><a href="{{ route('backgroundDetails') }}">{{ __('site.landing.about_eyebrow') }}</a></li>
                             <li><a href="{{ route('ourFactory') }}">{{ __('site.nav.factory') }}</a></li>
-                            @if(($setting->show_products_page ?? true))
-                                <li><a href="{{ route('ourProducts') }}">{{ __('site.nav.products') }}</a></li>
-                            @endif
+                            <li><a href="{{ route('ourProducts') }}">{{ __('site.nav.products') }}</a></li>
                             <li><a href="{{ route('impactPage') }}">{{ __('site.nav.impact') }}</a></li>
                             <li><a href="{{ route('impactCommunity') }}">{{ __('site.nav.community') }}</a></li>
                             <li><a href="{{ route('posts') }}">{{ __('site.nav.updates') }}</a></li>
+                            <li><a href="{{ route('gallery') }}">{{ __('site.nav.gallery') }}</a></li>
                         </ul>
                     </div>
 

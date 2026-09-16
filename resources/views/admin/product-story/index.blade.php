@@ -14,13 +14,11 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4 py-4">
-                <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-4">
-                    <div>
-                        <h1>Product story</h1>
-                        <p class="text-muted mb-0">Heading and bullet points shown below the product grid and on product detail pages (Made in Rwanda story).</p>
-                    </div>
-                    <a href="{{ route('catalogProducts.index') }}" class="btn btn-outline-primary">Products catalog</a>
+                <div class="admin-page-header mb-3">
+                    <h1>Products</h1>
+                    <p class="text-muted mb-0">Heading and bullet points shown on the public Products page and product detail pages.</p>
                 </div>
+                @include('admin.includes.products-tabs', ['tab' => 'story'])
 
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
@@ -33,7 +31,7 @@
                             @csrf
                             <div class="col-lg-10">
                                 <label class="form-label">Banner title</label>
-                                <input type="text" name="heading" class="form-control" value="{{ old('heading', $setting->heading) }}" placeholder="e.g. What goes into our handbags">
+                                <input type="text" name="heading" class="form-control" value="{{ old('heading', $story->heading) }}" placeholder="e.g. What goes into our handbags">
                                 <small class="text-muted">Displayed in the yellow banner above the bullet list.</small>
                             </div>
                             <div class="col-lg-2">
@@ -98,6 +96,7 @@
                 </div>
             </div>
         </main>
+        @include('admin.includes.footer')
     </div>
 </div>
 @endsection

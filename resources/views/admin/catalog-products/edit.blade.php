@@ -18,7 +18,8 @@
                     <a href="{{ route('catalogProducts.index') }}" class="btn btn-outline-secondary btn-sm">← Back</a>
                     <a href="{{ route('productShow', $product->slug) }}" class="btn btn-outline-primary btn-sm" target="_blank">View on site</a>
                 </div>
-                <h1 class="mb-4">Edit: {{ $product->title }}</h1>
+                <h1 class="mb-3">Edit: {{ $product->title }}</h1>
+                @include('admin.includes.products-tabs', ['tab' => 'products'])
 
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>

@@ -1,10 +1,4 @@
 @php
-    $productsOpen = request()->routeIs([
-        'catalogProducts.*',
-        'productCategories.*',
-        'productStory.*',
-        'orderRequests.*',
-    ]);
     $inboxOpen = request()->routeIs([
         'redirects',
         'dashboard',
@@ -62,54 +56,13 @@
                 Our factory
             </x-admin.nav-link>
 
-            <a
-                class="nav-link d-flex align-items-center{{ $productsOpen ? '' : ' collapsed' }}{{ $productsOpen ? ' active' : '' }}"
-                href="#"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapseProducts"
-                aria-expanded="{{ $productsOpen ? 'true' : 'false' }}"
-                aria-controls="collapseProducts"
+            <x-admin.nav-link
+                :href="route('catalogProducts.index')"
+                icon="fa-store"
+                :active="request()->routeIs(['catalogProducts.*', 'productCategories.*', 'productStory.*'])"
             >
-                <div class="sb-nav-link-icon"><i class="fa fa-store"></i></div>
-                <span>Products</span>
-                <div class="sb-sidenav-collapse-arrow"><i class="fa fa-angle-down"></i></div>
-            </a>
-            <div
-                class="collapse{{ $productsOpen ? ' show' : '' }}"
-                id="collapseProducts"
-                data-bs-parent="#sidenavAccordion"
-            >
-                <nav class="sb-sidenav-menu-nested nav">
-                    <x-admin.nav-link
-                        :href="route('catalogProducts.index')"
-                        icon="fa-box"
-                        :active="request()->routeIs(['catalogProducts.index', 'catalogProducts.create', 'catalogProducts.store', 'catalogProducts.edit', 'catalogProducts.update', 'catalogProducts.destroy', 'catalogProducts.deleteImage', 'catalogProducts.homepageCards'])"
-                    >
-                        Catalog &amp; homepage cards
-                    </x-admin.nav-link>
-                    <x-admin.nav-link
-                        :href="route('productCategories.index')"
-                        icon="fa-tags"
-                        :active="request()->routeIs(['productCategories.index', 'productCategories.store', 'productCategories.update', 'productCategories.destroy'])"
-                    >
-                        Categories
-                    </x-admin.nav-link>
-                    <x-admin.nav-link
-                        :href="route('productStory.index')"
-                        icon="fa-check-circle"
-                        :active="request()->routeIs(['productStory.index', 'productStory.heading', 'productStory.store', 'productStory.update', 'productStory.destroy'])"
-                    >
-                        Product story
-                    </x-admin.nav-link>
-                    <x-admin.nav-link
-                        :href="route('orderRequests.index')"
-                        icon="fa-clipboard-list"
-                        :active="request()->routeIs('orderRequests.index')"
-                    >
-                        Order requests
-                    </x-admin.nav-link>
-                </nav>
-            </div>
+                Products
+            </x-admin.nav-link>
 
             <x-admin.nav-link
                 :href="route('impacts.index')"
@@ -140,6 +93,13 @@
                 Updates
             </x-admin.nav-link>
             <x-admin.nav-link
+                :href="route('images')"
+                icon="fa-th"
+                :active="request()->routeIs(['images', 'saveGallery', 'editGallery', 'updateGallery', 'destroyGallery'])"
+            >
+                Site gallery
+            </x-admin.nav-link>
+            <x-admin.nav-link
                 :href="route('staff')"
                 icon="fa-users"
                 :active="request()->routeIs(['staff', 'editStaff', 'saveStaff', 'updateStaff', 'destroyStaff', 'staff.moveUp', 'staff.moveDown'])"
@@ -155,6 +115,13 @@
             </x-admin.nav-link>
 
             <div class="sb-sidenav-menu-heading">Inbox</div>
+            <x-admin.nav-link
+                :href="route('orderRequests.index')"
+                icon="fa-clipboard-list"
+                :active="request()->routeIs('orderRequests.index')"
+            >
+                Order requests
+            </x-admin.nav-link>
             <a
                 class="nav-link d-flex align-items-center{{ $inboxOpen ? '' : ' collapsed' }}{{ $inboxOpen ? ' active' : '' }}"
                 href="#"

@@ -28,10 +28,10 @@ class ProductStoryController extends Controller
 
     public function index()
     {
-        $setting = ProductStorySetting::firstOrSingleton();
+        $story = ProductStorySetting::firstOrSingleton();
         $points = ProductStoryPoint::query()->ordered()->get();
 
-        return view('admin.product-story.index', compact('setting', 'points'));
+        return view('admin.product-story.index', compact('story', 'points'));
     }
 
     public function updateHeading(Request $request)

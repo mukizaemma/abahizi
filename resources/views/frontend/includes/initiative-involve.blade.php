@@ -1,5 +1,5 @@
 @php
-    $ways = $activity->normalizedInvolvementWays();
+    $ways = $activity->publicInvolvementWays();
     $channelsReady = $formChannels['channels_ready'] ?? false;
     $oldWay = old('involvement_slug');
 @endphp

@@ -17,7 +17,8 @@
                 <div class="mb-4">
                     <a href="{{ route('catalogProducts.index') }}" class="btn btn-outline-secondary btn-sm">← Back</a>
                 </div>
-                <h1 class="mb-4">Add product</h1>
+                <h1 class="mb-3">Add product</h1>
+                @include('admin.includes.products-tabs', ['tab' => 'products'])
 
                 @if($categories->isEmpty())
                     <div class="alert alert-warning">Create at least one <a href="{{ route('productCategories.index') }}">category</a> first.</div>
@@ -72,7 +73,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Cover image</label>
                             <input type="file" name="image" class="form-control" accept="image/*">
-                            <p class="text-muted small mb-0 mt-1">Optional. Homepage cards are set on the <a href="{{ route('catalogProducts.index') }}">Products list</a> and do not require a catalog item.</p>
+                            <p class="text-muted small mb-0 mt-1">Optional. Homepage cards are set on the <a href="{{ route('catalogProducts.homepage') }}">Homepage cards</a> tab.</p>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Gallery images (optional)</label>

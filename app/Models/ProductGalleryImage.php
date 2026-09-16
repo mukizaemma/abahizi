@@ -5,19 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class ProductGalleryImage extends Model
 {
     use HasFactory;
-    protected $table= "images";
-    protected $fillable = [
-        'program_id',
-        'caption',
-        'image'
-    ];
 
-    public function program(){
-        return $this->belongsTo(Program::class);
-    }
+    protected $fillable = [
+        'caption',
+        'image',
+        'sort_order',
+    ];
 
     public function url(): string
     {
@@ -25,10 +21,7 @@ class Image extends Model
         if ($path === '') {
             return '';
         }
-        if (str_contains($path, '/')) {
-            return asset('storage/' . $path);
-        }
 
-        return asset('storage/images/gallery/' . $path);
+        return asset('storage/' . $path);
     }
 }

@@ -10,7 +10,7 @@
     <div class="container">
         <div class="activity-main__copy mx-auto">
             <div class="postbox__text activity-description">{!! $activity->description !!}</div>
-            @if(count($activity->normalizedInvolvementWays()) > 0)
+            @if(count($activity->publicInvolvementWays()) > 0)
                 <p class="mt-4 mb-0">
                     <button type="button" class="tp-btn tp-btn--lux" data-bs-toggle="modal" data-bs-target="#getInvolvedModal">
                         {{ __('site.initiative.cta_jump') }} <span aria-hidden="true">→</span>
@@ -22,6 +22,7 @@
 </section>
 
 @include('frontend.includes.initiative-highlights')
+@include('frontend.includes.initiative-cta')
 @include('frontend.includes.initiative-involve')
 
 @if($relatedActivities->count() > 0)
@@ -63,6 +64,33 @@
 @endif
 
 @include('frontend.includes.backImage')
+
+<script>
+    document.addEventListener('click', function (event) {
+        var btn = event.target.closest('[data-involve-way]');
+        if (!btn) {
+            return;
+        }
+        var slug = btn.getAttribute('data-involve-way');
+        var modal = document.getElementById('getInvolvedModal');
+        if (!slug || !modal) {
+            return;
+        }
+        var input = modal.querySelector('input[name="involvement_slug"][value="' + slug + '"]');
+        if (!input) {
+            var hay = slug.toLowerCase();
+            modal.querySelectorAll('input[name="involvement_slug"]').forEach(function (el) {
+                if (!input && (el.value + ' ' + (el.closest('label') ? el.closest('label').textContent : '')).toLowerCase().indexOf(hay) !== -1) {
+                    input = el;
+                }
+            });
+        }
+        if (input) {
+            input.checked = true;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+</script>
 
 @if(session('involve_success') || session('involve_open_url'))
     <script>

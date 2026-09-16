@@ -359,10 +359,9 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 0.55rem;
+    gap: 0.7rem;
     min-width: 0;
     width: 100%;
-    overflow: hidden;
 }
 
 .media-field input[type="file"],
@@ -381,41 +380,69 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
     pointer-events: none !important;
 }
 
-.media-field__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+.media-field__stage {
+    position: relative;
+    width: 100%;
+    min-height: 180px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f3f3f3;
+    border: 1px solid #ececec;
 }
 
-.media-field__actions .btn {
-    flex: 1 1 auto;
-    min-width: 0;
+.media-field__stage img,
+.media-field__photo {
+    width: 100% !important;
+    height: 200px !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: cover !important;
+    display: block;
+    border: 0 !important;
+    border-radius: 0 !important;
+}
+
+.media-field__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    color: #777;
+    font-size: 0.92rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.media-field__badge {
+    font-size: 0.8rem;
+    color: #555;
+    margin: 0;
+}
+
+.media-field__badge.is-pending {
+    color: #0f5132;
+    font-weight: 600;
+}
+
+.media-field__change {
+    align-self: flex-start;
+    background: var(--brand-secondary, #111);
+    color: #fff;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.55rem 1.15rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.media-field__change:hover,
+.media-field__change:focus {
+    background: #000;
+    color: #fff;
 }
 
 .media-field__preview {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-}
-
-.media-field__preview-item {
-    width: 160px;
-}
-
-.media-field__preview-item img,
-.media-field__current,
-.admin-preview-img,
-.admin-image-card img,
-.media-field > img {
-    width: 160px !important;
-    height: 110px !important;
-    max-width: 160px !important;
-    max-height: 110px !important;
-    object-fit: cover !important;
-    border-radius: 8px;
-    border: 1px solid #e5e5e5;
-    display: block;
-    background: #f4f4f4;
+    display: none;
 }
 
 .media-field__preview-item span {
@@ -430,8 +457,8 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
     font-size: 0.8rem;
     color: #0f5132;
     background: #d1e7dd;
-    border-radius: 6px;
-    padding: 0.45rem 0.65rem;
+    border-radius: 8px;
+    padding: 0.5rem 0.7rem;
 }
 
 .admin-image-card {
@@ -439,19 +466,77 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
     flex-direction: column;
     height: 100%;
     min-width: 0;
-    padding: 0.9rem;
+    padding: 1rem 1rem 1.1rem;
     border: 1px solid #ececec;
-    border-radius: 10px;
+    border-radius: 14px;
     background: #fff;
     overflow: hidden;
 }
 
 .admin-image-card .form-label {
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
 }
 
 .admin-image-card .text-muted {
-    min-height: 2.6rem;
+    min-height: 0;
+    margin-bottom: 0.75rem;
+}
+
+.admin-image-card:has(.media-field) > img:not(.media-field__photo) {
+    display: none;
+}
+
+.media-choice__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+}
+
+@media (min-width: 576px) {
+    .media-choice__grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.media-choice__card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    text-align: left;
+    width: 100%;
+    padding: 1rem 1.05rem 1.1rem;
+    border: 1px solid #e6e6e6;
+    border-radius: 14px;
+    background: #fafafa;
+}
+
+.media-choice__card:hover,
+.media-choice__card:focus {
+    border-color: var(--brand-primary, #fad200);
+    background: #fff;
+}
+
+.media-choice__icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--brand-primary, #fad200);
+    color: #111;
+    margin-bottom: 0.25rem;
+}
+
+.media-choice__card strong {
+    font-size: 0.95rem;
+}
+
+.media-choice__card span:last-child {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.4;
 }
 
 #section-backgrounds-pane [class*="col-"],

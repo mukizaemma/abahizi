@@ -8,15 +8,15 @@ use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
 class CatalogProductController extends Controller
 {
     public function index()
     {
         $products = Product::query()->with(['category', 'images'])->latest()->paginate(25);
-        $homepageSlots = \App\Support\HomeProductShowcase::adminSlots();
 
-        return view('admin.catalog-products.index', compact('products', 'homepageSlots'));
+        return view('admin.catalog-products.index', compact('products'));
     }
 
     public function saveHomepageCards(Request $request)
@@ -39,7 +39,7 @@ class CatalogProductController extends Controller
         \App\Support\HomeProductShowcase::save($request, $about);
 
         return redirect()
-            ->route('catalogProducts.index')
+            ->route('catalogProducts.homepage')
             ->with('success', 'Homepage product cards saved. Refresh the public homepage to see them.');
     }
 
@@ -179,6 +179,67 @@ class CatalogProductController extends Controller
         $img->delete();
 
         return redirect()->route('catalogProducts.edit', $productId)->with('success', 'Image removed.');
+    }
+
+    public function homepage()
+    {
+        $homepageSlots = \App\Support\HomeProductShowcase::adminSlots();
+
+        return view('admin.catalog-products.homepage', compact('homepageSlots'));
+    }
+
+    public function pageGallery()
+    {
+        $images = \App\Models\ProductGalleryImage::query()->orderBy('sort_order')->orderBy('id')->get();
+        $about = \App\Models\Background::firstOrEmpty();
+
+        return view('admin.catalog-products.page-gallery', compact('images', 'about'));
+    }
+
+    public function storePageGallery(Request $request)
+    {
+        $request->validate([
+            'caption' => ['nullable', 'string', 'max:255'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
+        ]);
+
+        $maxSort = (int) \App\Models\ProductGalleryImage::query()->max('sort_order');
+        \App\Models\ProductGalleryImage::create([
+            'caption' => trim((string) $request->input('caption')) ?: null,
+            'image' => $request->file('image')->store('images/products/page-gallery', 'public'),
+            'sort_order' => $maxSort + 1,
+        ]);
+
+        return redirect()->route('catalogProducts.pageGallery')->with('success', 'Photo added to the products page gallery.');
+    }
+
+    public function destroyPageGallery($id)
+    {
+        $image = \App\Models\ProductGalleryImage::findOrFail($id);
+        if (! empty($image->image) && Storage::disk('public')->exists($image->image)) {
+            Storage::disk('public')->delete($image->image);
+        }
+        $image->delete();
+
+        return redirect()->route('catalogProducts.pageGallery')->with('success', 'Photo removed from the products page gallery.');
+    }
+
+    public function savePageIntro(Request $request)
+    {
+        $request->validate([
+            'products_intro' => ['nullable', 'string'],
+        ]);
+        $about = \App\Models\Background::first();
+        if ($about === null) {
+            $about = new \App\Models\Background();
+            $about->description = 'Our Background';
+        }
+        if (Schema::hasColumn('backgrounds', 'products_intro')) {
+            $about->products_intro = $request->input('products_intro');
+            $about->save();
+        }
+
+        return redirect()->route('catalogProducts.pageGallery')->with('success', 'Products page intro saved.');
     }
 
     private function storeGalleryImages(Product $product, Request $request): void

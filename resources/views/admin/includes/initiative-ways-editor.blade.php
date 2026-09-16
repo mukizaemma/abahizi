@@ -6,8 +6,8 @@
 <div class="initiative-ways" data-initiative-ways>
     <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-2">
         <div>
-            <label class="form-label mb-0">Ways to get involved</label>
-            <p class="text-muted small mb-0">These appear as choices on the public initiative page. Mark a row as a donation option to ask for amount and one-time vs recurring.</p>
+            <label class="form-label mb-0">Volunteer and partner options</label>
+            <p class="text-muted small mb-0">These choices appear on the public program page. Keep Volunteer and Partner so people know how to help.</p>
         </div>
         <button type="button" class="btn btn-outline-secondary btn-sm" data-ways-samples>
             Insert samples

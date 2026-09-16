@@ -54,7 +54,7 @@ class GalleryController extends Controller
         $stored = $data->save();
 
         if($stored){
-            return redirect('images')->with('success', 'New image has been added successfully');
+            return redirect()->route('images')->with('success', 'New image has been added successfully');
         }
 
         return redirect()->back()->with('error','Failed to add new Image');
@@ -108,7 +108,7 @@ class GalleryController extends Controller
 
         $data->save();
 
-        return redirect('images')->with('success','Image has been updated');
+        return redirect()->route('images')->with('success','Image has been updated');
     }
 
     /**
@@ -125,6 +125,6 @@ class GalleryController extends Controller
             Storage::disk('public')->delete($image->image);
         }
         $image->delete();
-        return redirect()->back()->with('warning', 'Item has been deleted');
+        return redirect()->route('images')->with('warning', 'Item has been deleted');
     }
 }

@@ -290,7 +290,7 @@ class HomeController extends Controller
         }
         RateLimiter::hit($ipKey, 10 * 60);
 
-        $ways = $activity->normalizedInvolvementWays();
+        $ways = $activity->publicInvolvementWays();
         $allowedSlugs = array_column($ways, 'slug');
 
         if ($allowedSlugs === []) {
@@ -527,12 +527,10 @@ class HomeController extends Controller
     }
 
 public function gallery(){
-    $gallery = Projectimage::latest()->take(9)->get();
-    $programs = Activity::with('images')->get();
+    $gallery = Image::latest()->get();
 
     return view('frontend.gallery', [
         'gallery' => $gallery,
-        'programs' => $programs
     ]);
 }
 
@@ -996,9 +994,6 @@ public function gallery(){
     public function ourProducts(Request $request){
         $about = Background::firstOrEmpty();
         $setting = Setting::firstOrEmpty();
-        if (Schema::hasColumn('settings', 'show_products_page') && !($setting->show_products_page ?? true)) {
-            abort(404);
-        }
         $categories = ProductCategory::query()->active()->orderBy('sort_order')->orderBy('name')->get();
 
         $products = collect();
@@ -1026,7 +1021,12 @@ public function gallery(){
             && Schema::hasTable('products')
             && Product::query()->active()->exists();
 
-        return view('frontend.our-products', compact('about', 'products', 'categories', 'setting', 'catalogEnabled', 'hasCatalogProducts'));
+        $pageGallery = collect();
+        if (Schema::hasTable('product_gallery_images')) {
+            $pageGallery = \App\Models\ProductGalleryImage::query()->orderBy('sort_order')->orderBy('id')->get();
+        }
+
+        return view('frontend.our-products', compact('about', 'products', 'categories', 'setting', 'catalogEnabled', 'hasCatalogProducts', 'pageGallery'));
     }
 
     public function productShow($slug){

@@ -2,8 +2,10 @@
 <html lang="en" data-turbo="false">
     <head>
         @php
-            $theme = \App\Support\ThemeService::fromSetting($setting ?? $themeSetting ?? null);
-            $themeSetting = $setting ?? \App\Models\Setting::firstOrEmpty();
+            $themeSetting = (($setting ?? null) instanceof \App\Models\Setting)
+                ? $setting
+                : \App\Models\Setting::firstOrEmpty();
+            $theme = \App\Support\ThemeService::fromSetting($themeSetting);
         @endphp
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -25,7 +27,7 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="{{ asset('assets/admin/css/styles.css') }}" rel="stylesheet" />
-        <link href="{{ asset('assets/admin/css/admin-refine.css') }}" rel="stylesheet" />
+        <link href="{{ asset('assets/admin/css/admin-refine.css') }}?v=20260916" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
@@ -106,7 +108,7 @@
 
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-        <script src="{{ asset('assets/admin/js/admin-media.js') }}"></script>
+        <script src="{{ asset('assets/admin/js/admin-media.js') }}?v=20260916"></script>
         <script>
             function initAdminAlerts() {
                 if (document.documentElement.hasAttribute('data-turbo-preview')) {
