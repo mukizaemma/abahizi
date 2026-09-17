@@ -25,9 +25,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/spacing.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme-custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/luxury-demo.css') }}?v=20260916b">
+    <link href="{{ asset('assets/css/luxury-demo.css') }}?v=20260917c" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/css/landing-home.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/site-editorial.css') }}?v=20260917j">
+    <link rel="stylesheet" href="{{ asset('assets/css/site-editorial.css') }}?v=20260917k">
 
     <!-- Non-critical CSS: load after first paint -->
     <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}" media="print" onload="this.media='all'">

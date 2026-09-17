@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Background;
 use App\Models\Homepage;
+use App\Support\ImpactStats;
 use App\Support\SectionBackgroundService;
 use App\Support\SiteCopy;
 
@@ -76,6 +77,12 @@ public function saveBackg(Request $request)
         'factory_services_subitems' => 'nullable|string',
         'factory_community_impact_subitems' => 'nullable|string',
         'factory_training_facilities_subitems' => 'nullable|string',
+        'stat_value' => 'nullable|array',
+        'stat_value.*' => 'nullable|string|max:80',
+        'stat_label' => 'nullable|array',
+        'stat_label.*' => 'nullable|string|max:120',
+        'stat_on_bar' => 'nullable|array',
+        'stat_on_bar.*' => 'nullable|in:0,1',
         'families_impacted' => 'nullable|string|max:255',
         'jobs_created' => 'nullable|string|max:255',
         'training_hours' => 'nullable|string|max:255',
@@ -159,6 +166,8 @@ public function saveBackg(Request $request)
     if (Schema::hasColumn('backgrounds', 'artisans_count') && $request->has('artisans_count')) {
         $data->artisans_count = $request->input('artisans_count');
     }
+
+    ImpactStats::saveFromRequest($request, $data);
 
     // Process image
     if ($request->hasFile('image')) {
@@ -246,6 +255,9 @@ public function saveBackg(Request $request)
     $redirect = redirect()->back()->with('success', 'Background has been updated successfully');
     if ($request->input('return_tab') === 'section-backgrounds') {
         return $redirect->withFragment('section-backgrounds');
+    }
+    if ($request->input('return_tab') === 'impact') {
+        return $redirect->withFragment('impact');
     }
 
     return $redirect;

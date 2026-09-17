@@ -87,7 +87,7 @@ class AdminGuide
                     ],
                     [
                         'title' => 'Impact strip',
-                        'body' => 'The dark strip under the banner shows Impact pillars (the four cards you manage under Impact pillars), not separate highlight text.',
+                        'body' => 'The dark strip under the banner shows Impact numbers (jobs, families, bags exported, and any others you add). Edit those on About & homepage → Impact numbers. Impact pillars stay on their own page as program cards.',
                     ],
                 ],
                 'manage_route' => 'slides',
@@ -125,7 +125,7 @@ class AdminGuide
                     ],
                     [
                         'title' => 'Impact numbers vs pillars',
-                        'body' => 'Large stats (jobs, families, training hours) are on Impact numbers. Health, education, and similar cards are on Impact pillars.',
+                        'body' => 'Large stats (jobs, families, training hours) are on Impact numbers — rename labels, change figures, and add extra rows. Those numbers fill the homepage banner strip. Health, education, and similar cards are on Impact pillars.',
                     ],
                 ],
                 'manage_route' => 'about',

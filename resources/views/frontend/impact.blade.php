@@ -58,6 +58,8 @@
         'caption' => __('site.impact.caption'),
     ])
 
+    @include('frontend.includes.luxury.impact-ticker')
+
     @include('frontend.includes.impact-pillars', [
         'heading' => 'Our impact pillars',
         'lead' => \App\Support\SiteCopy::get('impact_lead'),

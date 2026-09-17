@@ -64,7 +64,7 @@
         $headlineParts = [$headline];
     }
 
-    $barItems = \App\Support\ImpactPillars::items(4);
+    $barItems = \App\Support\ImpactStats::forHeroBar($about ?? null);
 @endphp
 
 <section class="lh-hero" aria-label="{{ $brandName }}">
@@ -132,25 +132,14 @@
         </div>
     </div>
 
-    <div class="lh-hero__bar" aria-label="Impact pillars">
+    <div class="lh-hero__bar" aria-label="Impact statistics">
         <div class="container">
-            <ul class="lh-hero__bar-list" style="--lh-bar-count: {{ max(count($barItems), 1) }}">
+            <ul class="lh-hero__bar-list lh-hero__bar-list--stats" style="--lh-bar-count: {{ max(count($barItems), 1) }}">
                 @foreach($barItems as $item)
                     <li>
-                        <a class="lh-hero__bar-item" href="{{ route('impactPage') }}#impact-pillars">
-                            <span class="lh-hero__bar-icon" aria-hidden="true">
-                                @if(!empty($item['image']))
-                                    <img src="{{ $item['image'] }}" alt="">
-                                @else
-                                    <i class="fas {{ $item['icon'] }}"></i>
-                                @endif
-                            </span>
-                            <span class="lh-hero__bar-copy">
-                                @if(($item['value'] ?? '') !== '')
-                                    <span class="lh-hero__bar-value">{{ $item['value'] }}</span>
-                                @endif
-                                <span class="lh-hero__bar-label">{{ $item['title'] }}</span>
-                            </span>
+                        <a class="lh-hero__bar-item lh-hero__bar-item--stat" href="{{ route('impactPage') }}">
+                            <span class="lh-hero__bar-value">{{ $item['value'] }}</span>
+                            <span class="lh-hero__bar-label">{{ $item['label'] }}</span>
                         </a>
                     </li>
                 @endforeach

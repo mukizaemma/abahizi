@@ -1,24 +1,8 @@
 @php
-    $stats = [
-        [
-            'value' => $about->handbags_exported ?? '310,000+',
-            'label' => __('site.stats.handbags'),
-        ],
-        [
-            'value' => $about->artisans_count ?? ($about->jobs_created ?? '260+'),
-            'label' => __('site.stats.artisans'),
-        ],
-        [
-            'value' => $about->families_impacted ?? '2,000+',
-            'label' => __('site.stats.families'),
-        ],
-        [
-            'value' => $about->training_hours ?? '20,000+',
-            'label' => __('site.stats.training'),
-        ],
-    ];
+    $stats = \App\Support\ImpactStats::items($about ?? null);
 @endphp
 
+@if(($stats ?? []) !== [])
 <section class="lux-ticker" data-lux-counter-section aria-label="Impact statistics">
     <div class="container">
         <div class="lux-ticker__grid">
@@ -38,3 +22,4 @@
         </div>
     </div>
 </section>
+@endif

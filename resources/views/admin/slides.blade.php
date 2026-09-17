@@ -23,7 +23,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
                     <h1>Homepage hero</h1>
-                    <p class="text-muted mb-0">Headline, buttons, and the large photo or video at the top of the home page. The dark strip under the banner uses Impact pillars, not this screen.</p>
+                    <p class="text-muted mb-0">Headline, buttons, and the large photo or video at the top of the home page. The dark strip under the banner shows Impact numbers (About &amp; homepage → Impact numbers), not Impact pillars.</p>
                 </div>
 
                 <form action="{{ route('saveHero') }}" method="POST" enctype="multipart/form-data" class="card mb-4">

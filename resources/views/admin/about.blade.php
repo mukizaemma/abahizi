@@ -163,34 +163,74 @@
                             </div>
 
                             <div class="tab-pane fade" id="impact-pane" role="tabpanel" aria-labelledby="impact-tab">
-                                <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST">
                                     @csrf
-                                    <p class="text-muted mb-3">Large numbers on the Impact page. Homepage impact title and supporting text are under <a href="{{ route('impacts.index') }}">Impact pillars</a>.</p>
-                                    <div class="row g-3">
-                                        <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Handbags exported</label>
-                                            <input type="text" class="form-control" name="handbags_exported" value="{{ $background->handbags_exported }}" placeholder="310,000+">
+                                    <input type="hidden" name="return_tab" value="impact">
+                                    <p class="text-muted mb-3">These numbers appear on the dark strip under the homepage banner, and can also be used on Impact pages. Rename a label, change a figure, or add another row. Impact pillars (Health, Education, and so on) are a separate list under <a href="{{ route('impacts.index') }}">Impact pillars</a>.</p>
+                                    @php
+                                        $statRows = \App\Support\ImpactStats::items($background);
+                                        if ($statRows === []) {
+                                            $statRows = [['value' => '', 'label' => '', 'show_on_bar' => true]];
+                                        }
+                                    @endphp
+                                    <div data-impact-stats>
+                                        <div class="table-responsive">
+                                            <table class="table align-middle">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 9rem;">Number</th>
+                                                        <th>Label</th>
+                                                        <th style="width: 11rem;">Homepage bar</th>
+                                                        <th style="width: 6rem;"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-impact-stats-rows>
+                                                    @foreach($statRows as $stat)
+                                                        <tr data-impact-stats-row>
+                                                            <td>
+                                                                <input type="text" class="form-control" name="stat_value[]" value="{{ $stat['value'] }}" placeholder="2,000+" maxlength="80">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control" name="stat_label[]" value="{{ $stat['label'] }}" placeholder="Families empowered" maxlength="120">
+                                                            </td>
+                                                            <td>
+                                                                <select class="form-select" name="stat_on_bar[]">
+                                                                    <option value="1" {{ !empty($stat['show_on_bar']) ? 'selected' : '' }}>Show on banner</option>
+                                                                    <option value="0" {{ empty($stat['show_on_bar']) ? 'selected' : '' }}>Keep off banner</option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-outline-danger btn-sm" data-impact-stats-remove>Remove</button>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Full-time factory employees</label>
-                                            <input type="text" class="form-control" name="artisans_count" value="{{ $background->artisans_count }}" placeholder="260+">
-                                        </div>
-                                        <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Families impacted</label>
-                                            <input type="text" class="form-control" name="families_impacted" value="{{ $background->families_impacted }}">
-                                        </div>
-                                        <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Jobs created</label>
-                                            <input type="text" class="form-control" name="jobs_created" value="{{ $background->jobs_created }}">
-                                        </div>
-                                        <div class="col-lg-6 col-xl-3">
-                                            <label class="form-label">Hours of vocational training</label>
-                                            <input type="text" class="form-control" name="training_hours" value="{{ $background->training_hours }}">
-                                        </div>
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save impact stats</button>
-                                        </div>
+                                        <button type="button" class="btn btn-outline-primary btn-sm mb-3" data-impact-stats-add>
+                                            <i class="fa fa-plus me-1"></i> Add another statistic
+                                        </button>
+                                        <template data-impact-stats-template>
+                                            <tr data-impact-stats-row>
+                                                <td>
+                                                    <input type="text" class="form-control" name="stat_value[]" value="" placeholder="2,000+" maxlength="80">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" name="stat_label[]" value="" placeholder="Families empowered" maxlength="120">
+                                                </td>
+                                                <td>
+                                                    <select class="form-select" name="stat_on_bar[]">
+                                                        <option value="1" selected>Show on banner</option>
+                                                        <option value="0">Keep off banner</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-danger btn-sm" data-impact-stats-remove>Remove</button>
+                                                </td>
+                                            </tr>
+                                        </template>
                                     </div>
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save impact stats</button>
                                 </form>
                             </div>
 
@@ -243,7 +283,8 @@
         var map = {
             'section-backgrounds': 'section-backgrounds-tab',
             'homepage-photos': 'section-backgrounds-tab',
-            'what-we-do': 'what-we-do-tab'
+            'what-we-do': 'what-we-do-tab',
+            'impact': 'impact-tab'
         };
         var tabId = map[hash];
         if (!tabId) {
@@ -253,6 +294,29 @@
         if (tab && window.bootstrap && bootstrap.Tab) {
             bootstrap.Tab.getOrCreateInstance(tab).show();
         }
+    })();
+
+    (function () {
+        var root = document.querySelector('[data-impact-stats]');
+        if (!root) {
+            return;
+        }
+        var rows = root.querySelector('[data-impact-stats-rows]');
+        var template = root.querySelector('[data-impact-stats-template]');
+        root.addEventListener('click', function (event) {
+            var add = event.target.closest('[data-impact-stats-add]');
+            if (add && template && rows) {
+                rows.insertAdjacentHTML('beforeend', template.innerHTML);
+                return;
+            }
+            var remove = event.target.closest('[data-impact-stats-remove]');
+            if (remove) {
+                var row = remove.closest('[data-impact-stats-row]');
+                if (row && rows.querySelectorAll('[data-impact-stats-row]').length > 1) {
+                    row.remove();
+                }
+            }
+        });
     })();
 </script>
 @endsection
