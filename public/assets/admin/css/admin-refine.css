@@ -96,6 +96,18 @@
     display: none !important;
 }
 
+.admin-sidenav-label {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.42);
+    padding: 1.05rem 1rem 0.3rem;
+    margin: 0;
+    pointer-events: none;
+}
+
 .sb-nav-link-icon {
     opacity: 0.85;
 }

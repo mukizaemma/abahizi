@@ -29,7 +29,7 @@ class AdminGuide
                 'steps' => [
                     [
                         'title' => 'One place for each page',
-                        'body' => 'The left menu is the map of the website. Open the item that matches the page you want to change (for example Products, Our factory, or Impact pillars). You do not need to hunt in Site settings for titles.',
+                        'body' => 'The left menu follows the public site, then Photos, Inbox, and Admin. Open the item that matches the page you want to change (for example Products, Our factory, or Impact pillars). Site settings is under Admin — you do not need it for page titles.',
                     ],
                     [
                         'title' => 'Save often',

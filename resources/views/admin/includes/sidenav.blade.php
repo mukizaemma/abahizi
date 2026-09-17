@@ -24,26 +24,14 @@
             >
                 User guide
             </x-admin.nav-link>
-            <x-admin.nav-link
-                :href="route('settings')"
-                icon="fa-cogs"
-                :active="request()->routeIs(['settings', 'saveSetting'])"
-            >
-                Site settings
-            </x-admin.nav-link>
+
+            <div class="admin-sidenav-label">Website</div>
             <x-admin.nav-link
                 :href="route('slides')"
                 icon="fa-images"
                 :active="request()->routeIs(['slides', 'saveHero', 'editSlide', 'saveSlide', 'updateSlide', 'destroySlide'])"
             >
                 Homepage hero
-            </x-admin.nav-link>
-            <x-admin.nav-link
-                :href="route('mediaLibrary.index')"
-                icon="fa-photo-video"
-                :active="request()->routeIs(['mediaLibrary.*'])"
-            >
-                Media library
             </x-admin.nav-link>
             <x-admin.nav-link
                 :href="route('about')"
@@ -59,7 +47,6 @@
             >
                 Our factory
             </x-admin.nav-link>
-
             <x-admin.nav-link
                 :href="route('catalogProducts.index')"
                 icon="fa-store"
@@ -67,7 +54,13 @@
             >
                 Products
             </x-admin.nav-link>
-
+            <x-admin.nav-link
+                :href="route('staff')"
+                icon="fa-users"
+                :active="request()->routeIs(['staff', 'editStaff', 'saveStaff', 'updateStaff', 'destroyStaff', 'staff.moveUp', 'staff.moveDown', 'staff.toggleDisplay'])"
+            >
+                Our team
+            </x-admin.nav-link>
             <x-admin.nav-link
                 :href="route('impacts.index')"
                 icon="fa-chart-line"
@@ -97,20 +90,6 @@
                 Updates
             </x-admin.nav-link>
             <x-admin.nav-link
-                :href="route('images')"
-                icon="fa-th"
-                :active="request()->routeIs(['images', 'saveGallery', 'editGallery', 'updateGallery', 'destroyGallery'])"
-            >
-                Site gallery
-            </x-admin.nav-link>
-            <x-admin.nav-link
-                :href="route('staff')"
-                icon="fa-users"
-                :active="request()->routeIs(['staff', 'editStaff', 'saveStaff', 'updateStaff', 'destroyStaff', 'staff.moveUp', 'staff.moveDown', 'staff.toggleDisplay'])"
-            >
-                Our team
-            </x-admin.nav-link>
-            <x-admin.nav-link
                 :href="route('getTestimonials')"
                 icon="fa-quote-right"
                 :active="request()->routeIs(['getTestimonials', 'editTestimony', 'saveTestimony', 'updateTestimony', 'destroyTestimony'])"
@@ -118,6 +97,23 @@
                 Testimonials
             </x-admin.nav-link>
 
+            <div class="admin-sidenav-label">Photos</div>
+            <x-admin.nav-link
+                :href="route('images')"
+                icon="fa-th"
+                :active="request()->routeIs(['images', 'saveGallery', 'editGallery', 'updateGallery', 'destroyGallery'])"
+            >
+                Site gallery
+            </x-admin.nav-link>
+            <x-admin.nav-link
+                :href="route('mediaLibrary.index')"
+                icon="fa-photo-video"
+                :active="request()->routeIs(['mediaLibrary.*'])"
+            >
+                Media library
+            </x-admin.nav-link>
+
+            <div class="admin-sidenav-label">Inbox</div>
             <x-admin.nav-link
                 :href="route('orderRequests.index')"
                 icon="fa-clipboard-list"
@@ -170,6 +166,14 @@
                 </x-admin.nav-link>
             @endif
 
+            <div class="admin-sidenav-label">Admin</div>
+            <x-admin.nav-link
+                :href="route('settings')"
+                icon="fa-cogs"
+                :active="request()->routeIs(['settings', 'saveSetting'])"
+            >
+                Site settings
+            </x-admin.nav-link>
             <x-admin.nav-link
                 :href="route('admin.users.index')"
                 icon="fa-user-shield"
