@@ -79,11 +79,11 @@ class AdminGuide
                 'steps' => [
                     [
                         'title' => 'Headline and buttons',
-                        'body' => 'Write the main headline and subtitle. Button labels, the circular seal, and highlight bar sit on this same screen.',
+                        'body' => 'Write the main headline and subtitle. Button labels, the circular seal, and highlight bar sit on this same screen. These stay on every photo unless you choose each slide’s caption.',
                     ],
                     [
                         'title' => 'Choose media',
-                        'body' => 'Use sliding images, one still photo, or a video. Sliding images come from the slides you add below the hero form.',
+                        'body' => 'Use sliding images, one still photo, or a video. Sliding images come from the slides you add below the hero form. With sliding images, keep one static headline (best for brand memory) or rotate each slide’s headline and subheadline with the photo.',
                     ],
                     [
                         'title' => 'Impact strip',

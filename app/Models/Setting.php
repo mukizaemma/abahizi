@@ -24,6 +24,7 @@ class Setting extends Model
         'hero_headline' => 'string',
         'hero_subheadline' => 'string',
         'hero_media_type' => 'string',
+        'hero_text_mode' => 'string',
         'google_map_embed_code' => 'string',
         'show_products_publicly' => 'boolean',
         'show_products_page' => 'boolean',
@@ -47,6 +48,22 @@ class Setting extends Model
         }
 
         return 'slideshow';
+    }
+
+    public function heroTextMode(): string
+    {
+        $mode = strtolower(trim((string) ($this->hero_text_mode ?? '')));
+        if ($mode === '') {
+            $copy = is_array($this->landing_copy) ? $this->landing_copy : [];
+            $mode = strtolower(trim((string) ($copy['hero_text_mode'] ?? 'shared')));
+        }
+
+        return $mode === 'per_slide' ? 'per_slide' : 'shared';
+    }
+
+    public function usesPerSlideHeroText(): bool
+    {
+        return $this->resolvedHeroMediaType() === 'slideshow' && $this->heroTextMode() === 'per_slide';
     }
 
     public function heroPosterPublicUrl(): ?string

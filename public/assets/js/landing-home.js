@@ -121,6 +121,51 @@
         });
     }
 
+    function escapeHeroHtml(value) {
+        return String(value || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function formatHeroTitle(text) {
+        var raw = String(text || '').trim();
+        if (!raw) {
+            return '';
+        }
+        var parts = raw.split(/(?<=[.!?])\s+/).map(function (part) {
+            return part.trim();
+        }).filter(Boolean);
+        if (!parts.length) {
+            parts = [raw];
+        }
+        return parts.map(function (part, i) {
+            var accent = parts.length > 1 && i === 1 ? ' lh-hero__title-line--accent' : '';
+            return '<span class="lh-hero__title-line' + accent + '">' + escapeHeroHtml(part) + '</span>';
+        }).join('');
+    }
+
+    function applyHeroCopy(copyRoot, heading, subheading) {
+        if (!copyRoot) {
+            return;
+        }
+        var titleEl = copyRoot.querySelector('.lh-hero__title');
+        var subEl = copyRoot.querySelector('.lh-hero__subtitle');
+        var title = String(heading || '').trim() || copyRoot.getAttribute('data-lh-fallback-title') || '';
+        var sub = String(subheading || '').trim() || copyRoot.getAttribute('data-lh-fallback-subtitle') || '';
+        copyRoot.classList.add('is-changing');
+        window.setTimeout(function () {
+            if (titleEl && title) {
+                titleEl.innerHTML = formatHeroTitle(title);
+            }
+            if (subEl) {
+                subEl.textContent = sub;
+            }
+            copyRoot.classList.remove('is-changing');
+        }, 180);
+    }
+
     function initHeroSlides() {
         var root = document.querySelector('[data-lh-hero-slides]');
         if (!root) {
@@ -132,12 +177,20 @@
         }
         var index = 0;
         var interval = parseInt(root.getAttribute('data-lh-hero-interval') || '8000', 10);
+        var copyRoot = document.querySelector('[data-lh-hero-copy]');
         window.setInterval(function () {
             slides[index].classList.remove('is-active');
             slides[index].setAttribute('aria-hidden', 'true');
             index = (index + 1) % slides.length;
             slides[index].classList.add('is-active');
             slides[index].setAttribute('aria-hidden', 'false');
+            if (copyRoot) {
+                applyHeroCopy(
+                    copyRoot,
+                    slides[index].getAttribute('data-heading'),
+                    slides[index].getAttribute('data-subheading')
+                );
+            }
         }, interval);
     }
 

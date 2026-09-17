@@ -12,6 +12,9 @@
         $subtitle = __('site.landing.hero_subtitle');
     }
 
+    $sharedHeadline = $headline;
+    $sharedSubtitle = $subtitle;
+
     $heroType = $setting->resolvedHeroMediaType();
     $videoUrl = $setting->heroVideoPublicUrl();
     $posterFromSetting = $setting->heroPosterPublicUrl();
@@ -33,6 +36,7 @@
     $useVideo = $heroType === 'video' && $videoUrl;
     $useSingleImage = $heroType === 'image' || ($heroType === 'video' && ! $useVideo);
     $useSlideshow = ! $useVideo && ! $useSingleImage;
+    $perSlideText = $useSlideshow && $setting->usesPerSlideHeroText();
 
     if ($useSingleImage) {
         $bannerUrl = $posterFromSetting;
@@ -49,6 +53,18 @@
                 'url' => $bannerUrl,
             ],
         ]);
+    }
+
+    if ($perSlideText) {
+        $firstSlide = $heroSlides->first();
+        $slideHeadline = trim((string) ($firstSlide->heading ?? ''));
+        $slideSubtitle = trim((string) ($firstSlide->subheading ?? ''));
+        if ($slideHeadline !== '') {
+            $headline = $slideHeadline;
+        }
+        if ($slideSubtitle !== '') {
+            $subtitle = $slideSubtitle;
+        }
     }
 
     $youtubeId = null;
@@ -89,6 +105,8 @@
                 <div
                     class="lh-hero__slide{{ $index === 0 ? ' is-active' : '' }}"
                     data-lh-hero-slide
+                    data-heading="{{ e(trim((string) ($slide->heading ?? ''))) }}"
+                    data-subheading="{{ e(trim((string) ($slide->subheading ?? ''))) }}"
                     style="background-image: url('{{ $imageUrl }}');"
                     role="img"
                     aria-hidden="{{ $index === 0 ? 'false' : 'true' }}"
@@ -99,7 +117,14 @@
     </div>
 
     <div class="container lh-hero__content">
-        <div class="lh-hero__copy">
+        <div
+            class="lh-hero__copy"
+            @if($perSlideText)
+                data-lh-hero-copy
+                data-lh-fallback-title="{{ e($sharedHeadline) }}"
+                data-lh-fallback-subtitle="{{ e($sharedSubtitle) }}"
+            @endif
+        >
             <h1 class="lh-hero__title">
                 @foreach($headlineParts as $index => $part)
                     @php

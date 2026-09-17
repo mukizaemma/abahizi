@@ -33,6 +33,7 @@ class SlidesController extends Controller
             'hero_media_type' => ['required', 'in:slideshow,image,video'],
             'hero_headline' => ['nullable', 'string', 'max:255'],
             'hero_subheadline' => ['nullable', 'string', 'max:500'],
+            'hero_text_mode' => ['nullable', 'in:shared,per_slide'],
             'hero_video_url' => ['nullable', 'string', 'max:2048'],
             'hero_poster' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
             'hero_banner' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
@@ -49,6 +50,14 @@ class SlidesController extends Controller
 
         $data->hero_headline = $request->input('hero_headline');
         $data->hero_subheadline = $request->input('hero_subheadline');
+
+        if (Schema::hasColumn('settings', 'hero_text_mode')) {
+            $data->hero_text_mode = $request->input('hero_text_mode', 'shared');
+        } else {
+            $copy = is_array($data->landing_copy) ? $data->landing_copy : [];
+            $copy['hero_text_mode'] = $request->input('hero_text_mode', 'shared');
+            $data->landing_copy = $copy;
+        }
 
         if (Schema::hasColumn('settings', 'hero_media_type')) {
             $data->hero_media_type = $request->input('hero_media_type');
@@ -94,11 +103,12 @@ class SlidesController extends Controller
     {
         $request->validate([
             'heading' => ['nullable', 'string', 'max:255'],
+            'subheading' => ['nullable', 'string', 'max:255'],
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
         $data = new Slide();
         $data->heading = trim((string) $request->input('heading', ''));
-        $data->subheading = '';
+        $data->subheading = trim((string) $request->input('subheading', ''));
     
         if ($request->hasFile('image')) {
             $data->image = $request->file('image')->store('images/slides', 'public');
@@ -123,10 +133,12 @@ class SlidesController extends Controller
     {
         $request->validate([
             'heading' => ['nullable', 'string', 'max:255'],
+            'subheading' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:4096'],
         ]);
         $data = Slide::findOrFail($id);
         $data->heading = trim((string) $request->input('heading', ''));
+        $data->subheading = trim((string) $request->input('subheading', ''));
 
         if ($request->hasFile('image')) {
             if (!empty($data->image) && Storage::disk('public')->exists($data->image)) {

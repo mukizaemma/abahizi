@@ -10,6 +10,7 @@
 
 @php
     $heroType = $setting->resolvedHeroMediaType();
+    $heroTextMode = $setting->heroTextMode();
     $posterUrl = $setting->heroPosterPublicUrl();
     $videoUrl = $setting->heroVideoPublicUrl();
 @endphp
@@ -23,7 +24,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
                     <h1>Homepage hero</h1>
-                    <p class="text-muted mb-0">Headline, buttons, and the large photo or video at the top of the home page. The dark strip under the banner shows Impact numbers (About &amp; homepage → Impact numbers), not Impact pillars.</p>
+                    <p class="text-muted mb-0">Headline, buttons, and the large photo or video at the top of the home page. With sliding images, keep one brand headline (recommended) or rotate each slide’s caption. The dark strip under the banner shows Impact numbers (About &amp; homepage → Impact numbers), not Impact pillars.</p>
                 </div>
 
                 <form action="{{ route('saveHero') }}" method="POST" enctype="multipart/form-data" class="card mb-4">
@@ -37,6 +38,9 @@
                             <div class="col-lg-6">
                                 <label class="form-label">Subheadline</label>
                                 <input type="text" class="form-control" name="hero_subheadline" value="{{ $setting->hero_subheadline }}" placeholder="Ethical bag manufacturing that strengthens families…">
+                            </div>
+                            <div class="col-12" data-hero-panel="slideshow">
+                                <p class="text-muted small mb-0">These stay on every slide when you choose one static headline. If you choose each slide’s caption, they are used only when a slide has no caption of its own.</p>
                             </div>
                         </div>
 
@@ -73,8 +77,29 @@
                             </div>
                         </div>
 
-                        <div data-hero-panel="slideshow" class="hero-type-panel mb-3">
-                            <p class="text-muted mb-0">Add or edit slides in the list below. Use two or more images for a slideshow.</p>
+                        <div data-hero-panel="slideshow" class="hero-type-panel mb-4">
+                            <p class="text-muted mb-3">Add or edit slides in the list below. Use two or more images for a slideshow.</p>
+                            <label class="form-label d-block mb-2">Headline on sliding images</label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="hero-type-card">
+                                        <input type="radio" name="hero_text_mode" value="shared" {{ $heroTextMode !== 'per_slide' ? 'checked' : '' }}>
+                                        <span>
+                                            <strong>One static headline</strong>
+                                            <small>Recommended. The same headline and subheadline stay on screen while photos rotate. Stronger for brand memory.</small>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="hero-type-card">
+                                        <input type="radio" name="hero_text_mode" value="per_slide" {{ $heroTextMode === 'per_slide' ? 'checked' : '' }}>
+                                        <span>
+                                            <strong>Each slide’s caption</strong>
+                                            <small>Headline and subheadline change with the photo. Use when each image tells a different story. Empty captions fall back to the fields above.</small>
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
                         <div data-hero-panel="image" class="hero-type-panel mb-3">
@@ -121,7 +146,7 @@
                     <div class="card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
                         <div>
                             <strong>Slideshow images</strong>
-                            <p class="text-muted small mb-0 mt-1">Used when hero media is set to sliding images.</p>
+                            <p class="text-muted small mb-0 mt-1">Used when hero media is set to sliding images. Captions appear on the site only if you choose “Each slide’s caption”.</p>
                         </div>
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal" type="button">
                             <i class="fa fa-plus"></i> Add slide
@@ -131,7 +156,8 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Hero caption</th>
+                                    <th>Headline</th>
+                                    <th>Subheadline</th>
                                     <th>Image</th>
                                     <th>Action</th>
                                 </tr>
@@ -140,6 +166,7 @@
                                 @forelse($slides as $rs)
                                     <tr>
                                         <td>{{ $rs->heading ?: '—' }}</td>
+                                        <td>{{ $rs->subheading ?: '—' }}</td>
                                         <td>
                                             <img src="{{ \App\Models\Slide::publicImageUrl($rs->image) }}" alt="" width="150">
                                         </td>
@@ -152,7 +179,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-muted">No slides yet. Add at least one image for the slideshow.</td>
+                                        <td colspan="4" class="text-muted">No slides yet. Add at least one image for the slideshow.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -176,8 +203,13 @@
                                         <small class="text-muted">Landscape recommended (1920×1080 or similar)</small>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Slide caption <span class="text-muted fw-normal">(optional)</span></label>
-                                        <input type="text" class="form-control" placeholder="e.g. Premium Custom Handbags. Crafted in Rwanda." name="heading">
+                                        <label class="form-label">Slide headline <span class="text-muted fw-normal">(optional)</span></label>
+                                        <input type="text" class="form-control" placeholder="e.g. Crafted in Rwanda. Made for the World." name="heading">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Slide subheadline <span class="text-muted fw-normal">(optional)</span></label>
+                                        <input type="text" class="form-control" placeholder="Short line that belongs with this photo" name="subheading">
+                                        <small class="text-muted">Shown on the homepage only when Headline on sliding images is set to each slide’s caption.</small>
                                     </div>
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fa fa-save"></i> Add slide
