@@ -31,11 +31,11 @@
 <section class="lh-social" aria-labelledby="lh-social-title">
     <div class="container">
         <div class="lh-social__head lh-reveal">
-            <h2 id="lh-social-title" class="lh-social__title">{{ __('site.landing.social_title') }}</h2>
+            <h2 id="lh-social-title" class="lh-social__title">{{ \App\Support\SiteCopy::get('social_title') }}</h2>
             @if($instagram !== '')
                 <a href="{{ $instagram }}" class="lh-social__follow" target="_blank" rel="noopener noreferrer">
                     <i class="fab fa-instagram" aria-hidden="true"></i>
-                    <span>{{ __('site.landing.social_cta') }}</span>
+                    <span>{{ \App\Support\SiteCopy::get('social_cta') }}</span>
                 </a>
             @else
                 <span class="lh-social__follow" aria-hidden="true">

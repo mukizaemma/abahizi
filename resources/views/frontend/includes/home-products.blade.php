@@ -1,5 +1,6 @@
 @php
-    $productsEnabled = (bool) ($setting->show_products_publicly ?? false);
+    $productsEnabled = (bool) ($setting->show_products_publicly ?? false)
+        && ($setting->productsPageVisible());
     $productsIntro = trim((string) ($about->products_intro ?? ''));
 @endphp
 @if($productsEnabled && (isset($homeProducts) && $homeProducts->isNotEmpty()))
@@ -62,11 +63,13 @@
                 </div>
             @endforeach
         </div>
+        @if($setting->productsPageVisible())
         <div class="row">
             <div class="col-12 text-center pt-10">
                 <a href="{{ route('ourProducts') }}" class="tp-btn">View more products</a>
             </div>
         </div>
+        @endif
     </div>
 </div>
 @endif

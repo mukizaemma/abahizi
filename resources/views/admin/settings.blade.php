@@ -12,7 +12,9 @@
 
 @php
     use App\Support\PageHeaderService;
+    use App\Support\SiteCopy;
     $pageHeaderStore = PageHeaderService::storedHeaders($data);
+    $landingCopyStore = SiteCopy::stored($data);
 @endphp
 
 <div id="layoutSidenav">
@@ -24,7 +26,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
                     <h1>Site settings</h1>
-                    <p class="text-muted mb-0">Brand, contact details, colours, product visibility, and headers for pages that appear on the public site.</p>
+                    <p class="text-muted mb-0">Brand, contact details, colours, product visibility, homepage wording, and headers for pages that appear on the public site.</p>
                 </div>
 
                 @if (session()->has('success'))
@@ -57,6 +59,9 @@
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="visibility-tab" data-bs-toggle="tab" data-bs-target="#visibility-pane" type="button" role="tab">Visibility</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="copy-tab" data-bs-toggle="tab" data-bs-target="#copy-pane" type="button" role="tab">Homepage copy</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="headers-tab" data-bs-toggle="tab" data-bs-target="#headers-pane" type="button" role="tab">Page headers</button>
@@ -199,8 +204,9 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" role="switch" id="show_products_page" name="show_products_page" value="1" {{ ($data->show_products_page ?? true) ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="show_products_page">
-                                                    Show products page in navigation
+                                                    Show the products page on the public site
                                                 </label>
+                                                <div class="form-text">When this is off, Products is hidden from the menu and footer, the “view more bags” button is removed from the homepage, and <code>/products</code> is not available.</div>
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -212,6 +218,32 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="copy-pane" role="tabpanel" aria-labelledby="copy-tab">
+                                    <p class="text-muted mb-4">Edit the homepage section titles and related wording. Leave a field empty to keep the default text.</p>
+                                    @foreach(SiteCopy::groups() as $groupKey => $group)
+                                        <div class="card mb-4 border">
+                                            <div class="card-header bg-light fw-semibold">{{ $group['label'] }}</div>
+                                            <div class="card-body">
+                                                @if(! empty($group['help']))
+                                                    <p class="form-text mt-0 mb-3">{{ $group['help'] }}</p>
+                                                @endif
+                                                <div class="row g-3">
+                                                    @foreach($group['fields'] as $fieldKey => $field)
+                                                        <div class="{{ ($field['type'] ?? 'text') === 'textarea' ? 'col-12' : 'col-lg-6' }}">
+                                                            <label class="form-label" for="landing_copy_{{ $fieldKey }}">{{ $field['label'] }}</label>
+                                                            @if(($field['type'] ?? 'text') === 'textarea')
+                                                                <textarea class="form-control" rows="{{ $field['rows'] ?? 3 }}" id="landing_copy_{{ $fieldKey }}" name="landing_copy[{{ $fieldKey }}]" placeholder="{{ __('site.landing.'.$fieldKey) }}">{{ $landingCopyStore[$fieldKey] ?? '' }}</textarea>
+                                                            @else
+                                                                <input type="text" class="form-control" id="landing_copy_{{ $fieldKey }}" name="landing_copy[{{ $fieldKey }}]" value="{{ $landingCopyStore[$fieldKey] ?? '' }}" placeholder="{{ __('site.landing.'.$fieldKey) }}">
+                                                            @endif
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
 
                                 <div class="tab-pane fade" id="headers-pane" role="tabpanel" aria-labelledby="headers-tab">

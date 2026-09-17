@@ -850,6 +850,17 @@ public function gallery(){
             $data->page_headers = $headers;
         }
 
+        if (Schema::hasColumn('settings', 'landing_copy')) {
+            $copy = is_array($data->landing_copy) ? $data->landing_copy : [];
+            $incoming = (array) $request->input('landing_copy', []);
+            foreach (\App\Support\SiteCopy::keys() as $copyKey) {
+                if (array_key_exists($copyKey, $incoming)) {
+                    $copy[$copyKey] = trim((string) $incoming[$copyKey]);
+                }
+            }
+            $data->landing_copy = $copy;
+        }
+
         if ($request->hasFile('logo') && request('logo') != '') {
             $dir = 'public/images';
 
@@ -994,6 +1005,9 @@ public function gallery(){
     public function ourProducts(Request $request){
         $about = Background::firstOrEmpty();
         $setting = Setting::firstOrEmpty();
+        if (! $setting->productsPageVisible()) {
+            abort(404);
+        }
         $categories = ProductCategory::query()->active()->orderBy('sort_order')->orderBy('name')->get();
 
         $products = collect();
@@ -1032,7 +1046,7 @@ public function gallery(){
     public function productShow($slug){
         $about = Background::firstOrEmpty();
         $setting = Setting::firstOrEmpty();
-        if (!($setting->show_products_publicly ?? false)) {
+        if (! $setting->productsPageVisible() || ! ($setting->show_products_publicly ?? false)) {
             abort(404);
         }
         $product = Product::query()
@@ -1057,7 +1071,7 @@ public function gallery(){
     {
         $setting = Setting::firstOrEmpty();
 
-        if (! ($setting->show_products_publicly ?? false)) {
+        if (! ($setting->show_products_publicly ?? false) || ! $setting->productsPageVisible()) {
             abort(404);
         }
 

@@ -18,6 +18,7 @@ class Setting extends Model
         'page_header_image' => 'string',
         'page_header_caption' => 'string',
         'page_headers' => 'array',
+        'landing_copy' => 'array',
         'hero_video_url' => 'string',
         'hero_poster' => 'string',
         'hero_headline' => 'string',
@@ -84,5 +85,10 @@ class Setting extends Model
         }
 
         return asset('storage/videos/' . $path);
+    }
+
+    public function productsPageVisible(): bool
+    {
+        return (bool) ($this->show_products_page ?? true);
     }
 }

@@ -60,9 +60,9 @@
     <div class="container lh-impact__inner">
         <div class="lh-impact__intro lh-reveal">
             <h2 id="lh-impact-title" class="lh-impact__title">
-                {!! __('site.landing.impact_title_html') !!}
+                {!! \App\Support\SiteCopy::impactTitleHtml() !!}
             </h2>
-            <p class="lh-impact__lead">{{ __('site.landing.impact_lead') }}</p>
+            <p class="lh-impact__lead">{{ \App\Support\SiteCopy::get('impact_lead') }}</p>
         </div>
 
         <div class="lh-impact__pillars">
@@ -84,8 +84,8 @@
         </div>
 
         <div class="lh-impact__actions lh-reveal">
-            <a href="{{ route('impactPage') }}" class="lh-btn lh-btn--primary">{{ __('site.landing.impact_cta_explore') }}</a>
-            <a href="{{ route('impactCommunity') }}" class="lh-btn lh-btn--ghost">{{ __('site.landing.impact_cta_community') }}</a>
+            <a href="{{ route('impactPage') }}" class="lh-btn lh-btn--primary">{{ \App\Support\SiteCopy::get('impact_cta_explore') }}</a>
+            <a href="{{ route('impactCommunity') }}" class="lh-btn lh-btn--ghost">{{ \App\Support\SiteCopy::get('impact_cta_community') }}</a>
         </div>
     </div>
 </section>

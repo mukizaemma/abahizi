@@ -1,8 +1,8 @@
 @php
     $values = [
-        ['icon' => 'fa-hands-holding', 'title' => __('site.landing.value_1_title'), 'text' => __('site.landing.value_1_text')],
-        ['icon' => 'fa-people-group', 'title' => __('site.landing.value_2_title'), 'text' => __('site.landing.value_2_text')],
-        ['icon' => 'fa-seedling', 'title' => __('site.landing.value_3_title'), 'text' => __('site.landing.value_3_text')],
+        ['icon' => 'fa-hands-holding', 'title' => \App\Support\SiteCopy::get('value_1_title'), 'text' => \App\Support\SiteCopy::get('value_1_text')],
+        ['icon' => 'fa-people-group', 'title' => \App\Support\SiteCopy::get('value_2_title'), 'text' => \App\Support\SiteCopy::get('value_2_text')],
+        ['icon' => 'fa-seedling', 'title' => \App\Support\SiteCopy::get('value_3_title'), 'text' => \App\Support\SiteCopy::get('value_3_text')],
     ];
 @endphp
 
@@ -13,10 +13,10 @@
                 <span class="lh-move__mark" aria-hidden="true">
                     <i class="fas fa-dharmachakra"></i>
                 </span>
-                <p class="lh-eyebrow">{{ __('site.landing.move_eyebrow') }}</p>
-                <h2 id="lh-move-title" class="lh-move__title">{{ __('site.landing.move_title') }}</h2>
-                <p class="lh-move__text lh-body">{{ __('site.landing.move_text') }}</p>
-                <a href="{{ route('contacts') }}" class="lh-btn lh-btn--solid">{{ __('site.landing.move_cta') }}</a>
+                <p class="lh-eyebrow">{{ \App\Support\SiteCopy::get('move_eyebrow') }}</p>
+                <h2 id="lh-move-title" class="lh-move__title">{{ \App\Support\SiteCopy::get('move_title') }}</h2>
+                <p class="lh-move__text lh-body">{{ \App\Support\SiteCopy::get('move_text') }}</p>
+                <a href="{{ route('contacts') }}" class="lh-btn lh-btn--solid">{{ \App\Support\SiteCopy::get('move_cta') }}</a>
             </div>
             <div class="lh-move__cards">
                 @foreach($values as $index => $value)

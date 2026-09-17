@@ -65,10 +65,10 @@
     }
 
     $barItems = [
-        ['icon' => 'fa-users', 'label' => __('site.landing.bar_1')],
-        ['icon' => 'fa-hand-holding-heart', 'label' => __('site.landing.bar_2')],
-        ['icon' => 'fa-heart', 'label' => __('site.landing.bar_3')],
-        ['icon' => 'fa-location-dot', 'label' => __('site.landing.bar_4')],
+        ['icon' => 'fa-users', 'label' => \App\Support\SiteCopy::get('bar_1')],
+        ['icon' => 'fa-hand-holding-heart', 'label' => \App\Support\SiteCopy::get('bar_2')],
+        ['icon' => 'fa-heart', 'label' => \App\Support\SiteCopy::get('bar_3')],
+        ['icon' => 'fa-location-dot', 'label' => \App\Support\SiteCopy::get('bar_4')],
     ];
 @endphp
 
@@ -115,10 +115,10 @@
             </h1>
             <p class="lh-hero__subtitle">{{ $subtitle }}</p>
             <div class="lh-hero__actions">
-                <a href="#lh-about" class="lh-btn lh-btn--solid">{{ __('site.landing.cta_story') }}</a>
+                <a href="#lh-about" class="lh-btn lh-btn--solid">{{ \App\Support\SiteCopy::get('cta_story') }}</a>
                 <a href="#lh-impact" class="lh-btn lh-btn--ghost">
                     <i class="far fa-heart" aria-hidden="true"></i>
-                    {{ __('site.landing.cta_impact') }}
+                    {{ \App\Support\SiteCopy::get('cta_impact') }}
                 </a>
             </div>
         </div>
@@ -130,7 +130,7 @@
                 </defs>
                 <circle cx="100" cy="100" r="92" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.35" />
                 <text class="lh-hero__seal-text">
-                    <textPath href="#lh-seal-circle" startOffset="0%">{{ __('site.landing.hero_seal') }} · {{ __('site.landing.hero_seal') }}</textPath>
+                    <textPath href="#lh-seal-circle" startOffset="0%">{{ \App\Support\SiteCopy::get('hero_seal') }} · {{ \App\Support\SiteCopy::get('hero_seal') }}</textPath>
                 </text>
             </svg>
             <span class="lh-hero__seal-mark"><i class="fas fa-certificate"></i></span>

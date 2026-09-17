@@ -104,10 +104,10 @@
     }
 
     $craftFeatures = [
-        ['icon' => 'fa-gem', 'title' => __('site.landing.craft_1_title'), 'text' => __('site.landing.craft_1_text')],
-        ['icon' => 'fa-scissors', 'title' => __('site.landing.craft_2_title'), 'text' => __('site.landing.craft_2_text')],
-        ['icon' => 'fa-bag-shopping', 'title' => __('site.landing.craft_3_title'), 'text' => __('site.landing.craft_3_text')],
-        ['icon' => 'fa-leaf', 'title' => __('site.landing.craft_4_title'), 'text' => __('site.landing.craft_4_text')],
+        ['icon' => 'fa-gem', 'title' => \App\Support\SiteCopy::get('craft_1_title'), 'text' => \App\Support\SiteCopy::get('craft_1_text')],
+        ['icon' => 'fa-scissors', 'title' => \App\Support\SiteCopy::get('craft_2_title'), 'text' => \App\Support\SiteCopy::get('craft_2_text')],
+        ['icon' => 'fa-bag-shopping', 'title' => \App\Support\SiteCopy::get('craft_3_title'), 'text' => \App\Support\SiteCopy::get('craft_3_text')],
+        ['icon' => 'fa-leaf', 'title' => \App\Support\SiteCopy::get('craft_4_title'), 'text' => \App\Support\SiteCopy::get('craft_4_text')],
     ];
 @endphp
 
@@ -115,8 +115,8 @@
     <div class="container">
         <div class="lh-craft__grid">
             <div class="lh-craft__copy lh-reveal">
-                <p class="lh-eyebrow">{{ __('site.landing.products_title') }}</p>
-                <h2 id="lh-products-title" class="lh-craft__title">{{ __('site.landing.products_lead') }}</h2>
+                <p class="lh-eyebrow">{{ \App\Support\SiteCopy::get('products_title') }}</p>
+                <h2 id="lh-products-title" class="lh-craft__title">{{ \App\Support\SiteCopy::get('products_lead') }}</h2>
                 <ul class="lh-craft__features">
                     @foreach($craftFeatures as $feature)
                         <li>
@@ -128,8 +128,8 @@
                         </li>
                     @endforeach
                 </ul>
-                @if($showCraftCta ?? true)
-                    <a href="{{ $craftCtaHref ?? route('ourProducts') }}" class="lh-btn lh-btn--solid">{{ $craftCtaLabel ?? __('site.landing.products_view_more') }}</a>
+                @if($showCraftCta ?? ($setting->productsPageVisible() ?? true))
+                    <a href="{{ $craftCtaHref ?? route('ourProducts') }}" class="lh-btn lh-btn--solid">{{ $craftCtaLabel ?? \App\Support\SiteCopy::get('products_view_more') }}</a>
                 @endif
             </div>
 

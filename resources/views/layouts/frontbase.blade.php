@@ -172,7 +172,9 @@
                                         </ul>
                                     </li>
                                     <li><a href="{{ route('ourFactory') }}">{{ __('site.nav.factory') }}</a></li>
+                                    @if($setting->productsPageVisible())
                                     <li><a href="{{ route('ourProducts') }}">{{ __('site.nav.products') }}</a></li>
+                                    @endif
                                     <li class="has-dropdown">
                                         <a href="{{ route('impactPage') }}">{{ __('site.nav.impact') }}</a>
                                         <ul class="submenu tp-submenu">
@@ -239,9 +241,11 @@
                         <h3 class="site-footer__heading">{{ __('site.footer.explore') }}</h3>
                         <ul class="site-footer__nav list-unstyled mb-0">
                             <li><a href="{{ route('home') }}">{{ __('site.nav.home') }}</a></li>
-                            <li><a href="{{ route('backgroundDetails') }}">{{ __('site.landing.about_eyebrow') }}</a></li>
+                            <li><a href="{{ route('backgroundDetails') }}">{{ \App\Support\SiteCopy::get('about_eyebrow') }}</a></li>
                             <li><a href="{{ route('ourFactory') }}">{{ __('site.nav.factory') }}</a></li>
+                            @if($setting->productsPageVisible())
                             <li><a href="{{ route('ourProducts') }}">{{ __('site.nav.products') }}</a></li>
+                            @endif
                             <li><a href="{{ route('impactPage') }}">{{ __('site.nav.impact') }}</a></li>
                             <li><a href="{{ route('impactCommunity') }}">{{ __('site.nav.community') }}</a></li>
                             <li><a href="{{ route('posts') }}">{{ __('site.nav.updates') }}</a></li>

@@ -333,6 +333,8 @@ return [
         'gallery_close' => 'Close',
         'gallery_prev' => 'Previous image',
         'gallery_next' => 'Next image',
+        'impact_title' => 'Every bag supports real change',
+        'impact_accent' => 'real change',
         'impact_title_html' => 'Every bag supports <span class="lh-accent">real change</span>',
         'impact_lead' => 'Orders fund the programs our cooperative runs for workers, families, and the wider community.',
         'pillar_1_title' => 'Health Insurance',

@@ -333,6 +333,8 @@ return [
         'gallery_close' => 'Funga',
         'gallery_prev' => 'Ifoto ibanza',
         'gallery_next' => 'Ifoto ikurikira',
+        'impact_title' => 'Buri mufuka ushyigira impinduka nyayo',
+        'impact_accent' => 'impinduka nyayo',
         'impact_title_html' => 'Buri mufuka ushyigira <span class="lh-accent">impinduka nyayo</span>',
         'impact_lead' => 'Ibyo dukora bishyigira gahunda zacu ku bakozi, imiryango, n\'umuryango wose.',
         'pillar_1_title' => 'Ubwishingizi bw\'Ubuzima',

@@ -17,8 +17,8 @@
 
 <section class="lh-contact" id="lh-contact" aria-labelledby="lh-contact-title">
     <div class="container">
-        <h2 id="lh-contact-title" class="lh-contact__title lh-reveal">{{ __('site.landing.contact_title') }}</h2>
-        <p class="lh-contact__lead lh-reveal">{{ __('site.landing.contact_lead') }}</p>
+        <h2 id="lh-contact-title" class="lh-contact__title lh-reveal">{{ \App\Support\SiteCopy::get('contact_title') }}</h2>
+        <p class="lh-contact__lead lh-reveal">{{ \App\Support\SiteCopy::get('contact_lead') }}</p>
 
         <div class="lh-contact__grid">
             <div class="lh-contact__form lh-reveal">
