@@ -22,7 +22,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
                     <h1>About &amp; homepage</h1>
-                    <p class="text-muted mb-0">Copy and photos for Home, Our Story, Mission &amp; Vision, and What We Do. Homepage titles for Our Story and Our Values are on those tabs below.</p>
+                    <p class="text-muted mb-0">Mission, values, Our Story, What We Do, and homepage story text. Each tab saves its own content. See the user guide if you are unsure which tab to use.</p>
                 </div>
 
                 @if(session()->has('success'))
@@ -154,11 +154,6 @@
                                             <label class="form-label">How it works</label>
                                             <p class="text-muted small mb-2">One step per line or bullet. Format as <strong>Step title:</strong> short description — these appear as cards on What We Do.</p>
                                             <textarea rows="6" class="form-control" name="how_it_works" data-editor="rich">{!! $background->how_it_works !!}</textarea>
-                                        </div>
-                                        <div class="col-12">
-                                            <label class="form-label">Products page intro <span class="text-muted fw-normal">(optional)</span></label>
-                                            <p class="text-muted small mb-2">Shown at the top of the Products catalog page when that page is public.</p>
-                                            <textarea rows="4" class="form-control" name="products_intro" data-editor="rich">{!! $background->products_intro !!}</textarea>
                                         </div>
                                         <div class="col-12">
                                             <button type="submit" class="btn btn-primary"><i class="fa fa-save me-1"></i> Save homepage &amp; what we do</button>

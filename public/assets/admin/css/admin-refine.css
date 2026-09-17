@@ -864,6 +864,133 @@ a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
     }
 }
 
+.admin-guide {
+    max-width: 52rem;
+    margin: 0 auto 2rem;
+}
+
+.admin-guide__hero h1 {
+    font-family: var(--lux-serif, Georgia, serif);
+    margin-bottom: 0.5rem;
+}
+
+.admin-guide__kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--brand-secondary, #2c2c2c);
+    margin-bottom: 0.35rem;
+}
+
+.admin-guide__progress {
+    margin: 1.25rem 0 1rem;
+}
+
+.admin-guide__lessons {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.25rem 0 0.75rem;
+    margin-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.admin-guide__chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    max-width: 14rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--admin-border, #e2e8f0);
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.admin-guide__chip span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 50%;
+    background: #f1f5f9;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.admin-guide__chip.is-active {
+    background: var(--brand-primary, #fad200);
+    border-color: var(--brand-primary, #fad200);
+    color: var(--brand-on-primary, #111);
+    font-weight: 600;
+}
+
+.admin-guide__chip.is-active span {
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.admin-guide__card {
+    border: 1px solid var(--admin-border, #e2e8f0);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.admin-guide__title {
+    font-family: var(--lux-serif, Georgia, serif);
+    margin-bottom: 0.5rem;
+}
+
+.admin-guide__steps {
+    margin: 1.5rem 0 1.75rem;
+    padding-left: 1.25rem;
+}
+
+.admin-guide__steps li + li {
+    margin-top: 1.1rem;
+}
+
+.admin-guide__steps h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+}
+
+.admin-guide__steps p {
+    margin-bottom: 0;
+    color: #475569;
+}
+
+.admin-guide__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.admin-guide__pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 1.25rem;
+}
+
+.admin-guide-footer {
+    border-top: 1px solid var(--admin-border, #e2e8f0);
+}
+
+.admin-guide-footer__help {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 0.5rem;
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.85rem;
+}
+
 @media (max-width: 575.98px) {
     .sb-topnav {
         padding-right: 0.35rem;

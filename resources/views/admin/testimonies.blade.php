@@ -16,11 +16,11 @@
         </div>
         <div id="layoutSidenav_content">
             <main>
-                <div class="container-fluid px-4">
-                    {{-- <h1 class="mt-4">Dashboard</h1> --}}
-                    <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item active">Testimonies</li>
-                    </ol>
+                <div class="container-fluid px-4 py-4">
+                    <div class="admin-page-header">
+                        <h1>Testimonials</h1>
+                        <p class="text-muted mb-0">Quotes from partners, clients, or community members. These can also appear on impact stories.</p>
+                    </div>
                     @include('admin.includes.page-header-form', ['pageKey' => 'testimonials'])
                     <div class="row">
                         @if (session()->has('success'))

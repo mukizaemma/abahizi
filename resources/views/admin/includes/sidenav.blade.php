@@ -18,6 +18,13 @@
         <div class="nav flex-column pt-2">
 
             <x-admin.nav-link
+                :href="route('admin.guide.show')"
+                icon="fa-book"
+                :active="request()->routeIs('admin.guide.show')"
+            >
+                User guide
+            </x-admin.nav-link>
+            <x-admin.nav-link
                 :href="route('settings')"
                 icon="fa-cogs"
                 :active="request()->routeIs(['settings', 'saveSetting'])"

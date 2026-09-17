@@ -16,24 +16,12 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header mb-3">
                     <h1>Products</h1>
-                    <p class="text-muted mb-0">Photos on the public Products page. Use this when you do not want to list sellable catalog items.</p>
+                    <p class="text-muted mb-0">Photos on the public Products page. Use this when you do not want to list sellable catalog items. Headings for that page (Work with us, gallery, catalog) are on the Final products tab.</p>
                 </div>
                 @include('admin.includes.products-tabs', ['tab' => 'gallery'])
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
-
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h2 class="h5">Page intro</h2>
-                        <p class="text-muted small">Short text at the top of /products.</p>
-                        <form action="{{ route('catalogProducts.pageIntro') }}" method="POST">
-                            @csrf
-                            <textarea name="products_intro" rows="5" class="form-control" data-editor="rich">{!! old('products_intro', $about->products_intro ?? '') !!}</textarea>
-                            <button type="submit" class="btn btn-primary mt-3">Save intro</button>
-                        </form>
-                    </div>
-                </div>
 
                 <div class="card mb-4">
                     <div class="card-body">

@@ -102,6 +102,8 @@ Route::middleware(['auth', 'admin.role'
 
     Route::get('/redirects',[App\Http\Controllers\HomeController::class,'redirects'])->name('redirects');
 
+    Route::get('/admin/guide/{slug?}', [App\Http\Controllers\AdminGuideController::class, 'show'])->name('admin.guide.show');
+
     Route::get('/setting',[App\Http\Controllers\HomeController::class,'setting'])->name('settings');
     Route::post('/saveSetting/{id}',[App\Http\Controllers\HomeController::class,'saveSetting'])->name('saveSetting');
     Route::post('/landing-copy',[App\Http\Controllers\LandingCopyController::class,'update'])->name('landingCopy.update');
