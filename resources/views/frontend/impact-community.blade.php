@@ -7,7 +7,13 @@
     @include('frontend.includes.page-header', [
         'pageKey' => 'impact_community',
         'title' => __('site.nav.community'),
-        'caption' => __('site.impact.community_lead'),
+        'caption' => \App\Support\SiteCopy::get('impact_community_lead'),
+    ])
+
+    @include('frontend.includes.impact-pillars', [
+        'heading' => 'Our impact pillars',
+        'lead' => \App\Support\SiteCopy::get('impact_community_lead'),
+        'tone' => 'cream',
     ])
 
     <section class="lux-section impact-detail">

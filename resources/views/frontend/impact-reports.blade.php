@@ -7,7 +7,13 @@
     @include('frontend.includes.page-header', [
         'pageKey' => 'impact_reports',
         'title' => $page->title ?? __('site.nav.social_impact_reports'),
-        'caption' => empty($page->description) ? __('site.impact.reports_lead') : null,
+        'caption' => empty($page->description) ? \App\Support\SiteCopy::get('impact_reports_lead') : null,
+    ])
+
+    @include('frontend.includes.impact-pillars', [
+        'heading' => 'Our impact pillars',
+        'lead' => \App\Support\SiteCopy::get('impact_reports_lead'),
+        'tone' => 'cream',
     ])
 
     <section class="lux-section impact-detail grey-bg">

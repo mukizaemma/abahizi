@@ -24,6 +24,9 @@
                     </button>
                 </div>
 
+                @include('admin.includes.page-header-form', ['pageKey' => 'updates'])
+                @include('admin.includes.landing-copy-form', ['group' => 'updates', 'title' => 'Updates page heading'])
+
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="table-responsive admin-table-wrap">

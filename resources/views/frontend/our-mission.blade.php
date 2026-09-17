@@ -17,7 +17,7 @@
                         <div class="tp-about-4__list-icon text-center mb-20">
                             <i class="flaticon-mission" style="font-size:48px;"></i>
                         </div>
-                        <h4 class="tp-about-4__title-sm text-center mb-20">Our Mission</h4>
+                        <h4 class="tp-about-4__title-sm text-center mb-20">{{ \App\Support\SiteCopy::get('mission_card_title') }}</h4>
                         <div class="postbox__text" style="font-size: 18px; line-height: 1.7;">{!! $mission->mission ?? '' !!}</div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                         <div class="tp-about-4__list-icon text-center mb-20">
                             <i class="flaticon-vision" style="font-size:48px;"></i>
                         </div>
-                        <h4 class="tp-about-4__title-sm text-center mb-20">Our Vision</h4>
+                        <h4 class="tp-about-4__title-sm text-center mb-20">{{ \App\Support\SiteCopy::get('vision_card_title') }}</h4>
                         <div class="postbox__text" style="font-size: 18px; line-height: 1.7;">{!! $mission->vision ?? '' !!}</div>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
     </div>
 
     @include('frontend.includes.core-values-parallax', [
-        'coreValuesParallaxTitle' => 'Our Core Values',
+        'coreValuesParallaxTitle' => \App\Support\SiteCopy::get('values_page_heading'),
     ])
 
 @endsection

@@ -32,8 +32,8 @@
     <section class="contact-page-shell pt-40 pb-50 grey-bg">
         <div class="container">
             <div class="contact-intro">
-                <h2 class="contact-intro__title">You can contact us</h2>
-                <p class="contact-intro__lead">Call, email, or visit the Masoro workshop. We are glad to talk about orders, visits, training, and partnership.</p>
+                <h2 class="contact-intro__title">{{ \App\Support\SiteCopy::get('contact_intro_title') }}</h2>
+                <p class="contact-intro__lead">{{ \App\Support\SiteCopy::get('contact_intro_lead') }}</p>
             </div>
 
             <div class="row g-3 contact-page-shell__stats">

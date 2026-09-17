@@ -22,7 +22,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
                     <h1>About &amp; homepage</h1>
-                    <p class="text-muted mb-0">Copy and photos for Home, Our Story, Mission &amp; Vision, and What We Do. Factory, products, team, and impact reports have their own menu items.</p>
+                    <p class="text-muted mb-0">Copy and photos for Home, Our Story, Mission &amp; Vision, and What We Do. Homepage titles for Our Story and Our Values are on those tabs below.</p>
                 </div>
 
                 @if(session()->has('success'))
@@ -54,10 +54,12 @@
 
                         <div class="tab-content" id="aboutTabsContent">
                             <div class="tab-pane fade show active" id="mission-vision-pane" role="tabpanel" aria-labelledby="mission-vision-tab">
+                                @include('admin.includes.page-header-form', ['pageKey' => 'mission'])
                                 <form action="{{ route('saveAbout', $data->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <p class="text-muted mb-3">Shown on <strong>About → Mission &amp; Vision</strong> and on the Our Story page.</p>
-                                    <div class="row g-3">
+                                    @include('admin.includes.landing-copy-fields', ['group' => 'mission'])
+                                    <div class="row g-3 mt-1">
                                         <div class="col-lg-6">
                                             <label class="form-label">Mission</label>
                                             <textarea rows="6" class="form-control" name="mission" data-editor="rich">{!! $data->mission !!}</textarea>
@@ -85,7 +87,11 @@
                                     @endphp
                                     <div class="row g-3">
                                         <div class="col-12">
-                                            <label class="form-label">Core values</label>
+                                            <p class="text-muted small mb-2">Homepage <strong>Our Values</strong> heading and the three value cards. The list below also appears on Our Story and Mission &amp; Vision.</p>
+                                            @include('admin.includes.landing-copy-fields', ['group' => 'values'])
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Core values list</label>
                                             <p class="text-muted small mb-2">Add each value as a list item. They appear as cards on Our Story and Mission &amp; Vision.</p>
                                             <textarea rows="8" class="form-control" name="values" data-editor="rich" placeholder="Add each core value as a list item">{!! $valuesHtml !!}</textarea>
                                         </div>
@@ -99,10 +105,14 @@
                             </div>
 
                             <div class="tab-pane fade" id="story-pane" role="tabpanel" aria-labelledby="story-tab">
+                                @include('admin.includes.page-header-form', ['pageKey' => 'about'])
                                 <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    <p class="text-muted mb-3">This is the long story on <strong>Our Story</strong> (footer “Our Story” / <code>/about-us</code>).</p>
+                                    <p class="text-muted mb-3">This is the long story on <strong>Our Story</strong> (<code>/about-us</code>). The title and button below appear on the homepage.</p>
                                     <div class="row g-3">
+                                        <div class="col-12">
+                                            @include('admin.includes.landing-copy-fields', ['group' => 'story'])
+                                        </div>
                                         <div class="col-12">
                                             <label class="form-label">Story</label>
                                             <textarea rows="10" class="form-control" name="description" data-editor="rich">{!! $background->description !!}</textarea>
@@ -124,9 +134,12 @@
                             </div>
 
                             <div class="tab-pane fade" id="what-we-do-pane" role="tabpanel" aria-labelledby="what-we-do-tab">
+                                @include('admin.includes.page-header-form', ['pageKey' => 'what_we_do'])
                                 <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    <div class="row g-3">
+                                    <p class="text-muted mb-3">Homepage story paragraph and What We Do page copy. Homepage <strong>Our Story</strong> titles are on the Our story tab.</p>
+                                    @include('admin.includes.landing-copy-fields', ['group' => 'what_we_do'])
+                                    <div class="row g-3 mt-1">
                                         <div class="col-12">
                                             <label class="form-label">Homepage story text</label>
                                             <p class="text-muted small mb-2">Short paragraph beside the homepage photo (“From a small group of women…”). Keep it to a few sentences.</p>
@@ -157,7 +170,7 @@
                             <div class="tab-pane fade" id="impact-pane" role="tabpanel" aria-labelledby="impact-tab">
                                 <form action="{{ route('saveBackg', $background->id ?? '') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    <p class="text-muted mb-3">Large numbers on the Impact page and factory community band. Homepage pillars (Health Insurance, Education, …) are edited under <a href="{{ route('impacts.index') }}">Impact pillars</a>.</p>
+                                    <p class="text-muted mb-3">Large numbers on the Impact page. Homepage impact title and supporting text are under <a href="{{ route('impacts.index') }}">Impact pillars</a>.</p>
                                     <div class="row g-3">
                                         <div class="col-lg-6 col-xl-3">
                                             <label class="form-label">Handbags exported</label>

@@ -7,7 +7,7 @@
     @include('frontend.includes.page-header', [
         'pageKey' => 'gallery',
         'title' => __('site.nav.gallery'),
-        'caption' => 'Photos from our factory, products, and community work.',
+        'caption' => \App\Support\SiteCopy::get('gallery_intro'),
     ])
 
     <div class="tp-gallery-3__area pt-120 pb-120">

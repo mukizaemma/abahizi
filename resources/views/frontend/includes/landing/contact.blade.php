@@ -81,7 +81,7 @@
                 <img src="{{ $asideImage }}" alt="{{ __('site.landing.visit_alt') }}" loading="lazy" decoding="async">
                 <div class="lh-contact__aside-overlay" aria-hidden="true"></div>
                 <div class="lh-contact__aside-body">
-                    <h3 class="lh-contact__aside-title">{{ __('site.landing.visit_title') }}</h3>
+                    <h3 class="lh-contact__aside-title">{{ \App\Support\SiteCopy::get('visit_title') }}</h3>
                     <ul class="lh-contact__aside-list">
                         @if($contactPhone !== '')
                             <li>

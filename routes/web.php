@@ -104,6 +104,8 @@ Route::middleware(['auth', 'admin.role'
 
     Route::get('/setting',[App\Http\Controllers\HomeController::class,'setting'])->name('settings');
     Route::post('/saveSetting/{id}',[App\Http\Controllers\HomeController::class,'saveSetting'])->name('saveSetting');
+    Route::post('/landing-copy',[App\Http\Controllers\LandingCopyController::class,'update'])->name('landingCopy.update');
+    Route::post('/page-header',[App\Http\Controllers\PageHeaderController::class,'update'])->name('pageHeader.update');
 
     Route::get('/about',[App\Http\Controllers\HomeController::class,'about'])->name('about');
     Route::POST('/saveAbout/{id}',[App\Http\Controllers\HomeController::class,'saveAbout'])->name('saveAbout');

@@ -31,6 +31,8 @@
                     </button>
                 </div>
 
+                @include('admin.includes.page-header-form', ['pageKey' => 'impact_community'])
+
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="table-responsive admin-table-wrap">

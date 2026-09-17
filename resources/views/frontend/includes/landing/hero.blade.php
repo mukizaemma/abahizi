@@ -64,12 +64,7 @@
         $headlineParts = [$headline];
     }
 
-    $barItems = [
-        ['icon' => 'fa-users', 'label' => \App\Support\SiteCopy::get('bar_1')],
-        ['icon' => 'fa-hand-holding-heart', 'label' => \App\Support\SiteCopy::get('bar_2')],
-        ['icon' => 'fa-heart', 'label' => \App\Support\SiteCopy::get('bar_3')],
-        ['icon' => 'fa-location-dot', 'label' => \App\Support\SiteCopy::get('bar_4')],
-    ];
+    $barItems = \App\Support\ImpactPillars::items(4);
 @endphp
 
 <section class="lh-hero" aria-label="{{ $brandName }}">
@@ -137,13 +132,26 @@
         </div>
     </div>
 
-    <div class="lh-hero__bar" aria-label="{{ $brandName }} highlights">
+    <div class="lh-hero__bar" aria-label="Impact pillars">
         <div class="container">
-            <ul class="lh-hero__bar-list">
+            <ul class="lh-hero__bar-list" style="--lh-bar-count: {{ max(count($barItems), 1) }}">
                 @foreach($barItems as $item)
                     <li>
-                        <span class="lh-hero__bar-icon" aria-hidden="true"><i class="fas {{ $item['icon'] }}"></i></span>
-                        <span>{{ $item['label'] }}</span>
+                        <a class="lh-hero__bar-item" href="{{ route('impactPage') }}#impact-pillars">
+                            <span class="lh-hero__bar-icon" aria-hidden="true">
+                                @if(!empty($item['image']))
+                                    <img src="{{ $item['image'] }}" alt="">
+                                @else
+                                    <i class="fas {{ $item['icon'] }}"></i>
+                                @endif
+                            </span>
+                            <span class="lh-hero__bar-copy">
+                                @if(($item['value'] ?? '') !== '')
+                                    <span class="lh-hero__bar-value">{{ $item['value'] }}</span>
+                                @endif
+                                <span class="lh-hero__bar-label">{{ $item['title'] }}</span>
+                            </span>
+                        </a>
                     </li>
                 @endforeach
             </ul>

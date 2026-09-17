@@ -191,10 +191,13 @@
         });
     }
 
-    function initProductLightbox() {
-        var modal = document.getElementById('lh-product-lightbox');
-        var dataNode = document.getElementById('lh-product-gallery-data');
-        if (!modal || !dataNode) {
+    function initLightbox(modal) {
+        if (!modal || !modal.id) {
+            return;
+        }
+
+        var dataNode = document.getElementById(modal.id + '-data');
+        if (!dataNode) {
             return;
         }
 
@@ -213,7 +216,7 @@
         var countEl = modal.querySelector('[data-lh-gallery-count]');
         var prevBtn = modal.querySelector('[data-lh-gallery-prev]');
         var nextBtn = modal.querySelector('[data-lh-gallery-next]');
-        var openers = document.querySelectorAll('[data-lh-gallery-open]');
+        var openers = document.querySelectorAll('[data-lh-gallery-open][aria-controls="' + modal.id + '"]');
         var lastOpener = null;
         var current = 0;
         var touchStartX = 0;
@@ -339,7 +342,7 @@
         initCounters();
         initHeroSlides();
         initVideoModal();
-        initProductLightbox();
+        document.querySelectorAll('.lh-lightbox').forEach(initLightbox);
     }
 
     if (document.readyState === 'loading') {

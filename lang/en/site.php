@@ -451,4 +451,18 @@ return [
         'catalog_title' => 'Browse our catalog',
         'catalog_lead' => 'Published styles you can review in detail. Custom orders still start with a conversation.',
     ],
+    'cms' => [
+        'about_bg_heading' => 'Background',
+        'about_team_heading' => 'Our Team',
+        'about_team_lead' => 'Leadership and staff committed to quality manufacturing and community impact.',
+        'mission_card_title' => 'Our Mission',
+        'vision_card_title' => 'Our Vision',
+        'values_page_heading' => 'Our Core Values',
+        'what_we_do_how_title' => 'How it works',
+        'what_we_do_how_lead' => 'A clear, collaborative path from concept to export-ready production.',
+        'team_page_lead' => 'Meet the people behind Abahizi CBC—leadership and staff driving manufacturing excellence and community impact.',
+        'contact_intro_title' => 'You can contact us',
+        'contact_intro_lead' => 'Call, email, or visit the Masoro workshop. We are glad to talk about orders, visits, training, and partnership.',
+        'gallery_intro' => 'Photos from our factory, products, and community work.',
+    ],
 ];

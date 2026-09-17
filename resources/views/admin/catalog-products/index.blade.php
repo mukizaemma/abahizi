@@ -23,6 +23,8 @@
                 </div>
 
                 @include('admin.includes.products-tabs', ['tab' => 'products'])
+                @include('admin.includes.page-header-form', ['pageKey' => 'products'])
+                @include('admin.includes.landing-copy-form', ['group' => 'products_page', 'title' => 'Products page titles'])
 
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>

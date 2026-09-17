@@ -40,7 +40,9 @@
                             </div>
                         </div>
 
-                        <label class="form-label d-block mb-2">Hero media</label>
+                        @include('admin.includes.landing-copy-fields', ['group' => 'hero'])
+
+                        <label class="form-label d-block mb-2 mt-4">Hero media</label>
                         <div class="row g-3 mb-4">
                             <div class="col-md-4">
                                 <label class="hero-type-card">

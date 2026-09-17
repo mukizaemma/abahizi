@@ -6,7 +6,7 @@
 
     $sectionClassExtra = $coreValuesParallaxSectionClass ?? '';
     $overlayClassExtra = $coreValuesParallaxOverlayClass ?? '';
-    $cvTitle = $coreValuesParallaxTitle ?? 'Our Core Values';
+    $cvTitle = $coreValuesParallaxTitle ?? \App\Support\SiteCopy::get('values_page_heading');
     $cvSubtitle = $coreValuesParallaxSubtitle ?? null;
     $showCvCta = $showCoreValuesGetInvolvedCta ?? false;
 @endphp

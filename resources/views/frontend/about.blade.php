@@ -15,7 +15,7 @@
         <div class="row justify-content-center">
             <div class="col-12 col-xl-10 col-xxl-9">
                 <div class="tp-about-4__section-title mb-4">
-                    <h4 class="tp-section-title">Background</h4>
+                    <h4 class="tp-section-title">{{ \App\Support\SiteCopy::get('about_bg_heading') }}</h4>
                 </div>
                 <div class="postbox__text about-page-body" style="font-size: 19px; line-height: 1.75; color: #333;">
                     {!! $about->description ?? '' !!}
@@ -36,7 +36,7 @@
     <div class="container">
         <div class="row justify-content-center mb-5">
             <div class="col-12 text-center">
-                <h4 class="tp-section-title mb-0">Our Core Values</h4>
+                <h4 class="tp-section-title mb-0">{{ \App\Support\SiteCopy::get('values_page_heading') }}</h4>
             </div>
         </div>
         @if(count($coreValueItems) > 0)
@@ -64,8 +64,8 @@
 <section class="about-page-team lux-section grey-bg" aria-labelledby="about-team-heading">
     <div class="container">
         <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
-            <h2 id="about-team-heading" class="lux-section-head__title">Our Team</h2>
-            <p class="team-page__lead text-muted mx-auto mb-0">Leadership and staff committed to quality manufacturing and community impact.</p>
+            <h2 id="about-team-heading" class="lux-section-head__title">{{ \App\Support\SiteCopy::get('about_team_heading') }}</h2>
+            <p class="team-page__lead text-muted mx-auto mb-0">{{ \App\Support\SiteCopy::get('about_team_lead') }}</p>
         </div>
         <div class="row g-4 g-lg-5 justify-content-center">
             @forelse($staff as $i => $member)

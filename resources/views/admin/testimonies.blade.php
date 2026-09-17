@@ -21,6 +21,7 @@
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item active">Testimonies</li>
                     </ol>
+                    @include('admin.includes.page-header-form', ['pageKey' => 'testimonials'])
                     <div class="row">
                         @if (session()->has('success'))
                             <div class="arlert alert-success">

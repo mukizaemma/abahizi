@@ -19,9 +19,9 @@
     };
 
     $infoBySlot = [
-        1 => __('site.landing.product_1_info'),
-        2 => __('site.landing.product_2_info'),
-        3 => __('site.landing.product_3_info'),
+        1 => \App\Support\SiteCopy::get('product_1_info'),
+        2 => \App\Support\SiteCopy::get('product_2_info'),
+        3 => \App\Support\SiteCopy::get('product_3_info'),
     ];
 
     $showcaseCards = \App\Support\HomeProductShowcase::cards($about ?? null);
@@ -159,6 +159,7 @@
                                     class="lh-product-card__link"
                                     data-lh-gallery-open
                                     data-lh-gallery-index="{{ $card['index'] }}"
+                                    aria-controls="lh-product-lightbox"
                                 >
                                     {{ __('site.landing.product_view') }} <span aria-hidden="true">→</span>
                                 </button>
@@ -201,4 +202,4 @@
     </div>
 </div>
 
-<script type="application/json" id="lh-product-gallery-data">@json($lightboxItems->values())</script>
+<script type="application/json" id="lh-product-lightbox-data">@json($lightboxItems->values())</script>

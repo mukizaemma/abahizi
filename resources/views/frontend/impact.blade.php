@@ -33,19 +33,19 @@
         $hubCards = [
             [
                 'title' => __('site.nav.employee_empowerment'),
-                'desc' => __('site.impact.empower_lead'),
+                'desc' => \App\Support\SiteCopy::get('impact_empower_lead'),
                 'image' => $empowerImage,
                 'url' => route('impactEmployeeEmpowerment'),
             ],
             [
                 'title' => __('site.nav.community'),
-                'desc' => __('site.impact.community_lead'),
+                'desc' => \App\Support\SiteCopy::get('impact_community_lead'),
                 'image' => $communityImage,
                 'url' => route('impactCommunity'),
             ],
             [
                 'title' => __('site.nav.social_impact_reports'),
-                'desc' => __('site.impact.reports_lead'),
+                'desc' => \App\Support\SiteCopy::get('impact_reports_lead'),
                 'image' => $reportsImage,
                 'url' => route('impactReports'),
             ],
@@ -56,6 +56,12 @@
         'pageKey' => 'impact',
         'title' => __('site.impact.title'),
         'caption' => __('site.impact.caption'),
+    ])
+
+    @include('frontend.includes.impact-pillars', [
+        'heading' => 'Our impact pillars',
+        'lead' => \App\Support\SiteCopy::get('impact_lead'),
+        'tone' => 'cream',
     ])
 
     <section class="lux-section impact-hub" aria-label="{{ __('site.impact.hub_title') }}">
@@ -73,7 +79,7 @@
                                 </h2>
                                 <p class="impact-hub-card__desc mb-0">{{ $card['desc'] }}</p>
                                 <a href="{{ $card['url'] }}" class="impact-hub-card__link">
-                                    {{ __('site.impact.hub_card_cta') }} <span aria-hidden="true">→</span>
+                                    {{ \App\Support\SiteCopy::get('impact_hub_card_cta') }} <span aria-hidden="true">→</span>
                                 </a>
                             </div>
                         </article>

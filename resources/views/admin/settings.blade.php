@@ -12,9 +12,7 @@
 
 @php
     use App\Support\PageHeaderService;
-    use App\Support\SiteCopy;
     $pageHeaderStore = PageHeaderService::storedHeaders($data);
-    $landingCopyStore = SiteCopy::stored($data);
 @endphp
 
 <div id="layoutSidenav">
@@ -26,7 +24,7 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header">
                     <h1>Site settings</h1>
-                    <p class="text-muted mb-0">Brand, contact details, colours, product visibility, homepage wording, and headers for pages that appear on the public site.</p>
+                    <p class="text-muted mb-0">Brand, contact details, colours, product visibility, and headers for pages that appear on the public site. Homepage section titles are edited on those sections (Our Story, Core values, Products, Impact, Homepage hero).</p>
                 </div>
 
                 @if (session()->has('success'))
@@ -61,10 +59,7 @@
                                     <button class="nav-link" id="visibility-tab" data-bs-toggle="tab" data-bs-target="#visibility-pane" type="button" role="tab">Visibility</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="copy-tab" data-bs-toggle="tab" data-bs-target="#copy-pane" type="button" role="tab">Homepage copy</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="headers-tab" data-bs-toggle="tab" data-bs-target="#headers-pane" type="button" role="tab">Page headers</button>
+                                    <button class="nav-link" id="headers-tab" data-bs-toggle="tab" data-bs-target="#headers-pane" type="button" role="tab">Default header</button>
                                 </li>
                             </ul>
 
@@ -122,6 +117,34 @@
                                         <div class="col-12">
                                             <label class="form-label">Google Map embed code</label>
                                             <textarea class="form-control" rows="4" name="google_map_embed_code" placeholder="Paste iframe embed code">{{ $data->google_map_embed_code }}</textarea>
+                                        </div>
+                                        <div class="col-12">
+                                            <hr>
+                                            <h6 class="mb-3">Homepage and contact page wording</h6>
+                                            @include('admin.includes.landing-copy-fields', ['group' => 'contact', 'data' => $data])
+                                        </div>
+                                        @php
+                                            $contactHeader = (array) ($pageHeaderStore['contact'] ?? []);
+                                        @endphp
+                                        <div class="col-12">
+                                            <hr>
+                                            <h6 class="mb-3">Contact page banner</h6>
+                                            <p class="text-muted small">Title, caption, and image at the top of the public Get in Touch page.</p>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="form-label">Page title</label>
+                                            <input type="text" class="form-control" name="page_headers[contact][title]" value="{{ $contactHeader['title'] ?? '' }}" placeholder="Get In Touch">
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <label class="form-label">Header image</label>
+                                            <input type="file" class="form-control" name="page_headers[contact][image]" accept="image/*">
+                                            @if(!empty($contactHeader['image']))
+                                                <img src="{{ PageHeaderService::imageUrlFromStored($contactHeader['image']) }}" alt="" width="160" class="mt-2 rounded border p-1 bg-white">
+                                            @endif
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Caption</label>
+                                            <textarea class="form-control" rows="2" name="page_headers[contact][caption]">{{ $contactHeader['caption'] ?? '' }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -220,34 +243,8 @@
                                     </div>
                                 </div>
 
-                                <div class="tab-pane fade" id="copy-pane" role="tabpanel" aria-labelledby="copy-tab">
-                                    <p class="text-muted mb-4">Edit the homepage section titles and related wording. Leave a field empty to keep the default text.</p>
-                                    @foreach(SiteCopy::groups() as $groupKey => $group)
-                                        <div class="card mb-4 border">
-                                            <div class="card-header bg-light fw-semibold">{{ $group['label'] }}</div>
-                                            <div class="card-body">
-                                                @if(! empty($group['help']))
-                                                    <p class="form-text mt-0 mb-3">{{ $group['help'] }}</p>
-                                                @endif
-                                                <div class="row g-3">
-                                                    @foreach($group['fields'] as $fieldKey => $field)
-                                                        <div class="{{ ($field['type'] ?? 'text') === 'textarea' ? 'col-12' : 'col-lg-6' }}">
-                                                            <label class="form-label" for="landing_copy_{{ $fieldKey }}">{{ $field['label'] }}</label>
-                                                            @if(($field['type'] ?? 'text') === 'textarea')
-                                                                <textarea class="form-control" rows="{{ $field['rows'] ?? 3 }}" id="landing_copy_{{ $fieldKey }}" name="landing_copy[{{ $fieldKey }}]" placeholder="{{ __('site.landing.'.$fieldKey) }}">{{ $landingCopyStore[$fieldKey] ?? '' }}</textarea>
-                                                            @else
-                                                                <input type="text" class="form-control" id="landing_copy_{{ $fieldKey }}" name="landing_copy[{{ $fieldKey }}]" value="{{ $landingCopyStore[$fieldKey] ?? '' }}" placeholder="{{ __('site.landing.'.$fieldKey) }}">
-                                                            @endif
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-
                                 <div class="tab-pane fade" id="headers-pane" role="tabpanel" aria-labelledby="headers-tab">
-                                    <p class="text-muted mb-4">Headers for pages in the public menu. Homepage headline and media are under <strong>Homepage hero</strong>. Leave a field empty to keep the default.</p>
+                                    <p class="text-muted mb-4">Fallback banner used when a page has no header of its own. Edit each page’s title, caption, and image on that page’s admin screen (Our Story, Products, Impact, Team, and so on).</p>
 
                                     <div class="card mb-4 border">
                                         <div class="card-header bg-light fw-semibold">Default fallback (all pages)</div>
@@ -266,33 +263,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <div class="row g-4">
-                                        @foreach(PageHeaderService::definitions() as $pageKey => $pageLabel)
-                                            @php
-                                                $stored = (array) ($pageHeaderStore[$pageKey] ?? []);
-                                                $storedImage = $stored['image'] ?? null;
-                                            @endphp
-                                            <div class="col-lg-6">
-                                                <div class="card h-100 border">
-                                                    <div class="card-header bg-light py-2">
-                                                        <strong>{{ $pageLabel }}</strong>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <label class="form-label">Page title</label>
-                                                        <input type="text" class="form-control mb-3" name="page_headers[{{ $pageKey }}][title]" value="{{ $stored['title'] ?? '' }}" placeholder="{{ $pageLabel }}">
-                                                        <label class="form-label">Caption</label>
-                                                        <textarea class="form-control mb-3" rows="3" name="page_headers[{{ $pageKey }}][caption]" placeholder="Optional caption for this page">{{ $stored['caption'] ?? '' }}</textarea>
-                                                        <label class="form-label">Header image</label>
-                                                        <input type="file" class="form-control" name="page_headers[{{ $pageKey }}][image]" accept="image/*">
-                                                        @if(!empty($storedImage))
-                                                            <img src="{{ PageHeaderService::imageUrlFromStored($storedImage) }}" alt="{{ $pageLabel }} header" width="180" class="mt-2 rounded border">
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
                                     </div>
                                 </div>
                             </div>

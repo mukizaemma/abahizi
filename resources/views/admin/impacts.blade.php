@@ -20,8 +20,12 @@
                 {{-- <h1 class="mt-4">Dashboard</h1> --}}
                 <div class="admin-page-header">
                     <h1>Impact pillars</h1>
-                    <p class="text-muted mb-0">These four items appear on the homepage impact band (for example Health Insurance, Education). Large stats (handbags exported, jobs) are under About &amp; homepage → Impact numbers.</p>
+                    <p class="text-muted mb-0">These cards appear on the homepage banner strip, the homepage impact band, and every Impact page. Add a title, optional number, photo, and short description.</p>
                 </div>
+                @include('admin.includes.landing-copy-form', ['group' => 'impact', 'title' => 'Impact section titles (homepage)'])
+                @include('admin.includes.landing-copy-form', ['group' => 'impact_hub', 'title' => 'Impact page cards'])
+                @include('admin.includes.page-header-form', ['pageKey' => 'impact'])
+                @include('admin.includes.page-header-form', ['pageKey' => 'impact_employee'])
                 <div class="row">
                     @if(session()->has('success'))
                     <div class="arlert alert-success">

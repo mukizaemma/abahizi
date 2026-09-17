@@ -30,6 +30,7 @@ use App\Models\Testimony;
 use App\Models\Volunteer;
 use App\Mail\ReplyMessage;
 use App\Support\CoreValues;
+use App\Support\SiteCopy;
 use App\Models\Background;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -96,7 +97,7 @@ class HomeController extends Controller
         $programs = Activity::oldest()->get();
         $about = Background::firstOrEmpty();
         $mission = About::firstOrEmpty();
-        $homeGallery = Gallery::latest()->get();
+        $homeGallery = Image::latest()->get();
         $slides = Slide::oldest()->get();
         $testimonials = Testimony::query()
             ->where(function ($q) {
@@ -827,7 +828,11 @@ public function gallery(){
             $headers = is_array($data->page_headers) ? $data->page_headers : [];
             $inputHeaders = (array) $request->input('page_headers', []);
 
-            foreach (PageHeaderService::editablePageKeys() as $pageKey) {
+            foreach (array_keys($inputHeaders) as $pageKey) {
+                if (! in_array($pageKey, PageHeaderService::editablePageKeys(), true)) {
+                    continue;
+                }
+
                 $existing = (array) ($headers[$pageKey] ?? []);
                 $incoming = (array) ($inputHeaders[$pageKey] ?? []);
 
@@ -848,17 +853,6 @@ public function gallery(){
             }
 
             $data->page_headers = $headers;
-        }
-
-        if (Schema::hasColumn('settings', 'landing_copy')) {
-            $copy = is_array($data->landing_copy) ? $data->landing_copy : [];
-            $incoming = (array) $request->input('landing_copy', []);
-            foreach (\App\Support\SiteCopy::keys() as $copyKey) {
-                if (array_key_exists($copyKey, $incoming)) {
-                    $copy[$copyKey] = trim((string) $incoming[$copyKey]);
-                }
-            }
-            $data->landing_copy = $copy;
         }
 
         if ($request->hasFile('logo') && request('logo') != '') {
@@ -889,6 +883,8 @@ public function gallery(){
 
         $data->save();
 
+        SiteCopy::saveFromRequest($request);
+
         return redirect()->back()->with('success', 'Setting has been updated successfully');
     }
 
@@ -908,6 +904,8 @@ public function gallery(){
     }
 
     public function saveAbout(Request $request, $id){
+        SiteCopy::saveFromRequest($request);
+
         $data = About::firstOrEmpty();
         $data->mission = $request->input('mission');
         $data->vision = $request->input('vision');

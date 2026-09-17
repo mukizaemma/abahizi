@@ -17,7 +17,6 @@
     <div class="sb-sidenav-menu">
         <div class="nav flex-column pt-2">
 
-            <div class="sb-sidenav-menu-heading">Site</div>
             <x-admin.nav-link
                 :href="route('settings')"
                 icon="fa-cogs"
@@ -39,12 +38,10 @@
             >
                 Media library
             </x-admin.nav-link>
-
-            <div class="sb-sidenav-menu-heading">Pages</div>
             <x-admin.nav-link
                 :href="route('about')"
                 icon="fa-bullseye"
-                :active="request()->routeIs(['about', 'saveAbout', 'saveBackg'])"
+                :active="request()->routeIs(['about', 'saveAbout', 'saveBackg', 'background'])"
             >
                 About &amp; homepage
             </x-admin.nav-link>
@@ -67,7 +64,7 @@
             <x-admin.nav-link
                 :href="route('impacts.index')"
                 icon="fa-chart-line"
-                :active="request()->routeIs(['impacts.index', 'editImpact', 'saveImpact', 'updateImpact', 'destroyImpact'])"
+                :active="request()->routeIs(['impacts.*', 'editImpact', 'saveImpact', 'updateImpact', 'destroyImpact'])"
             >
                 Impact pillars
             </x-admin.nav-link>
@@ -114,7 +111,6 @@
                 Testimonials
             </x-admin.nav-link>
 
-            <div class="sb-sidenav-menu-heading">Inbox</div>
             <x-admin.nav-link
                 :href="route('orderRequests.index')"
                 icon="fa-clipboard-list"
@@ -123,7 +119,7 @@
                 Order requests
             </x-admin.nav-link>
             <a
-                class="nav-link d-flex align-items-center{{ $inboxOpen ? '' : ' collapsed' }}{{ $inboxOpen ? ' active' : '' }}"
+                class="nav-link d-flex align-items-center{{ $inboxOpen ? '' : ' collapsed' }}"
                 href="#"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapseInbox"
@@ -167,7 +163,6 @@
                 </x-admin.nav-link>
             @endif
 
-            <div class="sb-sidenav-menu-heading">Account</div>
             <x-admin.nav-link
                 :href="route('admin.users.index')"
                 icon="fa-user-shield"

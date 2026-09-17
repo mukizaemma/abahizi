@@ -16,12 +16,13 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header mb-3">
                     <h1>Products</h1>
-                    <p class="text-muted mb-0">The three bag photos on the homepage. These do not need a catalog product.</p>
+                    <p class="text-muted mb-0">The three bag photos on the homepage, plus the Our Craft title beside them.</p>
                 </div>
                 @include('admin.includes.products-tabs', ['tab' => 'homepage'])
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
+                @include('admin.includes.landing-copy-form', ['group' => 'craft', 'title' => 'Our Craft titles (homepage)'])
                 <div class="card">
                     <div class="card-body">
                         <form action="{{ route('catalogProducts.homepageCards') }}" method="POST" enctype="multipart/form-data">

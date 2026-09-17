@@ -20,11 +20,16 @@
                 <div class="admin-page-header d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                     <div>
                         <h1>Site gallery</h1>
-                        <p class="text-muted mb-0">Photos on the public Gallery page (next to Updates). This is separate from the media library file manager.</p>
+                        <p class="text-muted mb-0">Photos on the public Gallery page. You can add as many as you like — the homepage “Follow Our Journey” section always shows only the <strong>3 most recent</strong> images.</p>
                     </div>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
                         <i class="fa fa-plus me-1"></i> Add image
                     </button>
+                </div>
+                @include('admin.includes.page-header-form', ['pageKey' => 'gallery'])
+                @include('admin.includes.landing-copy-form', ['group' => 'gallery', 'title' => 'Gallery page caption'])
+                <div class="alert alert-info">
+                    Add as many photos as you need. Only the <strong>3 newest</strong> appear on the homepage journey section. Older photos still show on the public Gallery page.
                 </div>
                 @if(session()->has('success'))
                     <div class="alert alert-success">{{ session()->get('success') }}</div>
@@ -47,11 +52,12 @@
                                     <tr>
                                         <th>Image</th>
                                         <th>Caption</th>
+                                        <th>Homepage</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($images as $rs)
+                                    @forelse($images as $index => $rs)
                                         @php
                                             $imagePath = ltrim((string) $rs->image, '/');
                                             $imageUrl = str_contains($imagePath, '/')
@@ -64,6 +70,13 @@
                                             </td>
                                             <td>{{ $rs->caption ?: '—' }}</td>
                                             <td>
+                                                @if($index < 3)
+                                                    <span class="badge bg-success">Shown on homepage</span>
+                                                @else
+                                                    <span class="text-muted small">Gallery page only</span>
+                                                @endif
+                                            </td>
+                                            <td>
                                                 <div class="btn-group">
                                                     <a href="{{ route('editGallery', $rs->id) }}" class="btn btn-primary text-black">Edit</a>
                                                     <a href="{{ route('destroyGallery', $rs->id) }}" class="btn btn-danger text-black"
@@ -73,7 +86,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-muted">No gallery images yet.</td>
+                                            <td colspan="4" class="text-muted">No gallery images yet.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

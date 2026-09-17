@@ -16,8 +16,10 @@
             <div class="container-fluid px-4 py-4">
                 <div class="admin-page-header mb-3">
                     <h1>Factory</h1>
-                    <p class="text-muted mb-0">Each tab matches a section on the public Our Factory page. Empty fields keep the current default copy.</p>
+                    <p class="text-muted mb-0">Each tab matches a section on the public Our Factory page. Empty fields keep the current default copy. The page banner is below.</p>
                 </div>
+
+                @include('admin.includes.page-header-form', ['pageKey' => 'factory'])
 
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>

@@ -27,6 +27,8 @@
                     </div>
                 </div>
 
+                @include('admin.includes.page-header-form', ['pageKey' => 'impact_reports'])
+
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif

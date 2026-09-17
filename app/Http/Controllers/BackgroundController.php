@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\Background;
 use App\Models\Homepage;
 use App\Support\SectionBackgroundService;
+use App\Support\SiteCopy;
 
 class BackgroundController extends Controller
 {
@@ -54,6 +55,8 @@ class BackgroundController extends Controller
 
 public function saveBackg(Request $request)
 {
+    SiteCopy::saveFromRequest($request);
+
     $request->validate([
         'description' => 'nullable|string',
         'donations' => 'nullable|string',

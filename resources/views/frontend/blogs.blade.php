@@ -13,7 +13,7 @@
     <section class="updates-widget" aria-labelledby="updates-widget-title">
         <div class="container">
             <header class="updates-widget__intro">
-                <h2 id="updates-widget-title" class="updates-widget__heading">{{ __('site.updates.heading') }}</h2>
+                <h2 id="updates-widget-title" class="updates-widget__heading">{{ \App\Support\SiteCopy::get('updates_heading') }}</h2>
             </header>
 
             @if(!$featured)

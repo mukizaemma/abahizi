@@ -12,8 +12,8 @@
     <section class="lux-section team-page" aria-labelledby="team-page-heading">
         <div class="container">
             <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
-                <h2 id="team-page-heading" class="lux-section-head__title">{{ __('site.nav.team') }}</h2>
-                <p class="team-page__lead text-muted mx-auto mb-0">Meet the people behind Abahizi CBC—leadership and staff driving manufacturing excellence and community impact.</p>
+                <h2 id="team-page-heading" class="lux-section-head__title">{{ \App\Support\SiteCopy::get('team_page_heading') }}</h2>
+                <p class="team-page__lead text-muted mx-auto mb-0">{{ \App\Support\SiteCopy::get('team_page_lead') }}</p>
             </div>
 
             @if(($teamMembers ?? collect())->isEmpty())

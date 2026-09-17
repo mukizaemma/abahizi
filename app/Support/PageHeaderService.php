@@ -4,6 +4,8 @@ namespace App\Support;
 
 use App\Models\Background;
 use App\Models\Setting;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class PageHeaderService
 {
@@ -110,5 +112,40 @@ class PageHeaderService
         }
 
         return asset('assets/img/slider/slider-3-1.jpg');
+    }
+
+    public static function saveFromRequest(Request $request): void
+    {
+        if (! Schema::hasTable('settings') || ! Schema::hasColumn('settings', 'page_headers')) {
+            return;
+        }
+
+        $key = trim((string) $request->input('page_header_key', ''));
+        if ($key === '' || ! in_array($key, static::editablePageKeys(), true)) {
+            return;
+        }
+
+        $setting = Setting::query()->first();
+        if (! $setting) {
+            return;
+        }
+
+        $headers = is_array($setting->page_headers) ? $setting->page_headers : [];
+        $existing = (array) ($headers[$key] ?? []);
+
+        if ($request->exists('header_title')) {
+            $existing['title'] = trim((string) $request->input('header_title'));
+        }
+        if ($request->exists('header_caption')) {
+            $existing['caption'] = trim((string) $request->input('header_caption'));
+        }
+        if ($request->hasFile('header_image')) {
+            $path = $request->file('header_image')->store('public/images/page-headers');
+            $existing['image'] = 'page-headers/' . basename($path);
+        }
+
+        $headers[$key] = $existing;
+        $setting->page_headers = $headers;
+        $setting->save();
     }
 }

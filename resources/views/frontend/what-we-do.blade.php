@@ -42,8 +42,8 @@
     <section class="what-we-do-process lux-section grey-bg" aria-labelledby="what-we-do-process-title">
         <div class="container">
             <header class="what-we-do-process__head text-center wow tpfadeUp lux-section-head lux-section-head--solo" data-wow-duration=".85s">
-                <h2 id="what-we-do-process-title" class="what-we-do-process__title lux-section-head__title">How it works</h2>
-                <p class="what-we-do-process__subtitle mx-auto">A clear, collaborative path from concept to export-ready production.</p>
+                <h2 id="what-we-do-process-title" class="what-we-do-process__title lux-section-head__title">{{ \App\Support\SiteCopy::get('what_we_do_how_title') }}</h2>
+                <p class="what-we-do-process__subtitle mx-auto">{{ \App\Support\SiteCopy::get('what_we_do_how_lead') }}</p>
             </header>
 
             <ol class="what-we-do-process__grid">

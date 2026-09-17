@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/theme-custom.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/luxury-demo.css') }}?v=20260916b">
     <link rel="stylesheet" href="{{ asset('assets/css/landing-home.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/site-editorial.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/site-editorial.css') }}?v=20260917j">
 
     <!-- Non-critical CSS: load after first paint -->
     <link rel="stylesheet" href="{{ asset('assets/css/animate.css') }}" media="print" onload="this.media='all'">
@@ -358,7 +358,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
     <script defer src="{{ asset('assets/js/luxury-site.js') }}"></script>
     @if($isLandingHome ?? false)
-        <script defer src="{{ asset('assets/js/landing-home.js') }}"></script>
+        <script defer src="{{ asset('assets/js/landing-home.js') }}?v=20260917j"></script>
     @endif
     <script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" type="module"></script>
 

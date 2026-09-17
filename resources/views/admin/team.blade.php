@@ -24,6 +24,9 @@
                     </button>
                 </div>
 
+                @include('admin.includes.page-header-form', ['pageKey' => 'team'])
+                @include('admin.includes.landing-copy-form', ['group' => 'team', 'title' => 'Team page titles'])
+
                 @if(session()->has('success'))
                     <div class="alert alert-success">{{ session()->get('success') }}</div>
                 @endif

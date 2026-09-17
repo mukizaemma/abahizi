@@ -13,31 +13,31 @@
     @include('frontend.includes.landing.products', [
         'showCraftCta' => true,
         'craftCtaHref' => route('contacts'),
-        'craftCtaLabel' => __('site.products_page.craft_cta'),
+        'craftCtaLabel' => \App\Support\SiteCopy::get('products_craft_cta'),
     ])
 
     <section class="lux-section products-page-paths" aria-labelledby="products-paths-title">
         <div class="container">
             <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
-                <p class="lh-eyebrow mb-2">{{ __('site.products_page.paths_eyebrow') }}</p>
-                <h2 id="products-paths-title" class="lux-section-head__title mb-3">{{ __('site.products_page.paths_title') }}</h2>
-                <p class="lux-lead mb-0 mx-auto" style="max-width: 40rem;">{{ __('site.products_page.paths_lead') }}</p>
+                <p class="lh-eyebrow mb-2">{{ \App\Support\SiteCopy::get('products_paths_eyebrow') }}</p>
+                <h2 id="products-paths-title" class="lux-section-head__title mb-3">{{ \App\Support\SiteCopy::get('products_paths_title') }}</h2>
+                <p class="lux-lead mb-0 mx-auto" style="max-width: 40rem;">{{ \App\Support\SiteCopy::get('products_paths_lead') }}</p>
             </div>
             <div class="row g-4 justify-content-center">
                 <div class="col-md-6 wow tpfadeUp" data-wow-duration=".85s">
                     <a href="{{ route('contacts') }}" class="factory-partner__card is-featured h-100">
                         <span class="factory-partner__icon" aria-hidden="true"><i class="fas fa-shopping-bag"></i></span>
-                        <h3 class="factory-partner__title">{{ __('site.products_page.buy_title') }}</h3>
-                        <p class="factory-partner__desc">{{ __('site.products_page.buy_text') }}</p>
-                        <span class="factory-partner__action">{{ __('site.products_page.buy_cta') }} <span aria-hidden="true">→</span></span>
+                        <h3 class="factory-partner__title">{{ \App\Support\SiteCopy::get('products_buy_title') }}</h3>
+                        <p class="factory-partner__desc">{{ \App\Support\SiteCopy::get('products_buy_text') }}</p>
+                        <span class="factory-partner__action">{{ \App\Support\SiteCopy::get('products_buy_cta') }} <span aria-hidden="true">→</span></span>
                     </a>
                 </div>
                 <div class="col-md-6 wow tpfadeUp" data-wow-duration=".85s" data-wow-delay="0.08s">
                     <a href="{{ route('contacts') }}" class="factory-partner__card h-100">
                         <span class="factory-partner__icon" aria-hidden="true"><i class="fas fa-industry"></i></span>
-                        <h3 class="factory-partner__title">{{ __('site.products_page.make_title') }}</h3>
-                        <p class="factory-partner__desc">{{ __('site.products_page.make_text') }}</p>
-                        <span class="factory-partner__action">{{ __('site.products_page.make_cta') }} <span aria-hidden="true">→</span></span>
+                        <h3 class="factory-partner__title">{{ \App\Support\SiteCopy::get('products_make_title') }}</h3>
+                        <p class="factory-partner__desc">{{ \App\Support\SiteCopy::get('products_make_text') }}</p>
+                        <span class="factory-partner__action">{{ \App\Support\SiteCopy::get('products_make_cta') }} <span aria-hidden="true">→</span></span>
                     </a>
                 </div>
             </div>
@@ -48,8 +48,8 @@
         <section class="products-page-gallery py-5 grey-bg" aria-labelledby="products-gallery-title">
             <div class="container">
                 <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
-                    <h2 id="products-gallery-title" class="lux-section-head__title mb-2">{{ __('site.products_page.gallery_title') }}</h2>
-                    <p class="text-muted mb-0 mx-auto" style="max-width: 40rem;">{{ __('site.products_page.gallery_lead') }}</p>
+                    <h2 id="products-gallery-title" class="lux-section-head__title mb-2">{{ \App\Support\SiteCopy::get('products_gallery_title') }}</h2>
+                    <p class="text-muted mb-0 mx-auto" style="max-width: 40rem;">{{ \App\Support\SiteCopy::get('products_gallery_lead') }}</p>
                 </div>
                 <div class="row g-3 g-md-4">
                     @foreach($pageGallery as $image)
@@ -71,8 +71,8 @@
         <section class="shop-catalog-section py-5" aria-labelledby="shop-catalog-title">
             <div class="container">
                 <div class="text-center mb-4 mb-lg-5 lux-section-head lux-section-head--solo">
-                    <h2 id="shop-catalog-title" class="lux-section-head__title mb-2">{{ __('site.products_page.catalog_title') }}</h2>
-                    <p class="text-muted mb-0 mx-auto" style="max-width: 40rem;">{{ __('site.products_page.catalog_lead') }}</p>
+                    <h2 id="shop-catalog-title" class="lux-section-head__title mb-2">{{ \App\Support\SiteCopy::get('products_catalog_title') }}</h2>
+                    <p class="text-muted mb-0 mx-auto" style="max-width: 40rem;">{{ \App\Support\SiteCopy::get('products_catalog_lead') }}</p>
                 </div>
 
                 <form action="{{ route('ourProducts') }}" method="GET" class="shop-catalog-filters card border-0 shadow-sm mb-4 mb-lg-5 p-3 p-md-4 bg-white">

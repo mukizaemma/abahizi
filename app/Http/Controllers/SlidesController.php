@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Slide;
 use App\Models\Setting;
+use App\Support\SiteCopy;
 use Illuminate\Support\Facades\Schema;
 
 class SlidesController extends Controller
@@ -74,6 +75,8 @@ class SlidesController extends Controller
         }
 
         $data->save();
+
+        SiteCopy::saveFromRequest($request);
 
         return redirect()->route('slides')->with('success', 'Homepage hero has been updated.');
     }

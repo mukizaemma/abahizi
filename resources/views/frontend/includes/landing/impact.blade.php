@@ -2,40 +2,14 @@
     use App\Support\SectionBackgroundService;
 
     $impactAbout = $about ?? \App\Models\Background::firstOrEmpty();
-
-    $defaultPillars = [
-        ['icon' => 'fa-briefcase-medical', 'title' => __('site.landing.pillar_1_title'), 'text' => __('site.landing.pillar_1_text')],
-        ['icon' => 'fa-graduation-cap', 'title' => __('site.landing.pillar_2_title'), 'text' => __('site.landing.pillar_2_text')],
-        ['icon' => 'fa-heart-pulse', 'title' => __('site.landing.pillar_3_title'), 'text' => __('site.landing.pillar_3_text')],
-        ['icon' => 'fa-people-roof', 'title' => __('site.landing.pillar_4_title'), 'text' => __('site.landing.pillar_4_text')],
-    ];
-
-    $cmsPillars = collect($homeImpacts ?? [])
-        ->filter(fn ($item) => trim((string) ($item->title ?? '')) !== '')
-        ->take(4)
-        ->values();
-
-    $pillarIcons = ['fa-briefcase-medical', 'fa-graduation-cap', 'fa-heart-pulse', 'fa-people-roof'];
-
-    $pillars = $cmsPillars->isNotEmpty()
-        ? $cmsPillars->map(function ($item, $index) use ($pillarIcons, $defaultPillars) {
-            $text = trim(strip_tags((string) ($item->description ?? $item->value ?? '')));
-            if ($text === '') {
-                $text = $defaultPillars[$index]['text'] ?? '';
-            }
-
-            return [
-                'icon' => $pillarIcons[$index] ?? 'fa-heart',
-                'title' => trim((string) $item->title),
-                'text' => \Illuminate\Support\Str::limit($text, 110, '…'),
-            ];
-        })->all()
-        : $defaultPillars;
+    $pillars = \App\Support\ImpactPillars::items(4);
 
     $photoSources = collect();
     if (isset($homeGallery)) {
         foreach ($homeGallery as $img) {
-            if (! empty($img->image)) {
+            if (method_exists($img, 'url') && $img->url()) {
+                $photoSources->push($img->url());
+            } elseif (! empty($img->image)) {
                 $photoSources->push(asset('storage/images/gallery/' . ltrim($img->image, '/')));
             }
         }
@@ -48,6 +22,11 @@
     $resolvedBg = SectionBackgroundService::resolve('impact_cta_background', $impactAbout);
     if ($resolvedBg) {
         $photoSources->push($resolvedBg);
+    }
+    foreach ($pillars as $pillar) {
+        if (! empty($pillar['image'])) {
+            $photoSources->push($pillar['image']);
+        }
     }
     $photoSources = $photoSources->filter()->unique()->values();
     while ($photoSources->count() < 4) {
@@ -67,8 +46,16 @@
 
         <div class="lh-impact__pillars">
             @foreach($pillars as $index => $pillar)
-                <article class="lh-pillar lh-reveal" style="transition-delay: {{ $index * 0.07 }}s">
-                    <span class="lh-pillar__icon" aria-hidden="true"><i class="fas {{ $pillar['icon'] }}"></i></span>
+                <article class="lh-pillar lh-reveal{{ !empty($pillar['image']) ? ' lh-pillar--photo' : '' }}" style="transition-delay: {{ $index * 0.07 }}s">
+                    <div class="lh-pillar__media">
+                        @if(!empty($pillar['image']))
+                            <img src="{{ $pillar['image'] }}" alt="" loading="lazy" decoding="async">
+                        @endif
+                        <span class="lh-pillar__icon" aria-hidden="true"><i class="fas {{ $pillar['icon'] }}"></i></span>
+                    </div>
+                    @if(($pillar['value'] ?? '') !== '')
+                        <p class="lh-pillar__value">{{ $pillar['value'] }}</p>
+                    @endif
                     <h3 class="lh-pillar__title">{{ $pillar['title'] }}</h3>
                     <p class="lh-pillar__text">{{ $pillar['text'] }}</p>
                 </article>
@@ -84,7 +71,7 @@
         </div>
 
         <div class="lh-impact__actions lh-reveal">
-            <a href="{{ route('impactPage') }}" class="lh-btn lh-btn--primary">{{ \App\Support\SiteCopy::get('impact_cta_explore') }}</a>
+            <a href="{{ route('impactPage') }}#impact-pillars" class="lh-btn lh-btn--primary">{{ \App\Support\SiteCopy::get('impact_cta_explore') }}</a>
             <a href="{{ route('impactCommunity') }}" class="lh-btn lh-btn--ghost">{{ \App\Support\SiteCopy::get('impact_cta_community') }}</a>
         </div>
     </div>
