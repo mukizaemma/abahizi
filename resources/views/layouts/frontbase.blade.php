@@ -356,9 +356,9 @@
     <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script defer src="{{ asset('assets/js/site-form-channels.js') }}"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
-    <script defer src="{{ asset('assets/js/luxury-site.js') }}"></script>
+    <script defer src="{{ asset('assets/js/luxury-site.js') }}?v=20260917k"></script>
     @if($isLandingHome ?? false)
-        <script defer src="{{ asset('assets/js/landing-home.js') }}?v=20260917j"></script>
+        <script defer src="{{ asset('assets/js/landing-home.js') }}?v=20260917k"></script>
     @endif
     <script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" type="module"></script>
 

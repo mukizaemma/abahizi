@@ -100,6 +100,10 @@ class StaffController extends Controller
         $data->category = $validated['category'] ?? null;
         $data->display = $validated['display'] ?? $data->display ?? 'Yes';
 
+        if ($data->isDirty('names')) {
+            $data->slug = $this->uniqueSlug($validated['names'], $data->id);
+        }
+
         if (array_key_exists('sort_order', $validated) && $validated['sort_order'] !== null) {
             $data->sort_order = (int) $validated['sort_order'];
         }
@@ -134,6 +138,19 @@ class StaffController extends Controller
         $this->moveMember((int) $id, 1);
 
         return redirect()->route('staff')->with('success', 'Team order updated.');
+    }
+
+    public function toggleDisplay($id)
+    {
+        $member = Team::findOrFail($id);
+        $member->display = $member->isVisibleOnSite() ? 'No' : 'Yes';
+        $member->save();
+
+        $message = $member->isVisibleOnSite()
+            ? $member->names . ' is now visible on the website.'
+            : $member->names . ' is hidden from the public website.';
+
+        return redirect()->route('staff')->with('success', $message);
     }
 
     public function destroy($id)

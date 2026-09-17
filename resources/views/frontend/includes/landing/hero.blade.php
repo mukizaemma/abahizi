@@ -132,13 +132,21 @@
         </div>
     </div>
 
-    <div class="lh-hero__bar" aria-label="Impact statistics">
+    <div class="lh-hero__bar" data-lh-counter-section aria-label="Impact statistics">
         <div class="container">
             <ul class="lh-hero__bar-list lh-hero__bar-list--stats" style="--lh-bar-count: {{ max(count($barItems), 1) }}">
                 @foreach($barItems as $item)
+                    @php
+                        $statValue = (string) ($item['value'] ?? '');
+                        $counterTarget = \App\Support\ImpactStats::counterTarget($statValue);
+                    @endphp
                     <li>
                         <a class="lh-hero__bar-item lh-hero__bar-item--stat" href="{{ route('impactPage') }}">
-                            <span class="lh-hero__bar-value">{{ $item['value'] }}</span>
+                            <span
+                                class="lh-hero__bar-value"
+                                data-lh-counter-target="{{ $counterTarget }}"
+                                data-lh-counter-final="{{ $statValue }}"
+                            >{{ $counterTarget > 0 ? '0' : $statValue }}</span>
                             <span class="lh-hero__bar-label">{{ $item['label'] }}</span>
                         </a>
                     </li>

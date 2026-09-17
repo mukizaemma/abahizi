@@ -50,22 +50,36 @@
         }
 
         var started = false;
+        function start() {
+            if (started) {
+                return;
+            }
+            started = true;
+            if (io) {
+                io.disconnect();
+            }
+            els.forEach(function (el, i) {
+                window.setTimeout(function () {
+                    animateOne(el, 1900);
+                }, i * 90);
+            });
+        }
+
         var io = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
-                if (!entry.isIntersecting || started) {
-                    return;
+                if (entry.isIntersecting) {
+                    start();
                 }
-                started = true;
-                io.disconnect();
-                els.forEach(function (el, i) {
-                    window.setTimeout(function () {
-                        animateOne(el, 1900);
-                    }, i * 90);
-                });
             });
-        }, { threshold: 0.22, rootMargin: '0px 0px -8% 0px' });
+        }, { threshold: 0.05, rootMargin: '0px 0px 20% 0px' });
 
         io.observe(section);
+        requestAnimationFrame(function () {
+            var rect = section.getBoundingClientRect();
+            if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                start();
+            }
+        });
     }
 
     function initJourneySlider() {

@@ -233,6 +233,11 @@
         var wrap = document.createElement('div');
         wrap.className = 'media-field';
         wrap.setAttribute('data-media-field', 'true');
+        var layout = input.getAttribute('data-media-layout') || '';
+        if (layout) {
+            wrap.classList.add('media-field--' + layout);
+            wrap.setAttribute('data-media-layout', layout);
+        }
         if (input.multiple) {
             wrap.setAttribute('data-media-multiple', 'true');
         }

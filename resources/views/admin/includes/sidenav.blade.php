@@ -106,7 +106,7 @@
             <x-admin.nav-link
                 :href="route('staff')"
                 icon="fa-users"
-                :active="request()->routeIs(['staff', 'editStaff', 'saveStaff', 'updateStaff', 'destroyStaff', 'staff.moveUp', 'staff.moveDown'])"
+                :active="request()->routeIs(['staff', 'editStaff', 'saveStaff', 'updateStaff', 'destroyStaff', 'staff.moveUp', 'staff.moveDown', 'staff.toggleDisplay'])"
             >
                 Our team
             </x-admin.nav-link>

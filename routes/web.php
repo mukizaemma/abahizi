@@ -183,6 +183,7 @@ Route::middleware(['auth', 'admin.role'
     Route::post('/updateStaff/{id}', [App\Http\Controllers\StaffController::class, 'update'])->name('updateStaff');
     Route::post('/staff/{id}/move-up', [App\Http\Controllers\StaffController::class, 'moveUp'])->name('staff.moveUp');
     Route::post('/staff/{id}/move-down', [App\Http\Controllers\StaffController::class, 'moveDown'])->name('staff.moveDown');
+    Route::post('/staff/{id}/visibility', [App\Http\Controllers\StaffController::class, 'toggleDisplay'])->name('staff.toggleDisplay');
     Route::get('/destroyStaff/{id}', [App\Http\Controllers\StaffController::class, 'destroy'])->name('destroyStaff');
 
     // Testimonies

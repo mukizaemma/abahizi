@@ -76,7 +76,7 @@ class HomeController extends Controller
             $events = DB::table('events')->latest()->get();
             $slides = DB::table('slides')->latest()->get();
             $testimonials = DB::table('testimonies')->latest()->get();
-            $staff = DB::table('teams')->orderby('id','asc')->where('display','Yes')->get();
+            $staff = DB::table('teams')->orderBy('id', 'asc')->whereRaw('LOWER(TRIM(display)) = ?', ['yes'])->get();
 
             return view('frontend.home', [
                 'programs' =>$programs,
@@ -121,7 +121,7 @@ class HomeController extends Controller
                 ->get();
         }
         $partners = Partner::latest()->get();
-        $staff = Team::query()->where('display', 'Yes')->orderedForDisplay()->get();
+        $staff = Team::query()->visibleOnSite()->orderedForDisplay()->get();
 
         $today = Carbon::today()->toDateString();
 
@@ -166,7 +166,7 @@ class HomeController extends Controller
 
         $programs = Program::latest()->get();
         $partners = Partner::oldest()->get();
-        $staff = Team::query()->where('display', 'Yes')->orderedForDisplay()->get();
+        $staff = Team::query()->visibleOnSite()->orderedForDisplay()->get();
         $about = Background::firstOrEmpty();
         $mission = About::firstOrEmpty();
         $testimonials = DB::table('testimonies')->paginate(3);
@@ -176,7 +176,7 @@ class HomeController extends Controller
     {
         $about = Background::firstOrEmpty();
         $teamMembers = Team::query()
-            ->where('display', 'Yes')
+            ->visibleOnSite()
             ->orderedForDisplay()
             ->get();
 

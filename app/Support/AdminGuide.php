@@ -276,8 +276,12 @@ class AdminGuide
                 'summary' => 'People who appear on Our Team and on Our Story.',
                 'steps' => [
                     [
-                        'title' => 'Add a person',
-                        'body' => 'Name, role, photo, and optional social links. Lower order numbers appear first. Set display to Yes so the person shows on the site.',
+                        'title' => 'Add or replace a person',
+                        'body' => 'Name, role, and photo. If a role has a new person, open Replace / edit, keep the position title, and change the name and photo. Lower order numbers appear first.',
+                    ],
+                    [
+                        'title' => 'Hide from the website',
+                        'body' => 'Use Hide on the team list if someone has left. They stay in the admin so you can show them again later. Only Visible people appear on Our Team and Our Story.',
                     ],
                     [
                         'title' => 'Page banner',
@@ -286,7 +290,7 @@ class AdminGuide
                 ],
                 'manage_route' => 'staff',
                 'manage_label' => 'Open Our team',
-                'routes' => ['staff', 'editStaff', 'saveStaff', 'updateStaff', 'destroyStaff', 'staff.moveUp', 'staff.moveDown'],
+                'routes' => ['staff', 'editStaff', 'saveStaff', 'updateStaff', 'destroyStaff', 'staff.moveUp', 'staff.moveDown', 'staff.toggleDisplay'],
             ],
             [
                 'slug' => 'testimonials',

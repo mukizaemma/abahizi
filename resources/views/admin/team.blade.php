@@ -17,7 +17,7 @@
                 <div class="admin-page-header d-flex flex-wrap align-items-start justify-content-between gap-3">
                     <div>
                         <h1>Team</h1>
-                        <p class="text-muted mb-0">Add and manage staff profiles. Lower order numbers appear first on the site (oldest / first added by default).</p>
+                        <p class="text-muted mb-0">Hide someone who has left, or edit a profile to put a new person in the same role. Only people marked Visible appear on Our Team and Our Story.</p>
                     </div>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStaffModal">
                         <i class="fa fa-plus me-1"></i> Add team member
@@ -62,7 +62,7 @@
                                     @forelse($team as $member)
                                         <tr>
                                             <td class="text-nowrap">
-                                                <span class="badge bg-light text-dark border me-1">{{ $member->sort_order ?? ($loopIndex + 1) }}</span>
+                                                <span class="badge bg-light text-dark border me-1">{{ $member->sort_order ?? $loop->iteration }}</span>
                                                 <div class="btn-group btn-group-sm align-middle">
                                                     <form action="{{ route('staff.moveUp', $member->id) }}" method="POST" class="d-inline">
                                                         @csrf
@@ -85,16 +85,24 @@
                                             <td>{{ $member->position }}</td>
                                             <td class="text-muted small text-nowrap">{{ $member->created_at?->format('M j, Y') ?? '—' }}</td>
                                             <td>
-                                                @if(($member->display ?? 'No') === 'Yes')
-                                                    <span class="badge bg-success">Yes</span>
+                                                @if($member->isVisibleOnSite())
+                                                    <span class="badge bg-success">Visible</span>
                                                 @else
-                                                    <span class="badge bg-secondary">No</span>
+                                                    <span class="badge bg-secondary">Hidden</span>
                                                 @endif
                                             </td>
                                             <td class="text-end">
                                                 <div class="btn-group btn-group-sm">
-                                                    <a href="{{ route('editStaff', $member->id) }}" class="btn btn-outline-primary">Edit</a>
-                                                    <a href="{{ route('destroyStaff', $member->id) }}" class="btn btn-outline-danger" onclick="return confirm('Delete this team member?')">Delete</a>
+                                                    <form action="{{ route('staff.toggleDisplay', $member->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @if($member->isVisibleOnSite())
+                                                            <button type="submit" class="btn btn-outline-secondary" title="Hide from the public website">Hide</button>
+                                                        @else
+                                                            <button type="submit" class="btn btn-outline-success" title="Show on the public website">Show</button>
+                                                        @endif
+                                                    </form>
+                                                    <a href="{{ route('editStaff', $member->id) }}" class="btn btn-outline-primary">Replace / edit</a>
+                                                    <a href="{{ route('destroyStaff', $member->id) }}" class="btn btn-outline-danger" onclick="return confirm('Remove this team member from the list? Hidden people can stay in the list if you might need them later.')">Delete</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -159,10 +167,10 @@
                             <input type="url" class="form-control" id="staff_linkedin" name="linkedin" value="{{ old('linkedin') }}" placeholder="https://linkedin.com/in/…">
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label" for="staff_display">Show on website</label>
+                            <label class="form-label" for="staff_display">Public website</label>
                             <select class="form-select" id="staff_display" name="display">
-                                <option value="Yes" @selected(old('display', 'Yes') === 'Yes')>Yes — visible on About / Team</option>
-                                <option value="No" @selected(old('display') === 'No')>No — hidden</option>
+                                <option value="Yes" @selected(old('display', 'Yes') === 'Yes')>Visible — show on Our Team and Our Story</option>
+                                <option value="No" @selected(old('display') === 'No')>Hidden — keep in admin only</option>
                             </select>
                         </div>
                         <div class="col-md-4">

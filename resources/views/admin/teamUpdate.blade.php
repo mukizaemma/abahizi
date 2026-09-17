@@ -17,9 +17,19 @@
                 <div class="admin-page-header d-flex flex-wrap align-items-center justify-content-between gap-3">
                     <div>
                         <h1>Edit team member</h1>
-                        <p class="text-muted mb-0">{{ $data->names }}</p>
+                        <p class="text-muted mb-0">Keep the position if someone new has this role, then change the name, photo, and biography. Or hide this person from the public site.</p>
                     </div>
-                    <a href="{{ route('staff') }}" class="btn btn-outline-primary">Back to team</a>
+                    <div class="d-flex flex-wrap gap-2">
+                        <form action="{{ route('staff.toggleDisplay', $data->id) }}" method="POST">
+                            @csrf
+                            @if($data->isVisibleOnSite())
+                                <button type="submit" class="btn btn-outline-secondary">Hide from website</button>
+                            @else
+                                <button type="submit" class="btn btn-outline-success">Show on website</button>
+                            @endif
+                        </form>
+                        <a href="{{ route('staff') }}" class="btn btn-outline-primary">Back to team</a>
+                    </div>
                 </div>
 
                 @if(session()->has('success'))
@@ -39,6 +49,9 @@
                     <div class="card-body">
                         <form action="{{ route('updateStaff', $data->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            <div class="alert alert-info">
+                                If this <strong>position</strong> is now held by someone else, leave the job title as it is and update the name, photo, and biography below. If the person has left and you will add a new profile instead, use <strong>Hide from website</strong>.
+                            </div>
                             <div class="row g-3">
                                 <div class="col-md-8">
                                     <label class="form-label" for="edit_names">Full name <span class="text-danger">*</span></label>
@@ -69,10 +82,10 @@
                                     <input type="url" class="form-control" id="edit_linkedin" name="linkedin" value="{{ old('linkedin', $data->linkedin) }}">
                                 </div>
                                 <div class="col-md-4">
-                                    <label class="form-label" for="edit_display">Show on website</label>
+                                    <label class="form-label" for="edit_display">Public website</label>
                                     <select class="form-select" id="edit_display" name="display">
-                                        <option value="Yes" @selected(old('display', $data->display ?? 'Yes') === 'Yes')>Yes — visible on About / Team</option>
-                                        <option value="No" @selected(old('display', $data->display ?? 'Yes') === 'No')>No — hidden</option>
+                                        <option value="Yes" @selected(old('display', $data->isVisibleOnSite() ? 'Yes' : 'No') === 'Yes')>Visible — show on Our Team and Our Story</option>
+                                        <option value="No" @selected(old('display', $data->isVisibleOnSite() ? 'Yes' : 'No') === 'No')>Hidden — keep in admin only</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">

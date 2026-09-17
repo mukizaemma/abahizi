@@ -32,6 +32,16 @@ class Team extends Model
         'sort_order',
     ];
 
+    public function isVisibleOnSite(): bool
+    {
+        return strcasecmp(trim((string) $this->display), 'Yes') === 0;
+    }
+
+    public function scopeVisibleOnSite($query)
+    {
+        return $query->whereRaw('LOWER(TRIM(display)) = ?', ['yes']);
+    }
+
     public function scopeOrderedForDisplay($query)
     {
         return $query

@@ -35,6 +35,13 @@ class ImpactStats
         return $onBar !== [] ? $onBar : $items;
     }
 
+    public static function counterTarget(string $value): int
+    {
+        $digits = preg_replace('/\D/', '', $value);
+
+        return $digits !== '' ? (int) $digits : 0;
+    }
+
     /**
      * @return array<int, array{value: string, label: string, show_on_bar: bool}>
      */

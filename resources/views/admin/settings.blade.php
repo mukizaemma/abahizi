@@ -246,20 +246,26 @@
                                 <div class="tab-pane fade" id="headers-pane" role="tabpanel" aria-labelledby="headers-tab">
                                     <p class="text-muted mb-4">Fallback banner used when a page has no header of its own. Edit each page’s title, caption, and image on that page’s admin screen (Our Story, Products, Impact, Team, and so on).</p>
 
-                                    <div class="card mb-4 border">
-                                        <div class="card-header bg-light fw-semibold">Default fallback (all pages)</div>
+                                    <div class="card admin-cms-card mb-0">
+                                        <div class="card-header">
+                                            <span class="admin-cms-card__kicker">Public page banner</span>
+                                            <strong>Default fallback</strong>
+                                        </div>
                                         <div class="card-body">
-                                            <div class="row g-3">
-                                                <div class="col-lg-6">
-                                                    <label class="form-label">Default header image</label>
-                                                    <input type="file" class="form-control" name="page_header_image" accept="image/*">
+                                            <div class="admin-banner-card">
+                                                <div class="admin-banner-card__media">
+                                                    <label class="form-label" for="page_header_image">Banner photo</label>
+                                                    <input type="file" class="form-control" id="page_header_image" name="page_header_image" accept="image/*" data-media-layout="banner">
                                                     @if(!empty($data->page_header_image))
-                                                        <img src="{{ asset('storage/images') . $data->page_header_image }}" alt="Default header" width="180" class="mt-2 rounded border p-1 bg-white">
+                                                        <img src="{{ asset('storage/images') . $data->page_header_image }}" alt="Default header" class="admin-preview-img">
                                                     @endif
                                                 </div>
-                                                <div class="col-lg-6">
-                                                    <label class="form-label">Default header caption</label>
-                                                    <textarea class="form-control" rows="4" name="page_header_caption" placeholder="Used when a page has no custom caption">{{ $data->page_header_caption }}</textarea>
+                                                <div class="admin-banner-card__copy">
+                                                    <div class="admin-banner-card__caption">
+                                                        <label class="form-label" for="page_header_caption">Default caption</label>
+                                                        <textarea class="form-control" id="page_header_caption" rows="4" name="page_header_caption" placeholder="Used when a page has no custom caption">{{ $data->page_header_caption }}</textarea>
+                                                    </div>
+                                                    <p class="admin-cms-card__help mb-0">Saved with the rest of Site settings.</p>
                                                 </div>
                                             </div>
                                         </div>
